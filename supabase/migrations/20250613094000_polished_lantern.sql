@@ -1,0 +1,154 @@
+/*
+  # Add User Research Reports Table
+
+  1. New Tables
+    - `user_research_reports`
+      - `id` (uuid, primary key)
+      - `user_id` (uuid, foreign key to users)
+      - `title` (text)
+      - `summary` (text)
+      - `content` (text)
+      - `category` (text, optional)
+      - `created_at` (timestamp)
+      - `updated_at` (timestamp)
+
+  2. Security
+    - Enable RLS on `user_research_reports` table
+    - Add policies for users to manage their own reports
+    - Service role bypass for admin operations
+
+  3. Functions
+    - Add trigger function for updating timestamps
+    - Add RPC function to create table if needed
+*/
+
+-- Create the user_research_reports table
+CREATE TABLE IF NOT EXISTS user_research_reports (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id uuid NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  title text NOT NULL,
+  summary text NOT NULL,
+  content text NOT NULL,
+  category text,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
+);
+
+-- Create indexes for performance
+CREATE INDEX IF NOT EXISTS idx_user_research_reports_user_id ON user_research_reports(user_id);
+CREATE INDEX IF NOT EXISTS idx_user_research_reports_created_at ON user_research_reports(created_at);
+CREATE INDEX IF NOT EXISTS idx_user_research_reports_category ON user_research_reports(category);
+
+-- Enable RLS
+ALTER TABLE user_research_reports ENABLE ROW LEVEL SECURITY;
+
+-- Create trigger function for updated_at
+CREATE OR REPLACE FUNCTION update_user_research_reports_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Create trigger
+DROP TRIGGER IF EXISTS set_user_research_reports_updated_at ON user_research_reports;
+CREATE TRIGGER set_user_research_reports_updated_at
+  BEFORE UPDATE ON user_research_reports
+  FOR EACH ROW
+  EXECUTE FUNCTION update_user_research_reports_updated_at();
+
+-- Drop existing policies if they exist
+DROP POLICY IF EXISTS "Users can insert their own reports" ON user_research_reports;
+DROP POLICY IF EXISTS "Users can read their own reports" ON user_research_reports;
+DROP POLICY IF EXISTS "Users can update their own reports" ON user_research_reports;
+DROP POLICY IF EXISTS "Users can delete their own reports" ON user_research_reports;
+DROP POLICY IF EXISTS "Service role bypass user_research_reports" ON user_research_reports;
+
+-- Create RLS policies
+CREATE POLICY "Users can insert their own reports" ON user_research_reports
+  FOR INSERT
+  TO authenticated
+  WITH CHECK (
+    auth.uid() IS NOT NULL AND
+    user_id IN (
+      SELECT id FROM users WHERE user_id = auth.uid()
+    )
+  );
+
+CREATE POLICY "Users can read their own reports" ON user_research_reports
+  FOR SELECT
+  TO authenticated
+  USING (
+    auth.uid() IS NOT NULL AND
+    user_id IN (
+      SELECT id FROM users WHERE user_id = auth.uid()
+    )
+  );
+
+CREATE POLICY "Users can update their own reports" ON user_research_reports
+  FOR UPDATE
+  TO authenticated
+  USING (
+    auth.uid() IS NOT NULL AND
+    user_id IN (
+      SELECT id FROM users WHERE user_id = auth.uid()
+    )
+  )
+  WITH CHECK (
+    auth.uid() IS NOT NULL AND
+    user_id IN (
+      SELECT id FROM users WHERE user_id = auth.uid()
+    )
+  );
+
+CREATE POLICY "Users can delete their own reports" ON user_research_reports
+  FOR DELETE
+  TO authenticated
+  USING (
+    auth.uid() IS NOT NULL AND
+    user_id IN (
+      SELECT id FROM users WHERE user_id = auth.uid()
+    )
+  );
+
+CREATE POLICY "Service role bypass user_research_reports" ON user_research_reports
+  FOR ALL
+  TO service_role
+  USING (true)
+  WITH CHECK (true);
+
+-- Create RPC function to check if table exists and create it if needed
+CREATE OR REPLACE FUNCTION create_user_reports_table()
+RETURNS boolean AS $$
+BEGIN
+  -- Table creation is handled above, this function just returns true for compatibility
+  RETURN true;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Grant permissions
+GRANT EXECUTE ON FUNCTION create_user_reports_table() TO authenticated, anon;
+GRANT EXECUTE ON FUNCTION update_user_research_reports_updated_at() TO authenticated, anon;
+
+-- Grant table permissions
+GRANT SELECT, INSERT, UPDATE, DELETE ON user_research_reports TO authenticated;
+GRANT SELECT ON user_research_reports TO anon;
+
+-- Log the migration
+INSERT INTO maintenance_log (operation, details) 
+VALUES (
+  'add_user_research_reports', 
+  jsonb_build_object(
+    'timestamp', now(),
+    'operation', 'add_user_research_reports_table',
+    'changes', ARRAY[
+      'Created user_research_reports table with proper structure',
+      'Added RLS policies for data protection',
+      'Created indexes for performance optimization',
+      'Added trigger function for updated_at timestamp',
+      'Created RPC function for table management'
+    ],
+    'note', 'This table stores research reports generated by GOAI agent for users'
+  )
+);

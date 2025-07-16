@@ -1,0 +1,141 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Markdown content styling */
+.markdown-content h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  color: #049394;
+}
+
+.markdown-content p {
+  margin-bottom: 1rem;
+}
+
+.markdown-content ul, 
+.markdown-content ol {
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+}
+
+.markdown-content ul li, 
+.markdown-content ol li {
+  margin-bottom: 0.5rem;
+}
+
+.markdown-content ul {
+  list-style-type: disc;
+}
+
+.markdown-content ol {
+  list-style-type: decimal;
+}
+
+.markdown-content strong {
+  font-weight: 600;
+}
+
+.markdown-content a {
+  color: #049394;
+  text-decoration: underline;
+}
+
+.markdown-content a:hover {
+  color: #016774;
+}
+
+.markdown-content blockquote {
+  border-left: 4px solid #049394;
+  padding-left: 1rem;
+  margin-left: 0;
+  margin-right: 0;
+  font-style: italic;
+  color: #9ca3af;
+}
+
+.markdown-content code {
+  background-color: rgba(4, 147, 148, 0.1);
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.25rem;
+  font-family: monospace;
+}
+
+.markdown-content pre {
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin-bottom: 1rem;
+}
+
+.markdown-content pre code {
+  background-color: transparent;
+  padding: 0;
+}
+
+/* Prose styles for ReactMarkdown */
+.prose {
+  color: #d1d5db;
+  max-width: none;
+}
+
+.prose h3 {
+  color: #049394;
+  font-weight: 600;
+  margin-top: 1.5em;
+  margin-bottom: 0.8em;
+  font-size: 1.5rem;
+}
+
+.prose p {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.prose ul {
+  list-style-type: disc;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  padding-left: 1.5em;
+}
+
+.prose ol {
+  list-style-type: decimal;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  padding-left: 1.5em;
+}
+
+.prose li {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.prose strong {
+  font-weight: 600;
+  color: #f3f4f6;
+}
+
+.prose a {
+  color: #049394;
+  text-decoration: underline;
+}
+
+.prose a:hover {
+  color: #016774;
+}
+
+.prose-invert {
+  color: #d1d5db;
+}
+
+.prose-invert a {
+  color: #049394;
+}
+
+.prose-invert strong {
+  color: #f3f4f6;
+}
