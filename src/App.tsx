@@ -14,7 +14,6 @@ const DiscoverPage = React.lazy(() => import('./pages/DiscoverPage'));
 const SolutionDetails = React.lazy(() => import('./pages/SolutionDetails'));
 const AboutPage = React.lazy(() => import('./pages/AboutPage'));
 const ConfirmEmail = React.lazy(() => import('./pages/ConfirmEmail'));
-const ConfirmEmail = React.lazy(() => import('./pages/ConfirmEmail'));
 
 const HowItWorksPage = React.lazy(() => import('./pages/HowItWorksPage'));
 const GoAdvantagePage = React.lazy(() => import('./pages/GoAdvantagePage'));
