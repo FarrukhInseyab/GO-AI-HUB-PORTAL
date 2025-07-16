@@ -13,6 +13,7 @@ const UserProfile = React.lazy(() => import('./pages/UserProfile'));
 const DiscoverPage = React.lazy(() => import('./pages/DiscoverPage'));
 const SolutionDetails = React.lazy(() => import('./pages/SolutionDetails'));
 const AboutPage = React.lazy(() => import('./pages/AboutPage'));
+const ConfirmEmail = React.lazy(() => import('./pages/ConfirmEmail'));
 const HowItWorksPage = React.lazy(() => import('./pages/HowItWorksPage'));
 const GoAdvantagePage = React.lazy(() => import('./pages/GoAdvantagePage'));
 const SuccessStoriesPage = React.lazy(() => import('./pages/SuccessStoriesPage'));
@@ -48,6 +49,7 @@ function App() {
                     <Route path="/solutions/:id" element={<SolutionDetails />} />
                     <Route path="/solutions/:id/recommendation" element={<AIRecommendation />} />
                     <Route path="/about" element={<AboutPage />} />
+                    <Route path="/confirm-email" element={<ConfirmEmail />} />
                     <Route path="/how-it-works" element={<HowItWorksPage />} />
                     <Route path="/go-advantage" element={<GoAdvantagePage />} />
                     <Route path="/success-stories" element={<SuccessStoriesPage />} />

@@ -1,5 +1,6 @@
 import { supabase } from './supabase';
 import type { User } from '../types';
+import { generateToken } from '../utils/security';
 
 export async function signUp(
   email: string, 
@@ -33,6 +34,9 @@ export async function signUp(
 
     console.log('Auth: Creating Supabase auth user');
     
+    // Generate confirmation token
+    const confirmationToken = generateToken(32);
+    
     // Use Supabase's built-in authentication with user metadata
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email: sanitizedEmail,
@@ -62,7 +66,7 @@ export async function signUp(
     console.log('Auth: Supabase auth user created:', authData.user.id);
 
     // Wait for the trigger to create the profile
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 500));
 
     // Get the created user profile from public.users table
     console.log('Auth: Fetching user profile from database');
@@ -76,17 +80,19 @@ export async function signUp(
       console.log('Auth: Profile not found, creating manually');
       // If the trigger didn't work, create the profile manually
       const { data: manualProfileData, error: manualProfileError } = await supabase
-        .from('users')
-        .insert({
-          user_id: authData.user.id,
-          email: sanitizedEmail,
-          contact_name: sanitizedContactName,
-          company_name: sanitizedCompanyName,
-          country: sanitizedCountry,
-          role: 'User'
-        })
-        .select()
-        .single();
+          .from('users')
+          .insert({
+            user_id: authData.user.id,
+            email: sanitizedEmail,
+            contact_name: sanitizedContactName,
+            company_name: sanitizedCompanyName,
+            country: sanitizedCountry,
+            role: 'User',
+            email_confirmation_token: confirmationToken,
+            confirmation_sent_at: new Date().toISOString()
+          })
+          .select()
+          .single();
 
       if (manualProfileError) {
         console.error('Auth: Failed to create profile manually:', manualProfileError);
@@ -101,6 +107,27 @@ export async function signUp(
 
       console.log('Auth: Manual profile created:', manualProfileData);
       return manualProfileData as User;
+    }
+
+    // Update the user profile with confirmation token
+    const { error: updateError } = await supabase
+      .from('users')
+      .update({
+        email_confirmation_token: confirmationToken,
+        confirmation_sent_at: new Date().toISOString()
+      })
+      .eq('user_id', authData.user.id);
+      
+    if (updateError) {
+      console.error('Auth: Failed to update profile with confirmation token:', updateError);
+    } else {
+      // Send confirmation email
+      try {
+        await sendConfirmationEmail(sanitizedEmail, sanitizedContactName, confirmationToken);
+        console.log('Auth: Confirmation email sent to:', sanitizedEmail);
+      } catch (emailError) {
+        console.error('Auth: Failed to send confirmation email:', emailError);
+      }
     }
 
     console.log('Auth: Profile found:', profileData);
@@ -307,5 +334,64 @@ export async function getCurrentUser(): Promise<User | null> {
   } catch (error) {
     console.error('Error getting current user:', error);
     return null;
+  }
+}
+
+// Function to send confirmation email
+async function sendConfirmationEmail(email: string, name: string, token: string): Promise<void> {
+  try {
+    const emailServiceUrl = import.meta.env.EMAIL_SERVICE_URL || 'http://localhost:3000';
+    const appUrl = window.location.origin;
+    
+    const response = await fetch(`${emailServiceUrl}/api/send-email`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        to: email,
+        type: 'signup_confirmation',
+        name: name,
+        token: token,
+        appUrl: appUrl
+      })
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Failed to send confirmation email');
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error sending confirmation email:', error);
+    throw error;
+  }
+}
+
+// Function to verify email confirmation token
+export async function verifyEmailConfirmation(token: string): Promise<boolean> {
+  try {
+    if (!token) {
+      throw new Error('Confirmation token is required');
+    }
+    
+    // Find user with this token
+    const { data, error } = await supabase
+      .from('users')
+      .update({ email_confirmed: true, email_confirmation_token: null })
+      .eq('email_confirmation_token', token)
+      .select()
+      .single();
+      
+    if (error) {
+      console.error('Error verifying email confirmation:', error);
+      return false;
+    }
+    
+    return !!data;
+  } catch (error) {
+    console.error('Error in verifyEmailConfirmation:', error);
+    return false;
   }
 }
