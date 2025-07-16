@@ -106,6 +106,15 @@ export async function signUp(
       }
 
       console.log('Auth: Manual profile created:', manualProfileData);
+      
+      // Send confirmation email
+      try {
+        await sendConfirmationEmail(sanitizedEmail, sanitizedContactName, confirmationToken);
+        console.log('Auth: Confirmation email sent to:', sanitizedEmail);
+      } catch (emailError) {
+        console.error('Auth: Failed to send confirmation email:', emailError);
+      }
+      
       return manualProfileData as User;
     }
 
@@ -197,6 +206,12 @@ export async function signIn(email: string, password: string): Promise<User> {
       
       console.log('Auth: Created profile after signin:', newProfileData);
       return newProfileData as User;
+    }
+
+    // Check if email is confirmed
+    if (!profileData.email_confirmed) {
+      console.warn('Auth: Email not confirmed for user:', profileData.email);
+      throw new Error('Please confirm your email address before signing in. Check your inbox for the confirmation link.');
     }
 
     console.log('Auth: Sign in successful, profile found:', profileData);
@@ -340,7 +355,7 @@ export async function getCurrentUser(): Promise<User | null> {
 // Function to send confirmation email
 async function sendConfirmationEmail(email: string, name: string, token: string): Promise<void> {
   try {
-    const emailServiceUrl = import.meta.env.EMAIL_SERVICE_URL || 'http://localhost:3000';
+    const emailServiceUrl = import.meta.env.VITE_EMAIL_SERVICE_URL || 'http://localhost:3000';
     const appUrl = window.location.origin;
     
     const response = await fetch(`${emailServiceUrl}/api/send-email`, {

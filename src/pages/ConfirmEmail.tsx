@@ -93,8 +93,8 @@ const ConfirmEmail = () => {
                     ? 'شكرًا لتأكيد بريدك الإلكتروني. يمكنك الآن استخدام جميع ميزات المنصة.' 
                     : 'Thank you for confirming your email address. You can now use all features of the platform.'}
                 </p>
-                <Button onClick={() => navigate('/')} className="w-full">
-                  {language === 'ar' ? 'العودة إلى الصفحة الرئيسية' : 'Return to Home Page'}
+                <Button onClick={() => navigate('/auth')} className="w-full">
+                  {language === 'ar' ? 'تسجيل الدخول' : 'Sign In'}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </>
