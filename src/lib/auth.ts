@@ -1,7 +1,7 @@
 import { supabase } from './supabase';
 import type { User } from '../types';
 import { generateToken } from '../utils/security';
-import { generateToken } from '../utils/security';
+
 
 export async function signUp(
   email: string, 
@@ -381,7 +381,7 @@ async function sendConfirmationEmail(email: string, name: string, token: string)
     const emailServiceUrl = import.meta.env.VITE_EMAIL_SERVICE_URL || 'http://localhost:3000';
     const appUrl = window.location.origin;
     
-    const response = await fetch(`${emailServiceUrl}/api/send-email`, {
+    const response = await fetch(`${emailServiceUrl}/send-email`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
