@@ -372,36 +372,7 @@ export async function getCurrentUser(): Promise<User | null> {
 }
 
 // Function to send confirmation email
-async function sendConfirmationEmail(email: string, name: string, token: string): Promise<void> {
-  try {
-    const emailServiceUrl = import.meta.env.VITE_EMAIL_SERVICE_URL || 'http://localhost:3000';
-    const appUrl = window.location.origin;
-    
-    const response = await fetch(`${emailServiceUrl}/api/send-email`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        to: email,
-        type: 'signup_confirmation',
-        name: name,
-        token: token,
-        appUrl: appUrl
-      })
-    });
-    
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || 'Failed to send confirmation email');
-    }
-    
-    return await response.json();
-  } catch (error) {
-    console.error('Error sending confirmation email:', error);
-    throw error;
-  }
-}
+
 
 // Function to verify email confirmation token
 export async function verifyEmailConfirmation(token: string): Promise<boolean> {
