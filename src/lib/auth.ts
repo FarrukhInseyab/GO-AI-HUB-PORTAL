@@ -150,26 +150,7 @@ export async function signUp(
       }
     }
 
-    // Update the user profile with confirmation token
-    const { error: updateError } = await supabase
-      .from('users')
-      .update({
-        email_confirmation_token: confirmationToken,
-        confirmation_sent_at: new Date().toISOString()
-      })
-      .eq('user_id', authData.user.id);
-      
-    if (updateError) {
-      console.error('Auth: Failed to update profile with confirmation token:', updateError);
-    } else {
-      // Send confirmation email
-      try {
-        await sendConfirmationEmail(sanitizedEmail, sanitizedContactName, confirmationToken);
-        console.log('Auth: Confirmation email sent to:', sanitizedEmail);
-      } catch (emailError) {
-        console.error('Auth: Failed to send confirmation email:', emailError);
-      }
-    }
+  
 
     console.log('Auth: Profile found:', profileData);
     return profileData as User;
