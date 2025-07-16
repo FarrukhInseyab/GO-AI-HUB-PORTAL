@@ -47,6 +47,7 @@ const AuthPage = () => {
       
       if (isSignIn) {
         console.log('Attempting sign in for:', formData.email);
+        debugger;
         authenticatedUser = await signIn(formData.email, formData.password);
       } else {
         // Validation for sign up
@@ -80,7 +81,12 @@ const AuthPage = () => {
       setUser(authenticatedUser);
       
       // Navigate to redirect path
+      if(authenticatedUser.email_confirmed == true){
       navigate(redirectPath, { replace: true });
+      }else{
+        console.log('Email not confirmed');
+        return;
+      }
       
     } catch (error) {
       console.error('Auth error:', error);

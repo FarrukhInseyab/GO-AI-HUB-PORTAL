@@ -1,5 +1,6 @@
 // Common types used across the application
 export interface User {
+  email_confirmed: any;
   id: string;
   user_id: string; // Links to auth.users
   email: string;
