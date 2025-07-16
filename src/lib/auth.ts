@@ -374,32 +374,6 @@ export async function getCurrentUser(): Promise<User | null> {
 // Function to send confirmation email
 
 
-// Function to verify email confirmation token
-export async function verifyEmailConfirmation(token: string): Promise<boolean> {
-  try {
-    if (!token) {
-      throw new Error('Confirmation token is required');
-    }
-    
-    // Find user with this token
-    const { data, error } = await supabase
-      .from('users')
-      .update({ email_confirmed: true, email_confirmation_token: null })
-      .eq('email_confirmation_token', token)
-      .select()
-      .single();
-      
-    if (error) {
-      console.error('Error verifying email confirmation:', error);
-      return false;
-    }
-    
-    return !!data;
-  } catch (error) {
-    console.error('Error in verifyEmailConfirmation:', error);
-    return false;
-  }
-}
 
 // Function to send confirmation email
 async function sendConfirmationEmail(email: string, name: string, token: string): Promise<void> {
