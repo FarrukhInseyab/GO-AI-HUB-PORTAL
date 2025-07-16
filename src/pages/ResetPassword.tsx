@@ -62,6 +62,7 @@ const ResetPassword = () => {
     
     try {
       const token = searchParams.get('token');
+      console.log('Reset password token:', token?.substring(0, 5) + '...');
       
       if (!token) {
         throw new Error('Missing reset token');
@@ -76,6 +77,7 @@ const ResetPassword = () => {
       }
       
       const success = await resetPassword(token, formData.password);
+      console.log('Password reset result:', success);
       
       if (success) {
         setIsSuccess(true);

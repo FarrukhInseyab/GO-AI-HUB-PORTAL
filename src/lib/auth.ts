@@ -309,27 +309,26 @@ export async function resetPassword(token: string, newPassword: string): Promise
       throw new Error('Password must be at least 6 characters long');
     }
     
-    // Find user with this token
-    const { data: userData, error: userError } = await supabase
+    console.log('Attempting to reset password with token:', token.substring(0, 5) + '...');
+    
+    // First, check if the token exists in the database
+    const { data: tokenData, error: tokenError } = await supabase
       .from('users')
-      .select('user_id, email')
+      .select('*')
       .eq('email_confirmation_token', token)
       .single();
       
-    if (userError || !userData) {
-      console.error('User not found for token:', userError);
+    if (tokenError || !tokenData) {
+      console.error('Token validation failed:', tokenError);
       throw new Error('Invalid or expired token');
     }
     
+    console.log('Token found for user:', tokenData.email);
+    
     // Check if token is expired (24 hours)
-    const { data: tokenData, error: tokenError } = await supabase
-      .from('users')
-      .select('confirmation_sent_at')
-      .eq('email_confirmation_token', token)
-      .single();
-      
-    if (tokenError || !tokenData.confirmation_sent_at) {
-      throw new Error('Invalid or expired token');
+    if (!tokenData.confirmation_sent_at) {
+      console.error('Token has no timestamp');
+      throw new Error('Invalid token');
     }
     
     const tokenDate = new Date(tokenData.confirmation_sent_at);
@@ -337,14 +336,16 @@ export async function resetPassword(token: string, newPassword: string): Promise
     const hoursDiff = (now.getTime() - tokenDate.getTime()) / (1000 * 60 * 60);
     
     if (hoursDiff > 24) {
+      console.error('Token expired. Hours since creation:', hoursDiff);
       throw new Error('Token has expired. Please request a new password reset.');
     }
     
+    console.log('Token is valid and not expired');
+    
     // Update password in Supabase Auth
-    const { error: authError } = await supabase.auth.admin.updateUserById(
-      userData.user_id,
-      { password: newPassword }
-    );
+    const { error: authError } = await supabase.auth.updateUser({
+      password: newPassword
+    });
     
     if (authError) {
       console.error('Error updating password in auth:', authError);
@@ -354,10 +355,7 @@ export async function resetPassword(token: string, newPassword: string): Promise
     // Clear token in database
     const { error: clearTokenError } = await supabase
       .from('users')
-      .update({
-        email_confirmation_token: null,
-        confirmation_sent_at: null
-      })
+      .update({ email_confirmation_token: null, confirmation_sent_at: null })
       .eq('email_confirmation_token', token);
       
     if (clearTokenError) {
@@ -365,6 +363,7 @@ export async function resetPassword(token: string, newPassword: string): Promise
       // Don't throw here, password was already updated
     }
     
+    console.log('Password reset successful');
     return true;
   } catch (error) {
     console.error('Error in resetPassword:', error);
@@ -505,8 +504,11 @@ export async function getCurrentUser(): Promise<User | null> {
 // Function to send confirmation email
 async function sendConfirmationEmail(email: string, name: string, token: string): Promise<void> {
   try {
-    const emailServiceUrl = import.meta.env.VITE_EMAIL_SERVICE_URL || 'http://localhost:3000';
+    const emailServiceUrl = import.meta.env.VITE_EMAIL_SERVICE_URL || 'http://localhost:3000/api';
     const appUrl = window.location.origin;
+    
+    console.log('Sending confirmation email to:', email);
+    console.log('Using email service URL:', emailServiceUrl);
     
     const response = await fetch(`${emailServiceUrl}/send-email`, {
       method: 'POST',
@@ -523,8 +525,14 @@ async function sendConfirmationEmail(email: string, name: string, token: string)
     });
     
     if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || 'Failed to send confirmation email');
+      const errorText = await response.text();
+      console.error('Email service response:', errorText);
+      try {
+        const errorData = JSON.parse(errorText);
+        throw new Error(errorData.error || 'Failed to send confirmation email');
+      } catch (e) {
+        throw new Error(`Failed to send confirmation email: ${errorText}`);
+      }
     }
     
     return await response.json();
@@ -537,10 +545,13 @@ async function sendConfirmationEmail(email: string, name: string, token: string)
 // Function to send password reset email
 async function sendPasswordResetEmail(email: string, name: string, token: string): Promise<void> {
   try {
-    const emailServiceUrl = import.meta.env.VITE_EMAIL_SERVICE_URL || 'http://localhost:3000';
+    const emailServiceUrl = import.meta.env.VITE_EMAIL_SERVICE_URL || 'http://localhost:3000/api';
     const appUrl = window.location.origin;
     
-    const response = await fetch(`${emailServiceUrl}/api/send-email`, {
+    console.log('Sending password reset email to:', email);
+    console.log('Using email service URL:', emailServiceUrl);
+    
+    const response = await fetch(`${emailServiceUrl}/send-email`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -555,8 +566,14 @@ async function sendPasswordResetEmail(email: string, name: string, token: string
     });
     
     if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || 'Failed to send password reset email');
+      const errorText = await response.text();
+      console.error('Email service response:', errorText);
+      try {
+        const errorData = JSON.parse(errorText);
+        throw new Error(errorData.error || 'Failed to send password reset email');
+      } catch (e) {
+        throw new Error(`Failed to send password reset email: ${errorText}`);
+      }
     }
     
     return await response.json();

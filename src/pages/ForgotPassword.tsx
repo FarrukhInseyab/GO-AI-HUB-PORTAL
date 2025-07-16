@@ -21,6 +21,7 @@ const ForgotPassword = () => {
     setIsSubmitting(true);
     
     try {
+      console.log('Requesting password reset for:', email);
       if (!email.trim()) {
         throw new Error(language === 'ar' ? 'البريد الإلكتروني مطلوب' : 'Email is required');
       }
@@ -32,6 +33,7 @@ const ForgotPassword = () => {
       }
       
       const success = await requestPasswordReset(email);
+      console.log('Password reset request result:', success);
       
       if (success) {
         setIsSuccess(true);
