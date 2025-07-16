@@ -38,8 +38,6 @@ export async function signUp(
     // Generate confirmation token
     const confirmationToken = generateToken(32);
     
-    // Generate confirmation token
-    const confirmationToken = generateToken(32);
     
     // Use Supabase's built-in authentication with user metadata
     const { data: authData, error: authError } = await supabase.auth.signUp({
@@ -92,8 +90,6 @@ export async function signUp(
             company_name: sanitizedCompanyName,
             country: sanitizedCountry,
             role: 'User',
-            email_confirmation_token: confirmationToken,
-            confirmation_sent_at: new Date().toISOString()
             email_confirmation_token: confirmationToken,
             confirmation_sent_at: new Date().toISOString()
           })
