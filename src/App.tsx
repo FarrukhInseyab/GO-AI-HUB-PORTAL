@@ -14,6 +14,8 @@ const DiscoverPage = React.lazy(() => import('./pages/DiscoverPage'));
 const SolutionDetails = React.lazy(() => import('./pages/SolutionDetails'));
 const AboutPage = React.lazy(() => import('./pages/AboutPage'));
 const ConfirmEmail = React.lazy(() => import('./pages/ConfirmEmail'));
+const ForgotPassword = React.lazy(() => import('./pages/ForgotPassword'));
+const ResetPassword = React.lazy(() => import('./pages/ResetPassword'));
 
 const HowItWorksPage = React.lazy(() => import('./pages/HowItWorksPage'));
 const GoAdvantagePage = React.lazy(() => import('./pages/GoAdvantagePage'));
@@ -51,8 +53,8 @@ function App() {
                     <Route path="/solutions/:id/recommendation" element={<AIRecommendation />} />
                     <Route path="/about" element={<AboutPage />} />
                     <Route path="/confirm-email" element={<ConfirmEmail />} />
-                    <Route path="/confirm-email" element={<ConfirmEmail />} />
-                    <Route path="/confirm-email" element={<ConfirmEmail />} />
+                    <Route path="/forgot-password" element={<ForgotPassword />} />
+                    <Route path="/reset-password" element={<ResetPassword />} />
                     <Route path="/how-it-works" element={<HowItWorksPage />} />
                     <Route path="/go-advantage" element={<GoAdvantagePage />} />
                     <Route path="/success-stories" element={<SuccessStoriesPage />} />

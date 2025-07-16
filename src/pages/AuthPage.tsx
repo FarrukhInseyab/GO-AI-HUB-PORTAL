@@ -263,6 +263,17 @@ const AuthPage = () => {
                 </button>
 
                 <div className="text-center mt-4">
+            
+            {isSignIn && (
+              <div className="mt-4 text-center">
+                <Link
+                  to="/forgot-password"
+                  className="text-[#4CEADB] hover:text-[#4CEADB]/80 text-sm transition-colors duration-300"
+                >
+                  {language === 'ar' ? 'نسيت كلمة المرور؟' : 'Forgot password?'}
+                </Link>
+              </div>
+            )}
                   <button
                     type="button"
                     onClick={() => {

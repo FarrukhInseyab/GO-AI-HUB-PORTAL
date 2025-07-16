@@ -1,6 +1,6 @@
 import { supabase } from './supabase';
 import type { User } from '../types';
-import { generateToken } from '../utils/security';
+import { generateToken, validateToken } from '../utils/security';
 
 
 export async function signUp(
@@ -241,6 +241,137 @@ export async function signIn(email: string, password: string): Promise<User> {
   }
 }
 
+// Function to request password reset
+export async function requestPasswordReset(email: string): Promise<boolean> {
+  try {
+    if (!email) {
+      throw new Error('Email is required');
+    }
+    
+    const sanitizedEmail = email.toLowerCase().trim();
+    
+    // Check if user exists
+    const { data: userData, error: userError } = await supabase
+      .from('users')
+      .select('id, contact_name')
+      .eq('email', sanitizedEmail)
+      .single();
+      
+    if (userError || !userData) {
+      console.error('User not found for password reset:', userError);
+      // Don't reveal if user exists or not for security
+      return true;
+    }
+    
+    // Generate reset token
+    const resetToken = generateToken(32);
+    
+    // Store token in database
+    const { error: updateError } = await supabase
+      .from('users')
+      .update({
+        email_confirmation_token: resetToken,
+        confirmation_sent_at: new Date().toISOString()
+      })
+      .eq('email', sanitizedEmail);
+      
+    if (updateError) {
+      console.error('Error updating user with reset token:', updateError);
+      throw new Error('Failed to process password reset request');
+    }
+    
+    // Send password reset email
+    await sendPasswordResetEmail(
+      sanitizedEmail, 
+      userData.contact_name || 'User', 
+      resetToken
+    );
+    
+    return true;
+  } catch (error) {
+    console.error('Error in requestPasswordReset:', error);
+    throw error;
+  }
+}
+
+// Function to reset password with token
+export async function resetPassword(token: string, newPassword: string): Promise<boolean> {
+  try {
+    if (!token || !newPassword) {
+      throw new Error('Token and new password are required');
+    }
+    
+    if (!validateToken(token)) {
+      throw new Error('Invalid token format');
+    }
+    
+    if (newPassword.length < 6) {
+      throw new Error('Password must be at least 6 characters long');
+    }
+    
+    // Find user with this token
+    const { data: userData, error: userError } = await supabase
+      .from('users')
+      .select('user_id, email')
+      .eq('email_confirmation_token', token)
+      .single();
+      
+    if (userError || !userData) {
+      console.error('User not found for token:', userError);
+      throw new Error('Invalid or expired token');
+    }
+    
+    // Check if token is expired (24 hours)
+    const { data: tokenData, error: tokenError } = await supabase
+      .from('users')
+      .select('confirmation_sent_at')
+      .eq('email_confirmation_token', token)
+      .single();
+      
+    if (tokenError || !tokenData.confirmation_sent_at) {
+      throw new Error('Invalid or expired token');
+    }
+    
+    const tokenDate = new Date(tokenData.confirmation_sent_at);
+    const now = new Date();
+    const hoursDiff = (now.getTime() - tokenDate.getTime()) / (1000 * 60 * 60);
+    
+    if (hoursDiff > 24) {
+      throw new Error('Token has expired. Please request a new password reset.');
+    }
+    
+    // Update password in Supabase Auth
+    const { error: authError } = await supabase.auth.admin.updateUserById(
+      userData.user_id,
+      { password: newPassword }
+    );
+    
+    if (authError) {
+      console.error('Error updating password in auth:', authError);
+      throw new Error('Failed to update password');
+    }
+    
+    // Clear token in database
+    const { error: clearTokenError } = await supabase
+      .from('users')
+      .update({
+        email_confirmation_token: null,
+        confirmation_sent_at: null
+      })
+      .eq('email_confirmation_token', token);
+      
+    if (clearTokenError) {
+      console.error('Error clearing token:', clearTokenError);
+      // Don't throw here, password was already updated
+    }
+    
+    return true;
+  } catch (error) {
+    console.error('Error in resetPassword:', error);
+    throw error;
+  }
+}
+
 export async function updatePassword(newPassword: string): Promise<void> {
   try {
     // Password validation
@@ -372,10 +503,6 @@ export async function getCurrentUser(): Promise<User | null> {
 }
 
 // Function to send confirmation email
-
-
-
-// Function to send confirmation email
 async function sendConfirmationEmail(email: string, name: string, token: string): Promise<void> {
   try {
     const emailServiceUrl = import.meta.env.VITE_EMAIL_SERVICE_URL || 'http://localhost:3000';
@@ -403,6 +530,38 @@ async function sendConfirmationEmail(email: string, name: string, token: string)
     return await response.json();
   } catch (error) {
     console.error('Error sending confirmation email:', error);
+    throw error;
+  }
+}
+
+// Function to send password reset email
+async function sendPasswordResetEmail(email: string, name: string, token: string): Promise<void> {
+  try {
+    const emailServiceUrl = import.meta.env.VITE_EMAIL_SERVICE_URL || 'http://localhost:3000';
+    const appUrl = window.location.origin;
+    
+    const response = await fetch(`${emailServiceUrl}/api/send-email`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        to: email,
+        type: 'password_reset',
+        name: name,
+        token: token,
+        appUrl: appUrl
+      })
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Failed to send password reset email');
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error sending password reset email:', error);
     throw error;
   }
 }
