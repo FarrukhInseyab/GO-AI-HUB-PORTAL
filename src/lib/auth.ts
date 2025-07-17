@@ -90,6 +90,7 @@ export async function signUp(
             company_name: sanitizedCompanyName,
             country: sanitizedCountry,
             role: 'User',
+            email_confirmed:false,
             email_confirmation_token: confirmationToken,
             confirmation_sent_at: new Date().toISOString()
           })
@@ -119,12 +120,12 @@ export async function signUp(
       
       
       // Send confirmation email
-      try {
-        await sendConfirmationEmail(sanitizedEmail, sanitizedContactName, confirmationToken);
-        console.log('Auth: Confirmation email sent to:', sanitizedEmail);
-      } catch (emailError) {
-        console.error('Auth: Failed to send confirmation email:', emailError);
-      }
+      // try {
+      //   await sendConfirmationEmail(sanitizedEmail, sanitizedContactName, confirmationToken);
+      //   console.log('Auth: Confirmation email sent to:', sanitizedEmail);
+      // } catch (emailError) {
+      //   console.error('Auth: Failed to send confirmation email:', emailError);
+      // }
       
       return manualProfileData as User;
     }

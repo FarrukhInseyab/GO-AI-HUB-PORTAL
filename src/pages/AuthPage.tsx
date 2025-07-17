@@ -38,6 +38,7 @@ const AuthPage = () => {
   }, [user, navigate, redirectPath]);
 
   const handleSubmit = async (e: React.FormEvent) => {
+    debugger;
     e.preventDefault();
     setError(null);
     setIsLoading(true);
@@ -76,16 +77,16 @@ const AuthPage = () => {
       }
       
       console.log('Authentication successful:', authenticatedUser);
-      
+      if(authenticatedUser.email_confirmed == true){
       // Set user in context
       setUser(authenticatedUser);
       
       // Navigate to redirect path
-      if(authenticatedUser.email_confirmed == true){
+      
       navigate(redirectPath, { replace: true });
       }else{
-        console.log('Email not confirmed');
-        return;
+        setError('Confirmation email sent. Please check your inbox to verify your account.');
+        setIsLoading(false);
       }
       
     } catch (error) {
