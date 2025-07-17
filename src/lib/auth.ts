@@ -1,6 +1,13 @@
 import { supabase } from './supabase';
 import type { User } from '../types';
 import { generateToken, validateToken } from '../utils/security';
+import { createClient } from '@supabase/supabase-js';
+
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+const SERVICE_ROLE_KEY = import.meta.env.VITE_SERVICE_ROLE_KEY;
+
+// ✅ Client for public operations
+export const supabasesAdmin = createClient(SUPABASE_URL, SERVICE_ROLE_KEY);
 
 
 export async function signUp(
@@ -305,78 +312,96 @@ export async function requestPasswordReset(email: string): Promise<boolean> {
 export async function resetPassword(token: string, newPassword: string): Promise<boolean> {
   try {
     if (!token || !newPassword) {
-      throw new Error('Token and new password are required');
+      throw new Error("Token and new password are required");
     }
-    
+
     if (!validateToken(token)) {
-      throw new Error('Invalid token format');
+      throw new Error("Invalid token format");
     }
-    
+
     if (newPassword.length < 6) {
-      throw new Error('Password must be at least 6 characters long');
+      throw new Error("Password must be at least 6 characters long");
     }
-    
-    console.log('Attempting to reset password with token:', token.substring(0, 5) + '...');
-    
-    // First, check if the token exists in the database
-    const { data: tokenData, error: tokenError } = await supabase
-      .from('users')
-      .select('*')
-      .eq('email_confirmation_token', token)
+
+    console.log("🔐 Attempting to reset password with token:", token.substring(0, 5) + "...");
+
+    // 1️⃣ Validate token in custom users table
+    const { data: user, error: tokenError } = await supabase
+      .from("users")
+      .select("*")
+      .eq("email_confirmation_token", token)
       .single();
-      
-    if (tokenError || !tokenData) {
-      console.error('Token validation failed:', tokenError);
-      throw new Error('Invalid or expired token');
+
+    if (tokenError || !user) {
+      console.error("❌ Token validation failed:", tokenError);
+      throw new Error("Invalid or expired token");
     }
-    
-    console.log('Token found for user:', tokenData.email);
-    
-    // Check if token is expired (24 hours)
-    if (!tokenData.confirmation_sent_at) {
-      console.error('Token has no timestamp');
-      throw new Error('Invalid token');
-    }
-    
-    const tokenDate = new Date(tokenData.confirmation_sent_at);
+
+    console.log("✅ Token found for user:", user.email);
+
+    // Check token expiry (24 hours)
+    const tokenDate = new Date(user.confirmation_sent_at);
     const now = new Date();
     const hoursDiff = (now.getTime() - tokenDate.getTime()) / (1000 * 60 * 60);
-    
+
     if (hoursDiff > 24) {
-      console.error('Token expired. Hours since creation:', hoursDiff);
-      throw new Error('Token has expired. Please request a new password reset.');
+      console.error("⏳ Token expired. Hours since creation:", hoursDiff);
+      throw new Error("Token has expired. Please request a new password reset.");
     }
-    
-    console.log('Token is valid and not expired');
-    
-    // Update password in Supabase Auth
-    const { error: authError } = await supabase.auth.updateUser({
+
+    console.log("✅ Token is valid and not expired");
+
+    // 2️⃣ Fetch Supabase Auth user by email
+    const { data: authUsersData, error: authError } = await supabasesAdmin.auth.admin.listUsers({
+      email: user.email
+    });
+
+    if (authError) {
+      console.error("❌ Error fetching auth user by email:", authError);
+      throw new Error("Failed to find user in Supabase Auth");
+    }
+
+    if (!authUsersData?.users?.length) {
+      console.error("❌ No Supabase Auth user found for email:", user.email);
+      throw new Error("User not found in Supabase Auth");
+    }
+
+    const authUser = authUsersData.users[0];
+    console.log("✅ Supabase Auth user found. ID:", authUser.id);
+
+    // 3️⃣ Update password in Supabase Auth
+    const { error: adminError } = await supabasesAdmin.auth.admin.updateUserById(authUser.id, {
       password: newPassword
     });
-    
-    if (authError) {
-      console.error('Error updating password in auth:', authError);
-      throw new Error('Failed to update password');
+
+    if (adminError) {
+      console.error("❌ Admin API error updating password:", adminError);
+      throw new Error("Failed to update password");
     }
-    
-    // Clear token in database
+
+    console.log("✅ Password updated successfully in Supabase Auth");
+
+    // 4️⃣ Clear token in custom users table
     const { error: clearTokenError } = await supabase
-      .from('users')
+      .from("users")
       .update({ email_confirmation_token: null, confirmation_sent_at: null })
-      .eq('email_confirmation_token', token);
-      
+      .eq("id", user.id);
+
     if (clearTokenError) {
-      console.error('Error clearing token:', clearTokenError);
-      // Don't throw here, password was already updated
+      console.error("⚠️ Error clearing token:", clearTokenError);
+      // Don’t throw here; password was already updated
     }
-    
-    console.log('Password reset successful');
+
+    console.log("🎉 Password reset flow completed successfully");
     return true;
   } catch (error) {
-    console.error('Error in resetPassword:', error);
+    console.error("❌ Error in resetPassword:", error);
     throw error;
   }
 }
+
+
+
 
 export async function updatePassword(newPassword: string): Promise<void> {
   try {
