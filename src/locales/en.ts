@@ -243,7 +243,6 @@ const en = {
   backToSolution: "Back to Solution",
   
   // User Profile
-  myProfile: "My Profile",
   mySolutions: "My Solutions",
   solutionsImInterestedIn: "Solutions I'm Interested In",
   memberSince: "Member Since",
@@ -344,7 +343,6 @@ const en = {
   securityComplianceVerification: "Security and compliance verification",
   performanceBenchmarking: "Performance benchmarking",
   expertSupportTitle: "Expert Support",
-  expertSupportDesc: "Our team of AI specialists provides end-to-end support throughout your AI implementation journey.",
   solutionSelectionGuidance: "Solution selection guidance",
   implementationSupport: "Implementation support",
   ongoingOptimization: "Ongoing optimization assistance",
