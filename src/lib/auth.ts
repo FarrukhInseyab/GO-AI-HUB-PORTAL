@@ -247,6 +247,8 @@ export async function requestPasswordReset(email: string): Promise<boolean> {
     if (!email) {
       throw new Error('Email is required');
     }
+
+    debugger;
     
     const sanitizedEmail = email.toLowerCase().trim();
     
@@ -267,16 +269,20 @@ export async function requestPasswordReset(email: string): Promise<boolean> {
     const resetToken = generateToken(32);
     
     // Store token in database
-    const { error: updateError } = await supabase
-      .from('users')
-      .update({
-        email_confirmation_token: resetToken,
-        confirmation_sent_at: new Date().toISOString()
-      })
-      .eq('email', sanitizedEmail);
+    const { data, error } = await supabase
+        .from('users')
+        .update({
+          email_confirmation_token: resetToken,
+          confirmation_sent_at: new Date().toISOString()
+        })
+        .eq('email', sanitizedEmail)
+        .select();
+
+    console.log("UPDATE ERROR:", error);
+    console.log("UPDATE RESULT:", data);
       
-    if (updateError) {
-      console.error('Error updating user with reset token:', updateError);
+    if (!data) {
+      console.error('Error updating user with reset token:', data);
       throw new Error('Failed to process password reset request');
     }
     
@@ -540,7 +546,7 @@ async function sendPasswordResetEmail(email: string, name: string, token: string
     const emailServiceUrl = import.meta.env.VITE_EMAIL_SERVICE_URL || 'http://localhost:3000';
     const appUrl = window.location.origin;
     
-    const response = await fetch(`${emailServiceUrl}/api/send-email`, {
+    const response = await fetch(`${emailServiceUrl}/send-email`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
