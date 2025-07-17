@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -15,41 +15,46 @@ const ConfirmEmail = () => {
   const [isVerifying, setIsVerifying] = useState(true);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const hasRun = useRef(false);
 
   useEffect(() => {
-    const verifyEmail = async () => {
-      try {
-        const token = searchParams.get('token');
-        
-        if (!token) {
-          setError('Missing confirmation token');
-          setIsVerifying(false);
-          return;
-        }
-        
-        if (!validateToken(token)) {
-          setError('Invalid confirmation token format');
-          setIsVerifying(false);
-          return;
-        }
-        
-        const success = await verifyEmailConfirmation(token);
-        
-        setIsSuccess(success);
-        if (!success) {
-          setError('Failed to verify email. The token may be invalid or expired.');
-        }
-      } catch (error) {
-        console.error('Error verifying email:', error);
-        setError(error instanceof Error ? error.message : 'An unknown error occurred');
-        setIsSuccess(false);
-      } finally {
-        setIsVerifying(false);
-      }
-    };
+  if (hasRun.current) return;
+  hasRun.current = true;
 
-    verifyEmail();
-  }, [searchParams]);
+  const verifyEmail = async () => {
+    try {
+      const token = searchParams.get('token');
+
+      if (!token) {
+        setError('Missing confirmation token');
+        setIsVerifying(false);
+        return;
+      }
+
+      if (!validateToken(token)) {
+        setError('Invalid confirmation token format');
+        setIsVerifying(false);
+        return;
+      }
+
+      const success = await verifyEmailConfirmation(token);
+
+      if (success) {
+        setIsSuccess(true);
+      } else {
+        setError('Failed to verify email. The token may be invalid or expired.');
+      }
+    } catch (error) {
+      console.error('Error verifying email:', error);
+      setError(error instanceof Error ? error.message : 'An unknown error occurred');
+      setIsSuccess(false);
+    } finally {
+      setIsVerifying(false);
+    }
+  };
+
+  verifyEmail();
+}, []); // REMOVE searchParams dependency
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-900">
@@ -93,10 +98,13 @@ const ConfirmEmail = () => {
                     ? 'شكرًا لتأكيد بريدك الإلكتروني. يمكنك الآن استخدام جميع ميزات المنصة.' 
                     : 'Thank you for confirming your email address. You can now use all features of the platform.'}
                 </p>
-                <Button onClick={() => navigate('/auth')} className="w-full">
-                  {language === 'ar' ? 'تسجيل الدخول' : 'Sign In'}
+                <Button onClick={() => navigate('/auth')} className="w-full ">
+                 <div className='flex items-center justify-center'>
+                   {language === 'ar' ? 'تسجيل الدخول' : 'Sign In'}
                   <ArrowRight className="ml-2 h-4 w-4" />
+                 </div>
                 </Button>
+
               </>
             ) : (
               <>

@@ -538,7 +538,7 @@ async function sendConfirmationEmail(email: string, name: string, token: string)
         const errorData = JSON.parse(errorText);
         throw new Error(errorData.error || 'Failed to send confirmation email');
       } catch (e) {
-        throw new Error(`Failed to send confirmation email: ${errorText}`);
+        throw new Error(`Failed to send confirmation email: ${e}`);
       }
     }
     
@@ -579,7 +579,7 @@ async function sendPasswordResetEmail(email: string, name: string, token: string
         const errorData = JSON.parse(errorText);
         throw new Error(errorData.error || 'Failed to send password reset email');
       } catch (e) {
-        throw new Error(`Failed to send password reset email: ${errorText}`);
+        throw new Error(`Failed to send password reset email: ${e}`);
       }
     }
     
@@ -593,24 +593,20 @@ async function sendPasswordResetEmail(email: string, name: string, token: string
 // Function to verify email confirmation token
 export async function verifyEmailConfirmation(token: string): Promise<boolean> {
   try {
-    if (!token) {
-      throw new Error('Confirmation token is required');
-    }
-    
-    // Find user with this token
-    const { data, error } = await supabase
+    if (!token) throw new Error('Confirmation token is required');
+
+    const { error, count } = await supabase
       .from('users')
       .update({ email_confirmed: true, email_confirmation_token: null })
       .eq('email_confirmation_token', token)
-      .select()
-      .single();
-      
-    if (error) {
-      console.error('Error verifying email confirmation:', error);
+      .select();
+
+    if (error || count === 0) {
+      console.error('Verification failed:', error);
       return false;
     }
-    
-    return !!data;
+
+    return true;
   } catch (error) {
     console.error('Error in verifyEmailConfirmation:', error);
     return false;
