@@ -102,7 +102,7 @@ const AuthPage = () => {
       
       <main className="flex-grow pt-20 flex items-center justify-center relative">
         {/* Background gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#014952] to-[#016774]"></div>
+        <div className="absolute inset-0 bg-[#014952]"></div>
         
         <div className="container mx-auto px-4 py-8 relative z-10">
           <div className="max-w-md mx-auto">

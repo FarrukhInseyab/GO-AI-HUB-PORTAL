@@ -70,7 +70,7 @@ const Header = () => {
       }`}
     >
       {/* Simple background effect */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[#014952]/90 to-[#014952]/90"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-[#014952]/90 to-[#4CEADB]/90"></div>
       
       <div className="container mx-auto px-4 relative">
         <div className="flex items-center justify-between py-3 sm:py-4">

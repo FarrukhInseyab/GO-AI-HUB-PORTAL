@@ -35,46 +35,51 @@ const LandingPage = () => {
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center overflow-hidden bg-gradient-to-r from-[#014952] to-[#049394]">
         {/* Animated background */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#014952] to-[#049394]"></div>
+        <div className="absolute inset-0 bg-[#014952]"></div>
         
-        <div className="container mx-auto px-4 z-10 relative">
+        <div className={`container px-4 z-10 relative ${language === 'ar' ? 'mr-[40px]' : 'ml-[40px]'}`}>
           <div className="max-w-4xl">
-            <div className="mb-4 sm:mb-6 flex items-center space-x-2">
+            {/* <div className="mb-4 sm:mb-6 flex items-center space-x-2">
               <div className="px-3 py-1.5 sm:px-4 sm:py-2 bg-[#014952]/50 rounded-full border border-[#4CEADB]/30">
                 <span className="text-[#4CEADB] text-xs sm:text-sm font-medium flex items-center">
                   <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
                   {language === 'ar' ? 'مدعوم بواسطة رُوَّاد' : 'Powered by GO.Ai | رُوَّاد'}
                 </span>
               </div>
-            </div>
+            </div> */}
             
             <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-4 sm:mb-8 leading-tight">
-              <span className="text-[#4CEADB]">
+              <span className="bg-gradient-to-r from-[#4CEADB] to-[#049394] text-transparent bg-clip-text">
                 {translations.heroTitle.split(' ').slice(0, 3).join(' ')}
               </span>
               <br />
-              <span className="text-white">
-                {translations.heroTitle.split(' ').slice(3).join(' ')}
+              <span className="text-white text-5xl">
+                {translations.heroTitle.split(' ').slice(3,5).join(' ')}
+              </span>
+              <br />
+               <span className="text-white text-5xl">
+                {translations.heroTitle.split(' ').slice(5).join(' ')}
               </span>
             </h1>
             
-            <p className="text-base sm:text-xl md:text-2xl text-gray-300 mb-6 sm:mb-10 max-w-3xl leading-relaxed">
+            <p className="text-base sm:text-xl md:text-1xl text-gray-300 mb-6 sm:mb-10 max-w-xl leading-relaxed">
               {translations.heroSubtitle}
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
-              <Link 
-                to="/vendor-onboarding" 
-                className="group relative bg-[#4CEADB] hover:bg-[#4CEADB]/80 text-[#014952] font-semibold py-3 px-6 sm:py-4 sm:px-8 rounded-lg transition-all duration-300 flex items-center justify-center transform hover:translate-y-[-2px]"
+             <Link
+                to="/vendor-onboarding"
+                className="group relative text-white font-semibold py-3 px-6 sm:py-4 sm:px-8 rounded-lg transition-all duration-500 flex items-center justify-center transform hover:translate-y-[-2px] bg-gradient-to-r from-[#4CEADB] to-[#014952] bg-[length:200%_200%] bg-[position:0%_50%] hover:bg-[position:100%_50%]"
               >
                 <Building className="mr-2 sm:mr-3 h-5 w-5 sm:h-6 sm:w-6" />
                 {translations.vendorCTA}
                 <ArrowRight className="ml-2 sm:ml-3 h-4 w-4 sm:h-5 sm:w-5 transform group-hover:translate-x-1 transition-transform" />
               </Link>
+
               
               <Link 
                 to="/discover" 
-                className="group relative bg-[#014952]/70 hover:bg-[#014952] border border-[#4CEADB]/30 hover:border-[#4CEADB] text-white font-semibold py-3 px-6 sm:py-4 sm:px-8 rounded-lg transition-all duration-300 flex items-center justify-center transform hover:translate-y-[-2px]"
+                className="group relative text-white font-semibold py-3 px-6 sm:py-4 sm:px-8 rounded-lg transition-all duration-500 flex items-center justify-center transform hover:translate-y-[-2px] bg-gradient-to-r from-[#4CEADB] to-[#014952] bg-[length:200%_200%] bg-[position:0%_50%] hover:bg-[position:100%_50%]"
               >
                 <Landmark className="mr-2 sm:mr-3 h-5 w-5 sm:h-6 sm:w-6" />
                 {translations.governmentCTA}
@@ -272,20 +277,20 @@ const LandingPage = () => {
       </section>
 
       {/* Features */}
-      <section className="py-12 sm:py-20 bg-[#014952] relative">
+      <section className="container py-12 sm:py-20 bg-[#014952] relative">
         <div className="absolute inset-0 bg-[#014952]"></div>
         
         <div className="container mx-auto px-4 relative z-10">
           <div className="text-center mb-8 sm:mb-16">
             <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
-              <span className="text-[#4CEADB]">
+              <span className="bg-gradient-to-r from-[#4CEADB] to-[#049394] text-transparent bg-clip-text">
                 {translations.featuresTitle}
               </span>
             </h2>
             <div className="w-16 sm:w-24 h-1 bg-[#4CEADB] mx-auto rounded-full"></div>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 max-w-7xl mx-auto">
             {[
               { icon: Brain, color: 'from-primary-500 to-secondary-500' },
               { icon: Zap, color: 'from-secondary-500 to-primary-500' },
@@ -301,7 +306,7 @@ const LandingPage = () => {
                 {/* Glowing background effect */}
                 <div className="absolute inset-0 bg-[#016774] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 
-                <div className={`w-12 h-12 sm:w-16 sm:h-16 bg-[#014952] rounded-lg flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform duration-300 border border-[#4CEADB]/20`}>
+                <div className={`w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-[#016774] to-[#4CEADB] rounded-lg flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform duration-300`}>
                   <feature.icon className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
                 </div>
                 
@@ -309,7 +314,7 @@ const LandingPage = () => {
                   {translations[`featureTitle${index + 1}`]}
                 </h3>
                 
-                <p className="text-sm text-gray-400 mb-4 sm:mb-6 leading-relaxed relative z-10">
+                <p className="text-sm text-white mb-4 sm:mb-6 leading-relaxed relative z-10">
                   {translations[`featureDescription${index + 1}`]}
                 </p>
                 
@@ -319,7 +324,7 @@ const LandingPage = () => {
                       <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-[#4CEADB] flex items-center justify-center mr-2 sm:mr-3 mt-0.5 group-hover/item:scale-110 transition-transform duration-300">
                         <Check className="h-2 w-2 sm:h-3 sm:w-3 text-white" />
                       </div>
-                      <span className="text-xs sm:text-sm text-gray-400 group-hover/item:text-gray-300 transition-colors duration-300">
+                      <span className="text-xs sm:text-sm text-white group-hover/item:text-gray-300 transition-colors duration-300">
                         {translations[`featurePoint${index + 1}${point}`]}
                       </span>
                     </li>

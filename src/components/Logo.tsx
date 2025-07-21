@@ -1,5 +1,5 @@
 import React from 'react';
-import goLogo from '../assets/LOGO GO AI HUB .png';
+import goLogo from '../assets/LOGO GO AI HUB2 .png';
 
 interface LogoProps {
   color?: string;
