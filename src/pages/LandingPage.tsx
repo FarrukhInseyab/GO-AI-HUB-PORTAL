@@ -277,7 +277,7 @@ const LandingPage = () => {
       </section>
 
       {/* Features */}
-      <section className="container py-12 sm:py-20 bg-[#014952] relative">
+      <section className="py-12 sm:py-20 bg-[#014952] relative">
         <div className="absolute inset-0 bg-[#014952]"></div>
         
         <div className="container mx-auto px-4 relative z-10">
