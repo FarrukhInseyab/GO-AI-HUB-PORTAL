@@ -159,12 +159,12 @@ export async function createSolution(solution: Partial<Solution>): Promise<Solut
   }
   
   // Validate LinkedIn URL if provided
-  if (solution.linkedin) {
-    const linkedinValidation = validateLinkedIn(solution.linkedin);
-    if (!linkedinValidation.isValid) {
-      throw new Error(linkedinValidation.error || 'Invalid LinkedIn URL format');
-    }
-  }
+  // if (solution.linkedin) {
+  //   const linkedinValidation = validateLinkedIn(solution.linkedin);
+  //   if (!linkedinValidation.isValid) {
+  //     throw new Error(linkedinValidation.error || 'Invalid LinkedIn URL format');
+  //   }
+  // }
 
   // Email validation
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

@@ -356,17 +356,19 @@ export async function resetPassword(token: string, newPassword: string): Promise
       email: user.email
     });
 
+    const matchedUser = authUsersData.users.find(u => u.email === user.email);
+
     if (authError) {
       console.error("❌ Error fetching auth user by email:", authError);
       throw new Error("Failed to find user in Supabase Auth");
     }
 
-    if (!authUsersData?.users?.length) {
+    if (!authUsersData?.users?.length || !matchedUser) {
       console.error("❌ No Supabase Auth user found for email:", user.email);
       throw new Error("User not found in Supabase Auth");
     }
 
-    const authUser = authUsersData.users[0];
+    const authUser = matchedUser;
     console.log("✅ Supabase Auth user found. ID:", authUser.id);
 
     // 3️⃣ Update password in Supabase Auth
@@ -536,7 +538,7 @@ export async function getCurrentUser(): Promise<User | null> {
 // Function to send confirmation email
 async function sendConfirmationEmail(email: string, name: string, token: string): Promise<void> {
   try {
-    const emailServiceUrl = import.meta.env.VITE_EMAIL_SERVICE_URL || 'http://localhost:3000/api';
+    const emailServiceUrl = import.meta.env.VITE_EMAIL_SERVICE_URL || 'http://goaihub.ai:3000/api';
     const appUrl = window.location.origin;
     
     console.log('Sending confirmation email to:', email);
@@ -577,7 +579,7 @@ async function sendConfirmationEmail(email: string, name: string, token: string)
 // Function to send password reset email
 async function sendPasswordResetEmail(email: string, name: string, token: string): Promise<void> {
   try {
-    const emailServiceUrl = import.meta.env.VITE_EMAIL_SERVICE_URL || 'http://localhost:3000/api';
+    const emailServiceUrl = import.meta.env.VITE_EMAIL_SERVICE_URL || 'http://goaihub.ai:3000/api';
     const appUrl = window.location.origin;
     
     console.log('Sending password reset email to:', email);
