@@ -4,6 +4,7 @@ import { Menu, X, ChevronDown, User, Zap, Languages } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useUser } from '../context/UserContext';
 import Logo from './Logo';
+import Gologo from './GOlogo';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -80,7 +81,7 @@ const Header = () => {
               <div className="absolute inset-0 bg-primary-500/20 blur-lg rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </div>
           </Link>
-
+          
           {/* Desktop Navigation */}
           <nav className={`hidden md:flex items-center ${language === 'ar' ? 'space-x-reverse space-x-6' : 'space-x-6'}`}>
             <Link 
@@ -168,7 +169,7 @@ const Header = () => {
             >
               <Languages className="h-5 w-5" />
             </button>
-
+              
             {/* User Menu */}
             {user ? (
               <div className="relative group">
@@ -203,7 +204,9 @@ const Header = () => {
                   </button>
                 </div>
               </div>
-            ) : (
+            ) 
+            
+            : (
               <Link
                 to="/auth"
                 className={`font-medium transition-all duration-300 px-3 py-2 rounded-lg border border-gray-700/50 bg-primary-500/10 hover:bg-primary-500/20 text-sm ${
@@ -213,6 +216,10 @@ const Header = () => {
                 {translations.signIn}
               </Link>
             )}
+            <div className="relative">
+              <Gologo color={isScrolled || !isLandingPage ? 'text-primary-500' : 'text-white'} />
+              <div className="absolute inset-0 bg-primary-500/20 blur-lg rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </div>
           </nav>
 
           {/* Mobile Navigation Toggle */}
@@ -236,6 +243,7 @@ const Header = () => {
               {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
           </div>
+          
         </div>
       </div>
 
