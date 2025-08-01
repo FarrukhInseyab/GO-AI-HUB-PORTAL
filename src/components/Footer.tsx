@@ -105,7 +105,7 @@ const Footer = () => {
                   info@goaihub.ai
                 </a>
               </li>
-              <li className="flex items-center group">
+              {/* <li className="flex items-center group">
                 <div className="p-1.5 sm:p-2 rounded-lg border border-[#049394]/20 bg-[#049394]/5 mr-2 sm:mr-3">
                   <Phone className="h-4 w-4 sm:h-5 sm:w-5 text-[#049394]" />
                 </div>
@@ -115,7 +115,7 @@ const Footer = () => {
                 >
                   +966 59 136 4477
                 </a>
-              </li>
+              </li> */}
             </ul>
           </div>
         </div>
