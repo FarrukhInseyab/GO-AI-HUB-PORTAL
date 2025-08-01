@@ -130,7 +130,7 @@ async function handleChatRequest(
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: options?.model || 'gpt-4-turbo-preview',
+      model: options?.model || 'gpt-4-o',
       messages,
       temperature: options?.temperature ?? 0.7,
       max_tokens: options?.max_tokens,
@@ -219,7 +219,7 @@ async function analyzeMessage(
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'gpt-4-turbo-preview',
+      model: 'gpt-4-o',
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: message }
@@ -258,7 +258,7 @@ async function generateSummary(
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'gpt-4-turbo-preview',
+      model: 'gpt-4-o',
       messages: [
         {
           role: 'system',
@@ -298,7 +298,7 @@ async function generateTags(
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'gpt-4-turbo-preview',
+      model: 'gpt-4-o',
       messages: [
         {
           role: 'system',
@@ -363,7 +363,7 @@ async function generateRecommendation(
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'gpt-4-turbo-preview',
+      model: 'gpt-4-o',
       messages: [
         {
           role: 'system',
