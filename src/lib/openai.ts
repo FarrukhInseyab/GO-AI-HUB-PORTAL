@@ -52,7 +52,7 @@ export async function callOpenAI(
       method: 'POST',
       headers: getHeaders(),
       body: JSON.stringify({
-        model: options.model || 'gpt-4-o',
+        model: options.model || 'gpt-4-turbo-preview',
         messages,
         temperature: options.temperature ?? 0.7,
         max_tokens: options.max_tokens,
