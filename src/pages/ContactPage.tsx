@@ -92,7 +92,7 @@ const ContactPage = () => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          to: 'farrukh.khan@inseyab.com',
+          to: 'info@goaihub.ai',
           type: 'custom',
           subject: emailSubject,
           html: emailHtml
@@ -193,7 +193,7 @@ const ContactPage = () => {
                     </div>
                   </div>
 
-                  <div className="flex items-start group">
+                  {/* <div className="flex items-start group">
                     <div className="p-3 bg-gradient-to-br from-secondary-500/20 to-primary-500/20 rounded-xl border border-secondary-500/30 mr-4">
                       <Phone className="h-6 w-6 text-secondary-500" />
                     </div>
@@ -208,7 +208,7 @@ const ContactPage = () => {
                         +966 59 136 4477
                       </a>
                     </div>
-                  </div>
+                  </div> */}
 
                   <div className="flex items-start group">
                     <div className="p-3 bg-gradient-to-br from-green-500/20 to-teal-500/20 rounded-xl border border-green-500/30 mr-4">
@@ -343,10 +343,12 @@ const ContactPage = () => {
                     loading={isSubmitting}
                     className="w-full"
                   >
-                    <Send className="h-4 w-4 mr-2" />
-                    {isSubmitting 
-                      ? (language === 'ar' ? 'جاري الإرسال...' : 'Sending...') 
-                      : (language === 'ar' ? 'إرسال الرسالة' : 'Send Message')}
+                    <div className='flex gap-2'>
+                        <Send className="h-4 w-4 mr-2" />
+                      {isSubmitting 
+                        ? (language === 'ar' ? 'جاري الإرسال...' : 'Sending...') 
+                        : (language === 'ar' ? 'إرسال الرسالة' : 'Send Message')}
+                    </div>
                   </Button>
                 </form>
               </div>

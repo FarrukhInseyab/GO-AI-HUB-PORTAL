@@ -131,6 +131,17 @@ const Header = () => {
               <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary-500 group-hover:w-full transition-all duration-300"></div>
             </Link>
 
+
+            <Link 
+              to="/contact" 
+              className={`relative font-medium transition-all duration-300 hover:text-primary-500 group text-sm ${
+                isScrolled || !isLandingPage ? 'text-white' : 'text-white'
+              }`}
+            >
+              {translations.contact}
+              <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary-500 group-hover:w-full transition-all duration-300"></div>
+            </Link>
+
             {/* About Dropdown */}
             <div className="relative group">
               <button 
@@ -291,6 +302,13 @@ const Header = () => {
               GOAI | رُوَّاد
             </Link>
             
+             <Link 
+              to="/contact" 
+              className="font-medium text-white hover:text-primary-500 transition-all duration-300 py-2 px-4 rounded-lg hover:bg-primary-500/10"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              {translations.contact}
+            </Link>
             {/* About submenu items */}
             <div className="border-t border-gray-800/50 pt-2">
               <p className="text-sm font-semibold text-gray-500 mb-1 px-4">{translations.about}</p>

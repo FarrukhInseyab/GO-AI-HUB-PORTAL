@@ -27,7 +27,7 @@ export const ROUTES = {
   GO_ADVANTAGE: '/go-advantage',
   PROFILE: '/profile',
   AUTH_CALLBACK: '/auth/callback',
-  GOAI_AGENT: '/goai-agent'
+  GOAI_AGENT: '/goai-agent',
   CONTACT: '/contact'
 } as const;
 
