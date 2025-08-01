@@ -538,7 +538,7 @@ export async function getCurrentUser(): Promise<User | null> {
 // Function to send confirmation email
 async function sendConfirmationEmail(email: string, name: string, token: string): Promise<void> {
   try {
-    const emailServiceUrl = import.meta.env.VITE_EMAIL_SERVICE_URL || 'http://goaihub.ai:3000/api';
+    const emailServiceUrl = import.meta.env.VITE_EMAIL_SERVICE_URL ||  'https://goaihub.ai/email/api';
     const appUrl = window.location.origin;
     
     console.log('Sending confirmation email to:', email);
@@ -579,7 +579,7 @@ async function sendConfirmationEmail(email: string, name: string, token: string)
 // Function to send password reset email
 async function sendPasswordResetEmail(email: string, name: string, token: string): Promise<void> {
   try {
-    const emailServiceUrl = import.meta.env.VITE_EMAIL_SERVICE_URL || 'http://goaihub.ai:3000/api';
+    const emailServiceUrl = import.meta.env.VITE_EMAIL_SERVICE_URL || 'https://goaihub.ai/email/api';
     const appUrl = window.location.origin;
     
     console.log('Sending password reset email to:', email);
