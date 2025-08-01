@@ -92,7 +92,7 @@ const ContactPage = () => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          to: 'info@goaihub.ai',
+          to: 'farrukh.khan@inseyab.com',
           type: 'custom',
           subject: emailSubject,
           html: emailHtml
