@@ -30,6 +30,7 @@ const VendorOnboarding = React.lazy(() => import('./pages/VendorOnboarding'));
 const VendorOnboardingAI = React.lazy(() => import('./pages/VendorOnboardingAI'));
 const GOAIAgent = React.lazy(() => import('./pages/GOAIAgent'));
 const AIRecommendation = React.lazy(() => import('./pages/AIRecommendation'));
+const ContactPage = React.lazy(() => import('./pages/ContactPage'));
 
 function App() {
   return (
@@ -67,6 +68,7 @@ function App() {
                     <Route path="/vendor-onboarding" element={<VendorOnboarding />} />
                     <Route path="/vendor-onboarding-ai" element={<VendorOnboardingAI />} />
                     <Route path="/goai-agent" element={<GOAIAgent />} />
+                    <Route path="/contact" element={<ContactPage />} />
                   </Routes>
                 </Suspense>
               </div>

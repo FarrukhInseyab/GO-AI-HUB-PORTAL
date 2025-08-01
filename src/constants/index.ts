@@ -28,6 +28,7 @@ export const ROUTES = {
   PROFILE: '/profile',
   AUTH_CALLBACK: '/auth/callback',
   GOAI_AGENT: '/goai-agent'
+  CONTACT: '/contact'
 } as const;
 
 // Form options - organized by category
