@@ -227,10 +227,21 @@ const Header = () => {
                 {translations.signIn}
               </Link>
             )}
-            <div className="relative">
-              <Gologo color={isScrolled || !isLandingPage ? 'text-primary-500' : 'text-white'} />
-              <div className="absolute inset-0 bg-primary-500/20 blur-lg rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div className="relative group">
+              <a
+                href="https://go.com.sa/أعمال"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative group inline-block"
+              >
+                <div className="relative z-10">
+                  <Gologo color={isScrolled || !isLandingPage ? 'text-primary-500' : 'text-white'} />
+                </div>
+                <div className="absolute inset-0 bg-primary-500/20 blur-lg rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0"></div>
+              </a>
+
             </div>
+
           </nav>
 
           {/* Mobile Navigation Toggle */}
