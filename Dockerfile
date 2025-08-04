@@ -1,5 +1,4 @@
-# Step 1: Build the React/Vite app
-FROM node:20-alpine AS builder
+FROM node:20-alpine as builder
 
 WORKDIR /app
 COPY package*.json ./
@@ -7,18 +6,15 @@ RUN npm install
 COPY . .
 RUN npm run build
 
-# Step 2: Serve with Nginx
-FROM nginx:stable-alpine
+FROM node:20-alpine
 
-# Remove default index.html
-RUN rm -rf /usr/share/nginx/html/*
+WORKDIR /app
+RUN npm install -g serve
 
-# Copy built files from builder to Nginx directory
-COPY --from=builder /app/dist /usr/share/nginx/html
+COPY --from=builder /app/dist ./dist
 
-# Add your custom NGINX config
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 8080
 
-EXPOSE 80
+CMD ["serve", "-s", "dist", "-l", "8080"]
 
-CMD ["nginx", "-g", "daemon off;"]
+

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Sparkles, ArrowRight } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 interface SuccessStoryProps {
   title: string;
@@ -14,6 +15,7 @@ const SuccessStory: React.FC<SuccessStoryProps> = ({
   impact,
   active,
 }) => {
+  const { translations } = useLanguage();
   return (
     <div 
       className={`absolute inset-0 transition-all duration-1000 ${
@@ -42,7 +44,7 @@ const SuccessStory: React.FC<SuccessStoryProps> = ({
           <div className="bg-gray-800/50 backdrop-blur-sm border border-[#049394]/20 p-4 sm:p-6 rounded-xl">
             <div className="flex items-center mb-2 sm:mb-4">
               <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-gradient-to-r from-[#049394] to-[#4CEADB] rounded-full mr-2 sm:mr-3"></div>
-              <h4 className="font-semibold text-base sm:text-lg text-[#049394]">Impact:</h4>
+              <h4 className="font-semibold text-base sm:text-lg text-[#049394]">{translations.impact}:</h4>
             </div>
             <p className="text-sm sm:text-base text-gray-300 leading-relaxed">{impact}</p>
             
