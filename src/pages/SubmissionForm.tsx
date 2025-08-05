@@ -45,6 +45,8 @@ const SubmissionForm = () => {
   const [isResubmission, setIsResubmission] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [solutionId, setSolutionId] = useState<string | null>(null);
+  const [uploadingField, setUploadingField] = useState<null | 'registration' | 'pitchDeck' | 'productImages'>(null);
+
   
   const [formData, setFormData] = useState<FormData>({
     // Basic Info
@@ -188,26 +190,28 @@ const SubmissionForm = () => {
   };
 
   const handleFileUpload = async (field: 'registration' | 'pitchDeck' | 'productImages', file: File) => {
-    try {
-      let bucket = '';
-      if (field === 'registration') bucket = 'registration';
-      else if (field === 'pitchDeck') bucket = 'pitch-decks';
-      else if (field === 'productImages') bucket = 'product-images';
-      
-      const url = await uploadFile(file, bucket);
-      
-      if (field === 'productImages') {
-        // Add to array of product images
-        handleInputChange('productImages', [...(formData.productImages || []), url]);
-      } else {
-        // Set single file URL
-        handleInputChange(field, url);
-      }
-    } catch (error) {
-      console.error('File upload error:', error);
-      setError(`Failed to upload ${field}. Please try again.`);
+  try {
+    setUploadingField(field); // Start loader
+    let bucket = '';
+    if (field === 'registration') bucket = 'registration';
+    else if (field === 'pitchDeck') bucket = 'pitch-decks';
+    else if (field === 'productImages') bucket = 'product-images';
+
+    const url = await uploadFile(file, bucket);
+
+    if (field === 'productImages') {
+      handleInputChange('productImages', [...(formData.productImages || []), url]);
+    } else {
+      handleInputChange(field, url);
     }
-  };
+  } catch (error) {
+    console.error('File upload error:', error);
+    setError(`Failed to upload ${field}. Please try again.`);
+  } finally {
+    setUploadingField(null); // Stop loader
+  }
+};
+
 
   const generateAIContent = async () => {
     if (!formData.description?.length) {
@@ -540,22 +544,32 @@ const SubmissionForm = () => {
                 </label>
                 <div className="flex items-center space-x-3">
                   <label className="flex-1 cursor-pointer bg-gray-800/50 border border-gray-700/50 hover:border-primary-500/30 rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-center transition-all duration-300">
-                    <input
-                      type="file"
-                      className="hidden"
-                      accept=".pdf,.jpg,.jpeg,.png"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (file) {
-                          handleFileUpload('registration', file);
-                        }
-                      }}
-                    />
-                    <div className="flex items-center justify-center">
-                      <Upload className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400 mr-2" />
-                      <span className="text-gray-400 text-sm">{translations.uploadFile}</span>
-                    </div>
-                  </label>
+                      <input
+                        type="file"
+                        className="hidden"
+                        accept=".pdf,.jpg,.jpeg,.png"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            handleFileUpload('registration', file);
+                          }
+                        }}
+                      />
+                      <div className="flex items-center justify-center">
+                        {uploadingField === 'registration' ? (
+                          <svg className="animate-spin h-5 w-5 text-primary-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                          </svg>
+                        ) : (
+                          <Upload className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400 mr-2" />
+                        )}
+                        <span className="text-gray-400 text-sm">
+                          {uploadingField === 'registration' ? 'Uploading...' : translations.uploadFile}
+                        </span>
+                      </div>
+                    </label>
+
                   
                   {formData.registration && (
                     <div className="flex items-center bg-gray-800/50 border border-gray-700/50 rounded-lg px-2 sm:px-3 py-1.5 sm:py-2">
@@ -831,9 +845,22 @@ const SubmissionForm = () => {
                       }
                     }}
                   />
-                  <Upload className="h-4 w-4 sm:h-6 sm:w-6 text-gray-400 mb-1 sm:mb-2" />
-                  <span className="text-xs text-gray-400">Add Image</span>
+                  {uploadingField === 'productImages' ? (
+                    <>
+                      <svg className="animate-spin h-5 w-5 sm:h-6 sm:w-6 text-primary-500 mb-1 sm:mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                      </svg>
+                      <span className="text-xs text-primary-400">Uploading...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Upload className="h-4 w-4 sm:h-6 sm:w-6 text-gray-400 mb-1 sm:mb-2" />
+                      <span className="text-xs text-gray-400">Add Image</span>
+                    </>
+                  )}
                 </label>
+
               </div>
               <p className="text-xs text-gray-500 mt-1">Upload product screenshots or images (max 2MB each)</p>
             </div>
@@ -947,22 +974,35 @@ const SubmissionForm = () => {
               </label>
               <div className="flex items-center space-x-2 sm:space-x-3">
                 <label className="flex-1 cursor-pointer bg-gray-800/50 border border-gray-700/50 hover:border-primary-500/30 rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-center transition-all duration-300">
-                  <input
-                    type="file"
-                    className="hidden"
-                    accept=".pdf"
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (file) {
-                        handleFileUpload('pitchDeck', file);
-                      }
-                    }}
-                  />
-                  <div className="flex items-center justify-center">
-                    <Upload className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400 mr-2" />
-                    <span className="text-gray-400 text-sm">{translations.uploadFile}</span>
-                  </div>
-                </label>
+                <input
+                  type="file"
+                  className="hidden"
+                  accept=".pdf"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      handleFileUpload('pitchDeck', file);
+                    }
+                  }}
+                />
+                <div className="flex items-center justify-center">
+                  {uploadingField === 'pitchDeck' ? (
+                    <>
+                      <svg className="animate-spin h-4 w-4 sm:h-5 sm:w-5 text-primary-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                      </svg>
+                      <span className="text-primary-400 text-sm">Uploading...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Upload className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400 mr-2" />
+                      <span className="text-gray-400 text-sm">{translations.uploadFile}</span>
+                    </>
+                  )}
+                </div>
+              </label>
+
                 
                 {formData.pitchDeck && (
                   <div className="flex items-center bg-gray-800/50 border border-gray-700/50 rounded-lg px-2 sm:px-3 py-1.5 sm:py-2">
