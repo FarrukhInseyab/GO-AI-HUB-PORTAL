@@ -16,12 +16,12 @@ app.use(cors({
 
 // Create transporter
 const transporter = nodemailer.createTransport({
-  host: "decisions.social",
-  port: 465,
-  secure: true,
+  host: "Smtp.office365.com",
+  port: 587,
+  secure: false,
   auth: {
-    user: "alerts@decisions.social",
-    pass: "3?%-.v7pwsaz"
+    user: "noreply@goaihub.ai",
+    pass: "R$271566212132ok"
   }
 });
 
@@ -159,7 +159,7 @@ app.post('/api/send-email', async (req, res) => {
     }
     
     const mailOptions = {
-      from: process.env.EMAIL_FROM || 'alerts@decisions.social',
+      from: process.env.EMAIL_FROM || 'noreply@goaihub.ai',
       to,
       subject: emailContent.subject,
       html: emailContent.html
