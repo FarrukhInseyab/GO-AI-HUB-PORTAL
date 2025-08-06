@@ -137,62 +137,58 @@ export async function uploadFile(file: File, bucket: string): Promise<string> {
 }
 
 export async function createSolution(solution: Partial<Solution>): Promise<Solution> {
+  // Helper function to safely trim a value
+  const safeTrim = (value: any): string => (typeof value === 'string' ? value.trim() : '');
+ 
+  // Helper function to safely lower-case and trim email
+  const safeEmail = (value: any): string => 
+    typeof value === 'string' ? value.toLowerCase().trim() : '';
+ 
   // Input validation and sanitization
-  if (!solution.solution_name?.trim()) {
+  if (!safeTrim(solution.solution_name)) {
     throw new Error('Solution name is required');
   }
-  
-  if (!solution.summary?.trim()) {
+ 
+  if (!safeTrim(solution.summary)) {
     throw new Error('Solution summary is required');
   }
-
-  if (!solution.contact_email?.trim()) {
+ 
+  if (!safeTrim(solution.contact_email)) {
     throw new Error('Contact email is required');
   }
-  
+ 
   // Validate website URL if provided
   if (solution.website) {
-    const websiteValidation = validateUrl(solution.website);
+    const websiteValidation = validateUrl(safeTrim(solution.website));
     if (!websiteValidation.isValid) {
       throw new Error(websiteValidation.error || 'Invalid website URL format');
     }
   }
-  
-  // Validate LinkedIn URL if provided
-  // if (solution.linkedin) {
-  //   const linkedinValidation = validateLinkedIn(solution.linkedin);
-  //   if (!linkedinValidation.isValid) {
-  //     throw new Error(linkedinValidation.error || 'Invalid LinkedIn URL format');
-  //   }
-  // }
-
-  // Email validation
+ 
+  // Email format validation
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!solution.contact_email || !emailRegex.test(solution.contact_email)) {
+  const cleanedEmail = safeEmail(solution.contact_email);
+  if (!emailRegex.test(cleanedEmail)) {
     throw new Error('Invalid email format');
   }
-
+ 
   // Get current authenticated user
   const { data: { user }, error: userError } = await supabase.auth.getUser();
   if (userError || !user) {
     console.error('Auth error:', userError);
     throw new Error('Authentication required');
   }
-
-  console.log('Current auth user:', user.id);
-
-  // Get user profile to link solution - we need the primary key id for the foreign key relationship
+ 
+  // Get user profile to link solution
   const { data: userProfile, error: profileError } = await supabase
     .from('users')
     .select('id, user_id, email, contact_name, company_name')
     .eq('user_id', user.id)
     .single();
-
+ 
+  let finalUserProfile = userProfile;
+ 
   if (profileError || !userProfile) {
-    console.error('Profile error:', profileError);
-    console.error('Profile query result:', { userProfile, profileError });
-    
-    // Try to create the user profile if it doesn't exist
     console.log('Attempting to create user profile...');
     const { data: newProfile, error: createError } = await supabase
       .from('users')
@@ -206,72 +202,56 @@ export async function createSolution(solution: Partial<Solution>): Promise<Solut
       })
       .select('id, user_id, email, contact_name, company_name')
       .single();
-
+ 
     if (createError || !newProfile) {
       console.error('Failed to create user profile:', createError);
       throw new Error('User profile not found and could not be created. Please try signing out and signing back in.');
     }
-
-    console.log('Created new user profile:', newProfile);
-    // Use the newly created profile
-    userProfile.id = newProfile.id;
-    userProfile.user_id = newProfile.user_id;
-    userProfile.email = newProfile.email;
-    userProfile.contact_name = newProfile.contact_name;
-    userProfile.company_name = newProfile.company_name;
+ 
+    finalUserProfile = newProfile;
+  }
+ 
+  // Ensure finalUserProfile is not null
+  if (!finalUserProfile) {
+    throw new Error('User profile is missing. Please try signing out and signing back in.');
   }
 
-  console.log('Creating solution for user:', {
-    authUserId: user.id,
-    profileId: userProfile.id,
-    profileUserId: userProfile.user_id,
-    email: userProfile.email
-  });
-
-  // Sanitize text inputs
+  // Sanitize solution fields
   const sanitizedSolution = {
     ...solution,
-    user_id: userProfile.id, // Use the users table primary key for the foreign key relationship
-    solution_name: sanitizeInput(solution.solution_name),
-    summary: sanitizeInput(solution.summary || ''),
-    description: solution.description ? sanitizeInput(solution.description) : null,
-    company_name: solution.company_name ? sanitizeInput(solution.company_name) : userProfile.company_name,
-    contact_name: solution.contact_name ? sanitizeInput(solution.contact_name) : userProfile.contact_name,
-    contact_email: solution.contact_email.toLowerCase().trim(),
-    website: solution.website?.trim() || null,
-    linkedin: solution.linkedin ? (solution.linkedin.startsWith('http') ? solution.linkedin.trim() : `https://${solution.linkedin.trim()}`) : null,
-    clients: solution.clients ? sanitizeInput(solution.clients) : null,
-    ksa_customization_details: solution.ksa_customization_details ? sanitizeInput(solution.ksa_customization_details) : null,
+    user_id: finalUserProfile.id,
+    solution_name: sanitizeInput(safeTrim(solution.solution_name)),
+    summary: sanitizeInput(safeTrim(solution.summary || '')),
+    description: solution.description ? sanitizeInput(safeTrim(solution.description)) : null,
+    company_name: solution.company_name ? sanitizeInput(safeTrim(solution.company_name)) : finalUserProfile.company_name,
+    contact_name: solution.contact_name ? sanitizeInput(safeTrim(solution.contact_name)) : finalUserProfile.contact_name,
+    contact_email: cleanedEmail,
+    website: solution.website ? safeTrim(solution.website) : null,
+    linkedin: solution.linkedin 
+      ? (safeTrim(solution.linkedin).startsWith('http') 
+          ? safeTrim(solution.linkedin) 
+          : `https://${safeTrim(solution.linkedin)}`)
+      : null,
+    clients: solution.clients ? sanitizeInput(safeTrim(solution.clients)) : null,
+    ksa_customization_details: solution.ksa_customization_details ? sanitizeInput(safeTrim(solution.ksa_customization_details)) : null,
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
     status: 'pending',
     tech_approval_status: 'pending',
     business_approval_status: 'pending'
   };
-
-  console.log('Sanitized solution data:', {
-    user_id: sanitizedSolution.user_id,
-    solution_name: sanitizedSolution.solution_name,
-    contact_email: sanitizedSolution.contact_email
-  });
-
+ 
   const { data, error } = await supabase
     .from('solutions')
     .insert(sanitizedSolution)
     .select()
     .single();
-
+ 
   if (error) {
     console.error('Error creating solution:', error);
-    console.error('Error details:', {
-      code: error.code,
-      message: error.message,
-      details: error.details,
-      hint: error.hint
-    });
     throw error;
   }
-  
+ 
   return data;
 }
 
