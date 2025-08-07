@@ -21,7 +21,7 @@ const transporter = nodemailer.createTransport({
   secure: false,
   auth: {
     user: "noreply@goaihub.ai",
-    pass: "R$271566212132ok"
+    pass: ""
   }
 });
 
