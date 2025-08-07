@@ -57,28 +57,56 @@ const ContactPage = () => {
       const emailSubject = `Contact Form: ${formData.subject}`;
       const emailHtml = `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 5px;">
+      
           <div style="text-align: center; margin-bottom: 20px;">
-            <h1 style="color: #049394;">New Contact Form Submission - GO AI HUB</h1>
+            <h1 style="color: #00afaf;">New Contact Form Submission</h1>
           </div>
-          
-          <div style="background-color: #f9f9f9; padding: 20px; border-radius: 5px; margin-bottom: 20px;">
-            <h2 style="color: #333; margin-top: 0;">Contact Details</h2>
-            <p><strong>Name:</strong> ${formData.name}</p>
-            <p><strong>Email:</strong> ${formData.email}</p>
-            <p><strong>Company:</strong> ${formData.company || 'Not provided'}</p>
-            <p><strong>Phone:</strong> ${formData.phone || 'Not provided'}</p>
-            <p><strong>Subject:</strong> ${formData.subject}</p>
+
+          <p><strong>Name:</strong> ${formData.name || 'Not provided'}</p>
+          <p><strong>Email:</strong> ${formData.email || 'Not provided'}</p>
+          <p><strong>Company:</strong> ${formData.company || 'Not provided'}</p>
+          <p><strong>Phone:</strong> ${formData.phone || 'Not provided'}</p>
+          <p><strong>Subject:</strong> ${formData.subject || 'Not provided'}</p>
+
+          <div style="margin-top: 20px;">
+            <h2 style="color: #333;">Message</h2>
+            <p style="white-space: pre-wrap; line-height: 1.6; color: #444;">${formData.message || 'No message provided.'}</p>
           </div>
-          
-          <div style="background-color: #f0f8ff; padding: 20px; border-radius: 5px; margin-bottom: 20px;">
-            <h2 style="color: #333; margin-top: 0;">Message</h2>
-            <p style="white-space: pre-wrap; line-height: 1.6;">${formData.message}</p>
-          </div>
-          
+
           <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0; color: #666; font-size: 12px;">
             <p>This message was sent from the GO AI HUB contact form.<br>
             Submitted on: ${new Date().toLocaleString()}<br>
-            Reply to: ${formData.email}</p>
+            Reply to: <a href="mailto:${formData.email || 'no-reply@goaihub.ai'}">${formData.email || 'no-reply@goaihub.ai'}</a></p>
+            <p>Best regards,<br>
+            GO AI HUB Team<br>
+            Email: <a href="mailto:ai.support@go.com.sa">ai.support@go.com.sa</a><br>
+            Website: <a href="https://www.goaihub.ai" target="_blank">www.goaihub.ai</a><br>
+            Working Hours: Sunday–Thursday, 9:00 AM – 5:00 PM (KSA Time)</p>
+          </div>
+
+          <hr style="margin: 40px 0; border: none; border-top: 1px solid #e0e0e0;">
+
+          <div dir="rtl" style="text-align: right; font-family: Arial, sans-serif;">
+            <h1 style="color: #00afaf;">تم إرسال نموذج التواصل</h1>
+            <p><strong>الاسم:</strong> ${formData.name || 'لم يتم التقديم'}</p>
+            <p><strong>البريد الإلكتروني:</strong> ${formData.email || 'لم يتم التقديم'}</p>
+            <p><strong>الشركة:</strong> ${formData.company || 'لم يتم التقديم'}</p>
+            <p><strong>رقم الجوال:</strong> ${formData.phone || 'لم يتم التقديم'}</p>
+            <p><strong>الموضوع:</strong> ${formData.subject || 'لم يتم التقديم'}</p>
+
+            <h2 style="color: #333;">الرسالة</h2>
+            <p style="white-space: pre-wrap; line-height: 1.6; color: #444;">${formData.message || 'لا توجد رسالة'}</p>
+
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0; color: #666; font-size: 12px;">
+              <p>تم إرسال هذه الرسالة من نموذج التواصل في موقع GO AI HUB.<br>
+              تم الإرسال في: ${new Date().toLocaleString()}<br>
+              يمكن الرد على: <a href="mailto:${formData.email || 'no-reply@goaihub.ai'}">${formData.email || 'no-reply@goaihub.ai'}</a></p>
+              <p>مع أطيب التحيات،<br>
+              فريق GO AI HUB<br>
+              البريد الإلكتروني: <a href="mailto:ai.support@go.com.sa">ai.support@go.com.sa</a><br>
+              الموقع الإلكتروني: <a href="https://www.goaihub.ai" target="_blank">www.goaihub.ai</a><br>
+              ساعات العمل: الأحد–الخميس، 9:00 صباحًا – 5:00 مساءً (بتوقيت السعودية)</p>
+            </div>
           </div>
         </div>
       `;
@@ -92,7 +120,7 @@ const ContactPage = () => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          to: 'info@goaihub.ai',
+          to: 'farrukh.khan@inseyab.com',
           type: 'custom',
           subject: emailSubject,
           html: emailHtml

@@ -21,7 +21,7 @@ const Footer = () => {
       <div className="absolute top-10 left-10 w-32 h-32 bg-[#049394]/10 rounded-full blur-xl animate-pulse"></div>
       <div className="absolute bottom-10 right-10 w-40 h-40 bg-[#4CEADB]/10 rounded-full blur-xl animate-pulse delay-1000"></div>
       
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="container mx-auto px-4 relative z-0">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12 mb-8 sm:mb-12">
           <div className="space-y-4 sm:space-y-6">
             <div className="flex items-center group">

@@ -1,16 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { Search, Filter, Grid, List, ArrowRight, Check, Loader2, Users, Sparkles, Image } from 'lucide-react';
+import { Search, Filter, Grid, List, ArrowRight, Check, Loader2, Users, Sparkles, Image, X } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
-import { getSolutions, type Solution } from '../lib/supabase';
+import { getSolutions, createInterest, type Solution } from '../lib/supabase';
+import { useUser } from '../context/UserContext';
+
 
 type ViewMode = 'grid' | 'list';
 type SortOption = 'newest' | 'highest-rated' | 'alphabetical';
 
 const DiscoverPage = () => {
-  const { translations } = useLanguage();
+  const { translations, language } = useLanguage();
+  const { user } = useUser();
+  const navigate = useNavigate();
+  
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedIndustries, setSelectedIndustries] = useState<string[]>([]);
@@ -20,6 +26,16 @@ const DiscoverPage = () => {
   const [solutions, setSolutions] = useState<Solution[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showInterestForm, setShowInterestForm] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [formData, setFormData] = useState({
+      subject: 'New Interest Form Submission – GO AI HUB',
+      company_name: '',
+      contact_name: '',
+      contact_email: '',
+      contact_phone: '',
+      message: ''
+    });
   
   useEffect(() => {
     loadSolutions();
@@ -42,6 +58,20 @@ const DiscoverPage = () => {
     }
   };
   
+  const handleInterestClick = () => {
+    if (!user) {
+      navigate(`/auth?redirect=/`);
+    } else {
+      setShowInterestForm(true);
+    }
+  };
+
+  useEffect(() => {
+      if (user) {
+        setShowInterestForm(true);
+      }
+    }, [user]);
+
   const filteredSolutions = solutions.filter(solution => {
     const matchesSearch = searchQuery === '' || 
       solution.solution_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -49,10 +79,10 @@ const DiscoverPage = () => {
       solution.summary.toLowerCase().includes(searchQuery.toLowerCase());
     
     const matchesIndustry = selectedIndustries.length === 0 || 
-      (solution.industry_focus || []).some(industry => selectedIndustries.includes(industry));
+      (solution.industry_focus || []).some((industry: string) => selectedIndustries.includes(industry));
     
     const matchesTechnology = selectedTechnologies.length === 0 || 
-      (solution.tech_categories || []).some(tech => selectedTechnologies.includes(tech));
+      (solution.tech_categories || []).some((tech: string) => selectedTechnologies.includes(tech));
     
     return matchesSearch && matchesIndustry && matchesTechnology;
   });
@@ -67,6 +97,170 @@ const DiscoverPage = () => {
       return a.solution_name.localeCompare(b.solution_name);
     }
   });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      const { name, value } = e.target;
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    };
+
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //     e.preventDefault();
+  //     if (!user) return;
+  
+  //     setIsSubmitting(true);
+  //     setError(null);
+  
+  //     try {
+  //       await createInterest({
+  //         solution_id: "",
+  //         user_id: user.id,
+  //         ...formData
+  //       });
+  
+  //       setShowSuccess(true);
+  //       setShowInterestForm(false);
+        
+  //       // Reset form
+  //       setFormData({
+  //         subject: '',
+  //         company_name: user.company_name || '',
+  //         contact_name: user.contact_name || '',
+  //         contact_email: user.email || '',
+  //         contact_phone: '',
+  //         message: ''
+  //       });
+  
+  //       // Hide success message after 5 seconds
+  //       setTimeout(() => {
+  //         setShowSuccess(false);
+  //       }, 5000);
+  //     } catch (error) {
+  //       console.error('Error submitting interest:', error);
+  //       setError(translations.errorSubmittingInterest);
+  //     } finally {
+  //       setIsSubmitting(false);
+  //     }
+  //   };
+
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setIsSubmitting(true);
+ 
+    try {
+      // Validate required fields
+      if (!formData.contact_name.trim()) {
+        throw new Error(language === 'ar' ? 'الاسم مطلوب' : 'Name is required');
+      }
+      if (!formData.contact_phone.trim()) {
+        throw new Error(language === 'ar' ? 'البريد الإلكتروني مطلوب' : 'Email is required');
+      }
+      if (!formData.subject.trim()) {
+        throw new Error(language === 'ar' ? 'الموضوع مطلوب' : 'Subject is required');
+      }
+      if (!formData.message.trim()) {
+        throw new Error(language === 'ar' ? 'الرسالة مطلوبة' : 'Message is required');
+      }
+ 
+      
+ 
+      // Prepare email content
+      const emailSubject = `${formData.subject}`;
+
+      const emailHtml = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 5px;">
+      
+        <div style="text-align: center; margin-bottom: 20px;">
+          <h1 style="color: #00afaf;">Interest Form Submission</h1>
+        </div>
+
+        <p><strong>Name:</strong> ${formData.contact_name || 'Not provided'}</p>
+        <p><strong>Phone:</strong> ${formData.contact_phone || 'Not provided'}</p>
+        <p><strong>Message:</strong></p>
+        <p style="white-space: pre-wrap; line-height: 1.6; color: #444;">${formData.message || 'No message provided.'}</p>
+
+        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0; color: #666; font-size: 12px;">
+          <p>This interest form was submitted through the GO AI HUB website.</p>
+          <p>Best regards,<br>
+          GO AI HUB Team<br>
+          Email: <a href="mailto:ai.support@go.com.sa">ai.support@go.com.sa</a><br>
+          Website: <a href="https://www.goaihub.ai" target="_blank">www.goaihub.ai</a><br>
+          Working Hours: Sunday–Thursday, 9:00 AM – 5:00 PM (KSA Time)</p>
+        </div>
+
+        <hr style="margin: 40px 0; border: none; border-top: 1px solid #e0e0e0;">
+
+        <div dir="rtl" style="text-align: right; font-family: Arial, sans-serif;">
+          <h1 style="color: #00afaf;">تم إرسال نموذج الاهتمام</h1>
+          <p><strong>الاسم:</strong> ${formData.contact_name || 'لم يتم التقديم'}</p>
+          <p><strong>رقم الجوال:</strong> ${formData.contact_phone || 'لم يتم التقديم'}</p>
+          <p><strong>الرسالة:</strong></p>
+          <p style="white-space: pre-wrap; line-height: 1.6; color: #444;">${formData.message || 'لا توجد رسالة'}</p>
+
+          <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0; color: #666; font-size: 12px;">
+            <p>تم إرسال هذا النموذج من خلال موقع GO AI HUB.</p>
+            <p>مع أطيب التحيات،<br>
+            فريق GO AI HUB<br>
+            البريد الإلكتروني: <a href="mailto:ai.support@go.com.sa">ai.support@go.com.sa</a><br>
+            الموقع الإلكتروني: <a href="https://www.goaihub.ai" target="_blank">www.goaihub.ai</a><br>
+            ساعات العمل: الأحد–الخميس، 9:00 صباحًا – 5:00 مساءً (بتوقيت السعودية)</p>
+          </div>
+        </div>
+      </div>
+    `;
+
+ 
+      // Send email using the email service
+      const emailServiceUrl = import.meta.env.VITE_EMAIL_SERVICE_URL || 'https://goaihub.ai/email/api';
+     
+      const response = await fetch(`${emailServiceUrl}/send-email`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          to: 'farrukh.khan@inseyab.com',
+          type: 'custom',
+          subject: emailSubject,
+          html: emailHtml
+        })
+      });
+ 
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Failed to send message');
+      }
+ 
+      setShowSuccess(true);
+     
+      // Reset form
+       setFormData({
+          subject: '',
+          company_name: '',
+          contact_name: '',
+          contact_email:'',
+          contact_phone: '',
+          message: ''
+        });
+  
+        // Hide success message after 5 seconds
+        setTimeout(() => {
+          setShowSuccess(false);
+        }, 5000);
+ 
+      
+ 
+    } catch (error) {
+      console.error('Error sending contact form:', error);
+      setError(error instanceof Error ? error.message : 'Failed to send message');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   
   const allIndustries = Array.from(
     new Set(solutions.flatMap(solution => solution.industry_focus || []))
@@ -123,6 +317,7 @@ const DiscoverPage = () => {
               {translations.tryAgain}
             </button>
           </div>
+           
         </main>
         <Footer />
       </div>
@@ -150,9 +345,18 @@ const DiscoverPage = () => {
           <div className="bg-[#016774] rounded-lg border border-[#4CEADB]/30 p-4 sm:p-6 mb-6 sm:mb-8">
             <div className="flex items-center mb-4">
               <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 text-[#4CEADB] mr-2 sm:mr-3" />
-              <h1 className="text-xl sm:text-3xl font-bold text-[#4CEADB]">
+              <div className='flex justify-between w-full items-center'>
+                <h1 className="text-xl sm:text-3xl font-bold text-[#4CEADB]">
                 {translations.discoverTitle}
               </h1>
+
+              <button
+                  onClick={handleInterestClick}
+                  className="px-4 py-2 sm:px-6 sm:py-3 bg-gradient-to-r from-primary-500 to-secondary-500 hover:from-primary-400 hover:to-secondary-400 text-white rounded-lg transition-all duration-300 flex items-center justify-center shadow-lg shadow-primary-500/25 hover:shadow-primary-500/40 text-sm sm:text-base"
+                >
+                  {translations.imInterested}
+                </button>
+              </div>
             </div>
             <p className="text-sm sm:text-base text-gray-300 mb-4 sm:mb-6">
               {translations.discoverSubtitle}
@@ -303,6 +507,107 @@ const DiscoverPage = () => {
               )}
             </p>
           </div>
+          {showSuccess && (
+                    <div className="fixed top-24 left-1/2 transform -translate-x-1/2 bg-green-500/20 border border-green-500/30 backdrop-blur-sm p-3 sm:p-4 rounded-lg shadow-lg z-50 max-w-xs sm:max-w-md text-center">
+                      <div className="flex items-center justify-center">
+                        <Check className="h-4 w-4 sm:h-5 sm:w-5 text-green-400 mr-2" />
+                        <p className="text-sm sm:text-base text-green-300">{translations.interestSubmitted}</p>
+                      </div>
+                    </div>
+                  )}
+
+          {showInterestForm && (
+          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-40 p-4">
+            <div className="bg-gray-900/95 backdrop-blur-xl border border-primary-500/20 rounded-xl p-4 sm:p-6 w-full max-w-md shadow-2xl shadow-primary-500/10">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg sm:text-xl font-semibold text-white">{translations.expressInterest}</h3>
+                <button
+                  onClick={() => setShowInterestForm(false)}
+                  className="text-gray-400 hover:text-primary-500 p-2 rounded-lg hover:bg-gray-800/50 transition-all duration-300"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+
+              <form onSubmit={handleSubmit}>
+                <div className="space-y-3 sm:space-y-4">
+
+                  <div>
+                    <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1">
+                      {translations.contactName} *
+                    </label>
+                    <input
+                      type="text"
+                      name="contact_name"
+                      value={formData.contact_name}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full px-3 py-2 bg-gray-800/50 border border-gray-700/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-white placeholder-gray-400 backdrop-blur-sm text-sm"
+                    />
+                  </div>
+
+                 
+                  <div>
+                    <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1">
+                      {translations.phone} *
+                    </label>
+                    <input
+                      type="tel"
+                      name="contact_phone"
+                      value={formData.contact_phone}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full px-3 py-2 bg-gray-800/50 border border-gray-700/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-white placeholder-gray-400 backdrop-blur-sm text-sm"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1">
+                      {translations.message} *
+                    </label>
+                    <textarea
+                      name="message"
+                      value={formData.message}
+                      onChange={handleInputChange}
+                      required
+                      rows={4}
+                      className="w-full px-3 py-2 bg-gray-800/50 border border-gray-700/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-white placeholder-gray-400 backdrop-blur-sm text-sm"
+                      placeholder={translations.describeInterest}
+                    />
+                  </div>
+                </div>
+
+                {error && (
+                  <p className="mt-3 sm:mt-4 text-xs sm:text-sm text-red-400">{error}</p>
+                )}
+
+                <div className="mt-4 sm:mt-6 flex justify-end gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setShowInterestForm(false)}
+                    className="px-3 sm:px-4 py-1.5 sm:py-2 text-gray-400 hover:text-gray-300 transition-colors duration-300 text-sm"
+                  >
+                    {translations.cancel}
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="px-3 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-primary-500 to-secondary-500 hover:from-primary-400 hover:to-secondary-400 text-white rounded-lg disabled:opacity-50 flex items-center transition-all duration-300 shadow-lg shadow-primary-500/25 text-sm"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="h-3 w-3 sm:h-4 sm:w-4 animate-spin mr-2" />
+                        {translations.submitting}
+                      </>
+                    ) : (
+                      translations.submit
+                    )}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
           
           {sortedSolutions.length === 0 ? (
             <div className="bg-[#016774] rounded-lg border border-[#4CEADB]/30 p-6 sm:p-8 text-center">
