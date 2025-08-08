@@ -76,7 +76,7 @@ const GoAdvantagePage = () => {
                 <div className="p-4 bg-gradient-to-br from-secondary-500/20 to-primary-500/20 rounded-xl border border-secondary-500/30">
                   <Users className="h-8 w-8 text-secondary-500" />
                 </div>
-                <h2 className="text-2xl font-bold ml-4 text-white group-hover:text-secondary-500 transition-colors duration-300">{translations.expertSupportTitle}</h2>
+                <h2 className="text-2xl font-bold text-white group-hover:text-secondary-500 transition-colors duration-300">{translations.expertSupportTitle}</h2>
               </div>
               <p className="text-gray-300 mb-6 leading-relaxed">
                 {translations.expertSupportDesc}
@@ -100,11 +100,11 @@ const GoAdvantagePage = () => {
 
           <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-primary-500/20 shadow-xl shadow-primary-500/10 p-8 mb-16">
             <div className="max-w-4xl mx-auto">
-              <div className="flex items-center mb-8">
+              <div className="flex items-center mb-8 gap-3">
                 <div className="p-4 bg-gradient-to-br from-green-500/20 to-teal-500/20 rounded-xl border border-green-500/30">
                   <Rocket className="h-8 w-8 text-green-400" />
                 </div>
-                <h2 className="text-2xl font-bold ml-4 text-white">{translations.acceleratedImplementation}</h2>
+                <h2 className="text-2xl font-bold text-white">{translations.acceleratedImplementation}</h2>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -125,11 +125,11 @@ const GoAdvantagePage = () => {
           </div>
 
           <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-primary-500/20 shadow-xl shadow-primary-500/10 p-8">
-            <div className="flex items-center mb-8">
+            <div className="flex items-center mb-8 gap-3">
               <div className="p-4 bg-gradient-to-br from-orange-500/20 to-red-500/20 rounded-xl border border-orange-500/30">
                 <Globe className="h-8 w-8 text-orange-400" />
               </div>
-              <h2 className="text-2xl font-bold ml-4 text-white">{translations.globalNetwork}</h2>
+              <h2 className="text-2xl font-bold text-white">{translations.globalNetwork}</h2>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
