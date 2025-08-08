@@ -64,11 +64,11 @@ const DiscoverPage = () => {
     
   };
 
-  useEffect(() => {
+  // useEffect(() => {
     
-        setShowInterestForm(true);
+  //       setShowInterestForm(true);
       
-    }, []);
+  //   }, []);
 
   const filteredSolutions = solutions.filter(solution => {
     const matchesSearch = searchQuery === '' || 
