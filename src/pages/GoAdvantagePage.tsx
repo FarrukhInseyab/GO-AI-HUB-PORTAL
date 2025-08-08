@@ -9,7 +9,7 @@ const GoAdvantagePage = () => {
   const { translations, language } = useLanguage();
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-900">
+    <div className="min-h-screen flex flex-col bg-gray-900 overflow-x-hidden">
       <Header />
       
       <main className="flex-grow pt-20 relative">
