@@ -61,8 +61,8 @@ const GoAdvantagePage = () => {
                   translations.securityComplianceVerification,
                   translations.performanceBenchmarking
                 ].map((item, index) => (
-                  <li key={index} className="flex items-start group/item">
-                    <div className="w-5 h-5 rounded-full bg-gradient-to-r from-primary-500 to-secondary-500 flex items-center justify-center mr-3 mt-0.5 group-hover/item:scale-110 transition-transform duration-300">
+                  <li key={index} className="flex items-start group/item gap-3">
+                    <div className="w-5 h-5 rounded-full bg-gradient-to-r from-primary-500 to-secondary-500 flex items-center justify-center mt-0.5 group-hover/item:scale-110 transition-transform duration-300">
                       <Check className="h-3 w-3 text-white" />
                     </div>
                     <span className="text-gray-300 group-hover/item:text-primary-500 transition-colors duration-300">{item}</span>
@@ -87,8 +87,8 @@ const GoAdvantagePage = () => {
                   translations.implementationSupport,
                   translations.ongoingOptimization
                 ].map((item, index) => (
-                  <li key={index} className="flex items-start group/item">
-                    <div className="w-5 h-5 rounded-full bg-gradient-to-r from-secondary-500 to-primary-500 flex items-center justify-center mr-3 mt-0.5 group-hover/item:scale-110 transition-transform duration-300">
+                  <li key={index} className="flex items-start group/item gap-3">
+                    <div className="w-5 h-5 rounded-full bg-gradient-to-r from-secondary-500 to-primary-500 flex items-center justify-center mt-0.5 group-hover/item:scale-110 transition-transform duration-300">
                       <Check className="h-3 w-3 text-white" />
                     </div>
                     <span className="text-gray-300 group-hover/item:text-secondary-500 transition-colors duration-300">{item}</span>
@@ -141,8 +141,8 @@ const GoAdvantagePage = () => {
                     translations.globalLocalExpertise,
                     translations.diverseIndustryCoverage
                   ].map((item, index) => (
-                    <li key={index} className="flex items-start group">
-                      <div className="w-5 h-5 rounded-full bg-gradient-to-r from-primary-500 to-secondary-500 flex items-center justify-center mr-3 mt-0.5 group-hover:scale-110 transition-transform duration-300">
+                    <li key={index} className="flex items-start group gap-3">
+                      <div className="w-5 h-5 rounded-full bg-gradient-to-r from-primary-500 to-secondary-500 flex items-center justify-center mt-0.5 group-hover:scale-110 transition-transform duration-300">
                         <Check className="h-3 w-3 text-white" />
                       </div>
                       <span className="text-gray-300 group-hover:text-primary-500 transition-colors duration-300">{item}</span>
@@ -159,8 +159,8 @@ const GoAdvantagePage = () => {
                     translations.localPresenceSupport,
                     translations.provenTrackRecord
                   ].map((item, index) => (
-                    <li key={index} className="flex items-start group">
-                      <div className="w-5 h-5 rounded-full bg-gradient-to-r from-secondary-500 to-primary-500 flex items-center justify-center mr-3 mt-0.5 group-hover:scale-110 transition-transform duration-300">
+                    <li key={index} className="flex items-start group gap-3">
+                      <div className="w-5 h-5 rounded-full bg-gradient-to-r from-secondary-500 to-primary-500 flex items-center justify-center mt-0.5 group-hover:scale-110 transition-transform duration-300">
                         <Check className="h-3 w-3 text-white" />
                       </div>
                       <span className="text-gray-300 group-hover:text-secondary-500 transition-colors duration-300">{item}</span>
