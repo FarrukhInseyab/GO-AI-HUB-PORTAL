@@ -154,17 +154,17 @@ const MarketInsightsPage = () => {
                     disabled={isUpdating || isLoading || (updateStatus && !updateStatus.updateNeeded)}
                   >
                     {isUpdating ? (
-                      <RefreshCw className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2 animate-spin" />
+                      <RefreshCw className="h-3 w-3 sm:h-4 sm:w-4 animate-spin" />
                     ) : (
-                      <RefreshCw className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                      <RefreshCw className="h-3 w-3 sm:h-4 sm:w-4" />
                     )}
                     {language === 'ar' ? 'تحديث البيانات' : 'Refresh Data'}
                   </Button>
                 )}
               </div>
               
-              <div className="flex items-center mb-4 sm:mb-6">
-                <Sparkles className="h-6 w-6 sm:h-8 sm:w-8 text-primary-500 mr-2 sm:mr-4" />
+              <div className="flex items-center mb-4 sm:mb-6 gap-2">
+                <Sparkles className="h-6 w-6 sm:h-8 sm:w-8 text-primary-500 sm:mr-4" />
                 <h1 className="text-2xl sm:text-4xl font-bold bg-gradient-to-r from-primary-500 to-secondary-500 bg-clip-text text-transparent">
                   {translations.marketInsightsTitle}
                 </h1>
@@ -181,7 +181,7 @@ const MarketInsightsPage = () => {
           <section className="mb-8 sm:mb-16">
             <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-secondary-500/20 shadow-xl shadow-secondary-500/10 p-4 sm:p-8">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 gap-2">
-                <div className="flex items-center">
+                <div className="flex items-center gap-2">
                   <div className="p-3 sm:p-4 bg-gradient-to-br from-secondary-500/20 to-primary-500/20 rounded-xl border border-secondary-500/30">
                     <Brain className="h-6 w-6 sm:h-8 sm:w-8 text-secondary-500" />
                   </div>
@@ -225,7 +225,7 @@ const MarketInsightsPage = () => {
           {/* Industry Adoption & Growth Forecast */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-16 mb-8 sm:mb-16">
             <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-primary-500/20 shadow-xl shadow-primary-500/10 p-4 sm:p-8">
-              <div className="flex items-center mb-4 sm:mb-6">
+              <div className="flex items-center mb-4 sm:mb-6 gap-2">
                 <div className="p-3 sm:p-4 bg-gradient-to-br from-primary-500/20 to-secondary-500/20 rounded-xl border border-primary-500/30">
                   <BarChart3 className="h-6 w-6 sm:h-8 sm:w-8 text-primary-500" />
                 </div>
@@ -257,7 +257,7 @@ const MarketInsightsPage = () => {
             </div>
 
             <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-primary-500/20 shadow-xl shadow-primary-500/10 p-4 sm:p-8">
-              <div className="flex items-center mb-4 sm:mb-6">
+              <div className="flex items-center mb-4 sm:mb-6 gap-2">
                 <div className="p-3 sm:p-4 bg-gradient-to-br from-green-500/20 to-teal-500/20 rounded-xl border border-green-500/30">
                   <TrendingUp className="h-6 w-6 sm:h-8 sm:w-8 text-green-400" />
                 </div>
@@ -282,7 +282,7 @@ const MarketInsightsPage = () => {
           {/* Key Market Trends */}
           <section className="mb-8 sm:mb-16">
             <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-primary-500/20 shadow-xl shadow-primary-500/10 p-4 sm:p-8">
-              <div className="flex items-center mb-4 sm:mb-6">
+              <div className="flex items-center mb-4 sm:mb-6 gap-2">
                 <div className="p-3 sm:p-4 bg-gradient-to-br from-orange-500/20 to-red-500/20 rounded-xl border border-orange-500/30">
                   <Zap className="h-6 w-6 sm:h-8 sm:w-8 text-orange-400" />
                 </div>
@@ -309,7 +309,7 @@ const MarketInsightsPage = () => {
           {/* Global Context */}
           <section className="mb-8 sm:mb-16">
             <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-primary-500/20 shadow-xl shadow-primary-500/10 p-4 sm:p-8">
-              <div className="flex items-center mb-4 sm:mb-6">
+              <div className="flex items-center mb-4 sm:mb-6 gap-2">
                 <div className="p-3 sm:p-4 bg-gradient-to-br from-secondary-500/20 to-primary-500/20 rounded-xl border border-secondary-500/30">
                   <Globe className="h-6 w-6 sm:h-8 sm:w-8 text-secondary-500" />
                 </div>
@@ -331,8 +331,8 @@ const MarketInsightsPage = () => {
 
           {/* Data Sources & References */}
           <section className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-primary-500/20 shadow-xl shadow-primary-500/10 p-4 sm:p-8">
-            <div className="flex items-center mb-4 sm:mb-6">
-              <Target className="h-5 w-5 sm:h-6 sm:w-6 text-primary-500 mr-2" />
+            <div className="flex items-center mb-4 sm:mb-6 gap-2">
+              <Target className="h-5 w-5 sm:h-6 sm:w-6 text-primary-500" />
               <h3 className="text-base sm:text-lg font-semibold text-white">
                 {language === 'ar' ? 'مصادر البيانات والمراجع' : 'Data Sources & References'}
               </h3>

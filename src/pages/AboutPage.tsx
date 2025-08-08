@@ -29,8 +29,8 @@ const AboutPage = () => {
           <div className="absolute inset-0 bg-gradient-to-r from-primary-500/10 via-secondary-500/10 to-primary-500/10"></div>
           <div className="container mx-auto px-4 relative z-10">
             <div className="max-w-3xl">
-              <div className="flex items-center mb-6">
-                <Sparkles className="h-8 w-8 text-primary-500 mr-4" />
+              <div className="flex items-center mb-6 gap-3">
+                <Sparkles className="h-8 w-8 text-primary-500" />
                 <h1 className="text-4xl font-bold bg-gradient-to-r from-primary-500 to-secondary-500 bg-clip-text text-transparent">
                   {language === 'ar' ? translations.aboutTitle : 'About Us'}
                 </h1>
@@ -47,8 +47,8 @@ const AboutPage = () => {
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto">
               <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-primary-500/20 shadow-xl shadow-primary-500/10 p-8">
-                <div className="flex items-center mb-6">
-                  <Zap className="h-6 w-6 text-primary-500 mr-3" />
+                <div className="flex items-center mb-6 gap-3">
+                  <Zap className="h-6 w-6 text-primary-500" />
                   <h2 className="text-3xl font-bold text-white">{translations.ourMission}</h2>
                 </div>
                 <p className="text-lg text-gray-300 mb-8 leading-relaxed">
@@ -56,22 +56,22 @@ const AboutPage = () => {
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="group bg-gray-700/30 backdrop-blur-sm p-6 rounded-xl border border-primary-500/20 hover:border-primary-400/40 transition-all duration-300">
-                    <div className="flex items-center mb-4">
+                    <div className="flex items-center mb-4 gap-3">
                       <div className="p-3 bg-gradient-to-br from-primary-500/20 to-secondary-500/20 rounded-lg border border-primary-500/30">
                         <Globe className="h-6 w-6 text-primary-500" />
                       </div>
-                      <h3 className="text-xl font-semibold ml-3 text-white group-hover:text-primary-500 transition-colors duration-300">{translations.globalInnovation}</h3>
+                      <h3 className="text-xl font-semibold text-white group-hover:text-primary-500 transition-colors duration-300">{translations.globalInnovation}</h3>
                     </div>
                     <p className="text-gray-300 leading-relaxed">
                       {translations.globalInnovationDesc}
                     </p>
                   </div>
                   <div className="group bg-gray-700/30 backdrop-blur-sm p-6 rounded-xl border border-secondary-500/20 hover:border-secondary-400/40 transition-all duration-300">
-                    <div className="flex items-center mb-4">
+                    <div className="flex items-center mb-4 gap-3">
                       <div className="p-3 bg-gradient-to-br from-secondary-500/20 to-primary-500/20 rounded-lg border border-secondary-500/30">
                         <Building2 className="h-6 w-6 text-secondary-500" />
                       </div>
-                      <h3 className="text-xl font-semibold ml-3 text-white group-hover:text-secondary-500 transition-colors duration-300">{translations.localImpact}</h3>
+                      <h3 className="text-xl font-semibold text-white group-hover:text-secondary-500 transition-colors duration-300">{translations.localImpact}</h3>
                     </div>
                     <p className="text-gray-300 leading-relaxed">
                       {translations.localImpactDesc}

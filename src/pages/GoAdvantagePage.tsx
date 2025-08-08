@@ -30,8 +30,8 @@ const GoAdvantagePage = () => {
           <div className="absolute inset-0 bg-gradient-to-r from-primary-500/10 via-secondary-500/10 to-primary-500/10"></div>
           <div className="container mx-auto px-4 relative z-10">
             <div className="max-w-3xl">
-              <div className="flex items-center mb-6">
-                <Sparkles className="h-8 w-8 text-primary-500 mr-4" />
+              <div className="flex items-center mb-6 gap-3">
+                <Sparkles className="h-8 w-8 text-primary-500" />
                 <h1 className="text-4xl font-bold bg-gradient-to-r from-primary-500 to-secondary-500 bg-clip-text text-transparent">
                   {language === 'ar' ? translations.goAdvantageTitle : 'Why GO AI Hub?'}
                 </h1>
@@ -46,11 +46,11 @@ const GoAdvantagePage = () => {
         <div className="container mx-auto px-4 py-16 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
             <div className="group bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700/50 hover:border-primary-500/30 shadow-lg hover:shadow-primary-500/20 p-8 transition-all duration-500">
-              <div className="flex items-center mb-6">
+              <div className="flex items-center mb-6 gap-3">
                 <div className="p-4 bg-gradient-to-br from-primary-500/20 to-secondary-500/20 rounded-xl border border-primary-500/30">
                   <Shield className="h-8 w-8 text-primary-500" />
                 </div>
-                <h2 className="text-2xl font-bold ml-4 text-white group-hover:text-primary-500 transition-colors duration-300">{translations.trustedVerification}</h2>
+                <h2 className="text-2xl font-bold text-white group-hover:text-primary-500 transition-colors duration-300">{translations.trustedVerification}</h2>
               </div>
               <p className="text-gray-300 mb-6 leading-relaxed">
                 {translations.trustedVerificationDesc}
@@ -72,7 +72,7 @@ const GoAdvantagePage = () => {
             </div>
 
             <div className="group bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700/50 hover:border-secondary-500/30 shadow-lg hover:shadow-secondary-500/20 p-8 transition-all duration-500">
-              <div className="flex items-center mb-6">
+              <div className="flex items-center mb-6 gap-3">
                 <div className="p-4 bg-gradient-to-br from-secondary-500/20 to-primary-500/20 rounded-xl border border-secondary-500/30">
                   <Users className="h-8 w-8 text-secondary-500" />
                 </div>

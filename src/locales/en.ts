@@ -108,7 +108,7 @@ const en = {
   chatCompleted: "Chat completed - redirecting to form...",
   signInToGetListed: "Sign in to Get Listed",
   signInDescription: "Please sign in or create an account to list your AI solution.",
-  
+  name: 'Name',
   // Submission form
   submissionFormTitle: "Solution Submission Form",
   submissionFormSubtitle: "Complete your solution details for review",
@@ -229,7 +229,7 @@ const en = {
   message: "Message",
   describeInterest: "Please describe your interest in this solution...",
   interestSubmitted: "Your interest has been submitted successfully! Our team will contact you soon.",
-  
+  ctaform:"CTA Form",
   // AI Recommendation
   aiSolutionRecommendation: "AI Solution Recommendation",
   aiRecommendationDescription: "Describe your needs and requirements, and our AI will analyze how well this solution matches them.",

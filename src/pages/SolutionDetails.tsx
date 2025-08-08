@@ -220,9 +220,9 @@ const SolutionDetails = () => {
             <p className="text-red-400 mb-4">{error || 'Solution not found'}</p>
             <Link
               to="/discover"
-              className="text-primary-500 hover:text-primary-400 flex items-center justify-center transition-colors duration-300"
+              className="text-primary-500 hover:text-primary-400 flex items-center justify-center gap-2 transition-colors duration-300"
             >
-              <ArrowLeft className="h-4 w-4 mr-2" />
+              <ArrowLeft className="h-4 w-4" />
               {translations.backToSolutions}
             </Link>
           </div>
@@ -251,8 +251,8 @@ const SolutionDetails = () => {
 
         {showSuccess && (
           <div className="fixed top-24 left-1/2 transform -translate-x-1/2 bg-green-500/20 border border-green-500/30 backdrop-blur-sm p-3 sm:p-4 rounded-lg shadow-lg z-50 max-w-xs sm:max-w-md text-center">
-            <div className="flex items-center justify-center">
-              <Check className="h-4 w-4 sm:h-5 sm:w-5 text-green-400 mr-2" />
+            <div className="flex items-center justify-center gap-2">
+              <Check className="h-4 w-4 sm:h-5 sm:w-5 text-green-400" />
               <p className="text-sm sm:text-base text-green-300">{translations.interestSubmitted}</p>
             </div>
           </div>
@@ -360,11 +360,11 @@ const SolutionDetails = () => {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="px-3 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-primary-500 to-secondary-500 hover:from-primary-400 hover:to-secondary-400 text-white rounded-lg disabled:opacity-50 flex items-center transition-all duration-300 shadow-lg shadow-primary-500/25 text-sm"
+                    className="px-3 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-primary-500 to-secondary-500 hover:from-primary-400 hover:to-secondary-400 text-white rounded-lg disabled:opacity-50 flex items-center transition-all gap-2 duration-300 shadow-lg shadow-primary-500/25 text-sm"
                   >
                     {isSubmitting ? (
                       <>
-                        <Loader2 className="h-3 w-3 sm:h-4 sm:w-4 animate-spin mr-2" />
+                        <Loader2 className="h-3 w-3 sm:h-4 sm:w-4 animate-spin" />
                         {translations.submitting}
                       </>
                     ) : (
@@ -380,9 +380,9 @@ const SolutionDetails = () => {
         <div className="container mx-auto px-4 py-6 sm:py-8 relative z-10">
           <Link
             to="/discover"
-            className="inline-flex items-center text-primary-500 hover:text-primary-400 mb-4 sm:mb-6 transition-colors duration-300 text-sm"
+            className="inline-flex gap-2 items-center text-primary-500 hover:text-primary-400 mb-4 sm:mb-6 transition-colors duration-300 text-sm"
           >
-            <ArrowLeft className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+            <ArrowLeft className="h-3 w-3 sm:h-4 sm:w-4" />
             {translations.backToSolutions}
           </Link>
 
@@ -418,14 +418,14 @@ const SolutionDetails = () => {
             <div className="p-4 sm:p-6">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
                 <div>
-                  <div className="flex items-center mb-3 sm:mb-4">
-                    <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 text-primary-500 mr-2 sm:mr-3" />
+                  <div className="flex items-center mb-3 sm:mb-4 gap-3">
+                    <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 text-primary-500" />
                     <h1 className="text-xl sm:text-3xl font-bold text-white">
                       {solution.solution_name}
                     </h1>
                   </div>
-                  <div className="flex items-center text-gray-400 text-sm">
-                    <Building2 className="h-4 w-4 mr-2" />
+                  <div className="flex items-center text-gray-400 text-sm gap-2">
+                    <Building2 className="h-4 w-4" />
                     {solution.company_name}
                   </div>
                 </div>
@@ -454,8 +454,8 @@ const SolutionDetails = () => {
               {/* Product Images Gallery Preview */}
               {solution.product_images && solution.product_images.length > 0 && (
                 <div className="mb-6 sm:mb-8">
-                  <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 text-primary-500 flex items-center">
-                    <Image className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
+                  <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 text-primary-500 flex items-center gap-2">
+                    <Image className="h-4 w-4 sm:h-5 sm:w-5" />
                     {language === 'ar' ? 'صور المنتج' : 'Product Images'}
                   </h3>
                   <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2 sm:gap-3">
@@ -561,21 +561,21 @@ const SolutionDetails = () => {
                   <div className="bg-gray-700/30 backdrop-blur-sm rounded-xl border border-gray-600/50 p-4 sm:p-6">
                     <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 text-primary-500">{translations.companyInformation}</h3>
                     <div className="space-y-3 sm:space-y-4 mb-4">
-                      <div className="flex items-center text-sm text-gray-300">
-                        <Building2 className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-primary-400 flex-shrink-0" />
-                        <span className="font-medium mr-2">{translations.companyName}:</span>
+                      <div className="flex items-center text-sm text-gray-300 gap-2">
+                        <Building2 className="h-4 w-4 sm:h-5 sm:w-5 text-primary-400 flex-shrink-0" />
+                        <span className="font-medium mr-1">{translations.companyName}:</span>
                         <span>{solution.company_name || 'N/A'}</span>
                       </div>
                       
-                      <div className="flex items-center text-sm text-gray-300">
-                        <MapPin className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-primary-400 flex-shrink-0" />
-                        <span className="font-medium mr-2">{language === 'ar' ? 'البلد:' : 'Country'}:</span>
+                      <div className="flex items-center text-sm text-gray-300 gap-2">
+                        <MapPin className="h-4 w-4 sm:h-5 sm:w-5 text-primary-400 flex-shrink-0" />
+                        <span className="font-medium mr-1">{language === 'ar' ? 'البلد:' : 'Country'}:</span>
                         <span>{solution.country || 'N/A'}</span>
                       </div>
                       
-                      <div className="flex items-center text-sm text-gray-300">
-                        <Globe className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-primary-400 flex-shrink-0" />
-                        <span className="font-medium mr-2">{translations.website}:</span>
+                      <div className="flex items-center text-sm gap-2 text-gray-300">
+                        <Globe className="h-4 w-4 sm:h-5 sm:w-5 text-primary-400 flex-shrink-0" />
+                        <span className="font-medium mr-1">{translations.website}:</span>
                         {solution.website ? (
                           <a
                             href={solution.website}
@@ -591,9 +591,9 @@ const SolutionDetails = () => {
                         )}
                       </div>
                       
-                      <div className="flex items-center text-sm text-gray-300">
-                        <ExternalLink className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-primary-400 flex-shrink-0" />
-                        <span className="font-medium mr-2">LinkedIn:</span>
+                      <div className="flex items-center text-sm text-gray-300 gap-2">
+                        <ExternalLink className="h-4 w-4 sm:h-5 sm:w-5 text-primary-400 flex-shrink-0" />
+                        <span className="font-medium">LinkedIn:</span>
                         {solution.linkedin ? (
                           <a
                             href={solution.linkedin}
@@ -609,42 +609,42 @@ const SolutionDetails = () => {
                         )}
                       </div>
                       
-                      <div className="flex items-center text-sm text-gray-300">
-                        <Users className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-primary-400 flex-shrink-0" />
-                        <span className="font-medium mr-2">{translations.employees}:</span>
+                      <div className="flex items-center text-sm text-gray-300 gap-2">
+                        <Users className="h-4 w-4 sm:h-5 sm:w-5 text-primary-400 flex-shrink-0" />
+                        <span className="font-medium">{translations.employees}:</span>
                         <span>{solution.employees || 'N/A'}</span>
                       </div>
                       
-                      <div className="flex items-center text-sm text-gray-300">
-                        <DollarSign className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-primary-400 flex-shrink-0" />
-                        <span className="font-medium mr-2">{language === 'ar' ? 'الإيرادات:' : 'Revenue'}:</span>
+                      <div className="flex items-center text-sm text-gray-300 gap-2">
+                        <DollarSign className="h-4 w-4 sm:h-5 sm:w-5 text-primary-400 flex-shrink-0" />
+                        <span className="font-medium">{language === 'ar' ? 'الإيرادات:' : 'Revenue'}:</span>
                         <span>{solution.revenue || 'N/A'}</span>
                       </div>
                     </div>
 
                     <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 mt-4 text-primary-500">{language === 'ar' ? 'معلومات النشر والتطوير' : 'Deployment & Development'}</h3>
                     <div className="space-y-3 sm:space-y-4 mb-4">
-                      <div className="flex items-center text-sm text-gray-300">
-                        <Server className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-primary-400 flex-shrink-0" />
-                        <span className="font-medium mr-2">{language === 'ar' ? 'نموذج النشر:' : 'Deployment Model'}:</span>
+                      <div className="flex items-center text-sm text-gray-300 gap-2">
+                        <Server className="h-4 w-4 sm:h-5 sm:w-5 text-primary-400 flex-shrink-0" />
+                        <span className="font-medium">{language === 'ar' ? 'نموذج النشر:' : 'Deployment Model'}:</span>
                         <span>{solution.deployment_model || 'N/A'}</span>
                       </div>
                       
-                      <div className="flex items-center text-sm text-gray-300">
-                        <Layers className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-primary-400 flex-shrink-0" />
-                        <span className="font-medium mr-2">{language === 'ar' ? 'حالة النشر:' : 'Deployment Status'}:</span>
+                      <div className="flex items-center text-sm text-gray-300 gap-2">
+                        <Layers className="h-4 w-4 sm:h-5 sm:w-5 text-primary-400 flex-shrink-0" />
+                        <span className="font-medium">{language === 'ar' ? 'حالة النشر:' : 'Deployment Status'}:</span>
                         <span>{solution.deployment_status || 'N/A'}</span>
                       </div>
                       
-                      <div className="flex items-center text-sm text-gray-300">
-                        <Award className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-primary-400 flex-shrink-0" />
-                        <span className="font-medium mr-2">{language === 'ar' ? 'مستوى جاهزية التكنولوجيا:' : 'TRL Level'}:</span>
+                      <div className="flex items-center text-sm text-gray-300 gap-2">
+                        <Award className="h-4 w-4 sm:h-5 sm:w-5 text-primary-400 flex-shrink-0" />
+                        <span className="font-medium">{language === 'ar' ? 'مستوى جاهزية التكنولوجيا:' : 'TRL Level'}:</span>
                         <span>{solution.trl || 'N/A'}</span>
                       </div>
                       
-                      <div className="flex items-start text-sm text-gray-300">
-                        <Briefcase className="h-4 w-4 sm:h-5 sm:w-5 mr-2 mt-0.5 text-primary-400 flex-shrink-0" />
-                        <span className="font-medium mr-2">{language === 'ar' ? 'العملاء الحاليين:' : 'Current Clients'}:</span>
+                      <div className="flex items-start text-sm text-gray-300 gap-2">
+                        <Briefcase className="h-4 w-4 sm:h-5 sm:w-5 mt-0.5 text-primary-400 flex-shrink-0" />
+                        <span className="font-medium">{language === 'ar' ? 'العملاء الحاليين:' : 'Current Clients'}:</span>
                         <span className="flex-1">{solution.clients || 'N/A'}</span>
                       </div>
                     </div>
@@ -657,9 +657,9 @@ const SolutionDetails = () => {
                       <p className="text-xs sm:text-sm text-gray-500">{solution.position || 'N/A'}</p>
                       <a
                         href={`mailto:${solution.contact_email}`}
-                        className="flex items-center text-primary-500 hover:text-primary-400 mt-2 transition-colors duration-300 text-sm"
+                        className="flex items-center gap-2 text-primary-500 hover:text-primary-400 mt-2 transition-colors duration-300 text-sm"
                       >
-                        <Mail className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
+                        <Mail className="h-4 w-4 sm:h-5 sm:w-5" />
                         {translations.contactViaEmail}
                       </a>
                     </div>
@@ -674,9 +674,9 @@ const SolutionDetails = () => {
                               href={solution.demo_video.startsWith('http') ? solution.demo_video : `https://${solution.demo_video}`}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="flex items-center text-sm text-gray-300 hover:text-primary-500 transition-colors duration-300"
+                              className="flex items-center gap-2 text-sm text-gray-300 hover:text-primary-500 transition-colors duration-300"
                             >
-                              <ExternalLink className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
+                              <ExternalLink className="h-4 w-4 sm:h-5 sm:w-5" />
                               {translations.watchDemoVideo}
                             </a>
                           )}
@@ -685,9 +685,9 @@ const SolutionDetails = () => {
                               href={solution.pitch_deck}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="flex items-center text-sm text-gray-300 hover:text-primary-500 transition-colors duration-300"
+                              className="flex items-center gap-2 text-sm text-gray-300 hover:text-primary-500 transition-colors duration-300"
                             >
-                              <ExternalLink className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
+                              <ExternalLink className="h-4 w-4 sm:h-5 sm:w-5" />
                               {translations.viewPitchDeck}
                             </a>
                           )}

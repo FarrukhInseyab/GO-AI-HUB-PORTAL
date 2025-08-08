@@ -54,8 +54,8 @@ const Footer = () => {
           </div>
           
           <div className="space-y-4 sm:space-y-6">
-            <h3 className="font-bold text-base sm:text-lg text-[#049394] flex items-center">
-              <Zap className="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-[#049394]" />
+            <h3 className="font-bold text-base sm:text-lg text-[#049394] flex items-center gap-2">
+              <Zap className="w-4 h-4 sm:w-5 sm:h-5 text-[#049394]" />
               {translations.quickLinks}
             </h3>
             <ul className="space-y-2 sm:space-y-3 text-sm sm:text-base">
@@ -63,8 +63,11 @@ const Footer = () => {
                 { label: translations.home, path: "/" },
                 { label: translations.discover, path: "/discover" },
                 { label: translations.getListedShort, path: "/vendor-onboarding" },
+                { label: translations.marketInsights, path: "/market-insights" },
+                { label: 'GO.Ai | رُوَّاد', path: "/goai-agent" },
                 { label: translations.about, path: "/about" },
                 { label: "How It Works", path: "/how-it-works" },
+                { label: translations.contact, path: "/contact" },
                 { label: translations.faq, path: "/faq" }
               ].map((link, index) => (
                 <li key={index}>
@@ -81,21 +84,21 @@ const Footer = () => {
           </div>
           
           <div className="space-y-4 sm:space-y-6">
-            <h3 className="font-bold text-base sm:text-lg text-[#049394] flex items-center">
-              <Zap className="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-[#049394]" />
+            <h3 className="font-bold text-base sm:text-lg text-[#049394] flex items-center gap-2">
+              <Zap className="w-4 h-4 sm:w-5 sm:h-5 text-[#049394]" />
               {translations.contact}
             </h3>
             <ul className="space-y-3 sm:space-y-4 text-sm sm:text-base">
-              <li className="flex items-start group">
-                <div className="p-1.5 sm:p-2 rounded-lg border border-[#049394]/20 bg-[#049394]/5 mr-2 sm:mr-3 mt-1">
+              <li className="flex items-start group gap-2">
+                <div className="p-1.5 sm:p-2 rounded-lg border border-[#049394]/20 bg-[#049394]/5 mt-1">
                   <MapPin className="h-4 w-4 sm:h-5 sm:w-5 text-[#049394]" />
                 </div>
                 <span className="text-gray-400 group-hover:text-gray-300 transition-colors duration-300 text-sm sm:text-base">
                   3758 King Abdullah Road, Al Maghrazat District, Riyadh 12482 6514, Riyadh 12431
                 </span>
               </li>
-              <li className="flex items-center group">
-                <div className="p-1.5 sm:p-2 rounded-lg border border-[#049394]/20 bg-[#049394]/5 mr-2 sm:mr-3">
+              <li className="flex items-center group gap-2">
+                <div className="p-1.5 sm:p-2 rounded-lg border border-[#049394]/20 bg-[#049394]/5">
                   <Mail className="h-4 w-4 sm:h-5 sm:w-5 text-[#049394]" />
                 </div>
                 <a 

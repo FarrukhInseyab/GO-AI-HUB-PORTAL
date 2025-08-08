@@ -188,8 +188,8 @@ const FAQPage = () => {
           <div className="absolute inset-0 bg-gradient-to-r from-primary-500/10 via-secondary-500/10 to-primary-500/10"></div>
           <div className="container mx-auto px-4 relative z-10">
             <div className="max-w-3xl">
-              <div className="flex items-center mb-6">
-                <Sparkles className="h-8 w-8 text-primary-500 mr-4" />
+              <div className="flex items-center mb-6 gap-3">
+                <Sparkles className="h-8 w-8 text-primary-500" />
                 <h1 className="text-4xl font-bold bg-gradient-to-r from-primary-500 to-secondary-500 bg-clip-text text-transparent">
                   {translations.faqTitle}
                 </h1>

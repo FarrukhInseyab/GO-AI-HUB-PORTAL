@@ -108,7 +108,7 @@ const ar = {
   chatCompleted: "اكتملت المحادثة - جاري التوجيه إلى النموذج...",
   signInToGetListed: "سجل دخولك للحصول على القائمة",
   signInDescription: "يرجى تسجيل الدخول أو إنشاء حساب لإدراج حل الذكاء الاصطناعي الخاص بك.",
-  
+  name:'اسم',
   // Submission form
   submissionFormTitle: "نموذج تقديم الحل",
   submissionFormSubtitle: "أكمل تفاصيل حلك للمراجعة",
@@ -229,7 +229,7 @@ const ar = {
   message: "الرسالة",
   describeInterest: "يرجى وصف اهتمامك بهذا الحل...",
   interestSubmitted: "تم تقديم اهتمامك بنجاح! سيتواصل معك فريقنا قريبًا.",
-  
+  ctaform:"نموذج CTA",
   // AI Recommendation
   aiSolutionRecommendation: "توصية حل الذكاء الاصطناعي",
   aiRecommendationDescription: "صف احتياجاتك ومتطلباتك، وسيقوم الذكاء الاصطناعي لدينا بتحليل مدى توافق هذا الحل معها.",

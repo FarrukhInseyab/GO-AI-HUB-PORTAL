@@ -302,8 +302,8 @@ const UserProfile = () => {
             <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-primary-500/20 shadow-xl shadow-primary-500/10 p-4 sm:p-6 mb-6 sm:mb-8">
               {isEditing ? (
                 <form onSubmit={handleSaveProfile} className="space-y-4">
-                  <div className="flex items-center mb-4">
-                    <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 text-primary-500 mr-2 sm:mr-3" />
+                  <div className="flex items-center mb-4 gap-3">
+                    <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 text-primary-500" />
                     <h2 className="text-lg sm:text-xl font-bold text-white">
                       {language === 'ar' ? 'تعديل الملف الشخصي' : 'Edit Profile'}
                     </h2>
@@ -362,8 +362,8 @@ const UserProfile = () => {
                   </div>
                   
                   {error && (
-                    <div className="p-3 sm:p-4 bg-red-500/20 border border-red-500/30 text-red-300 rounded-lg flex items-start backdrop-blur-sm">
-                      <AlertCircle className="h-4 w-4 sm:h-5 sm:w-5 mr-2 mt-0.5 flex-shrink-0" />
+                    <div className="p-3 sm:p-4 bg-red-500/20 border border-red-500/30 text-red-300 rounded-lg flex items-start gap-2 backdrop-blur-sm">
+                      <AlertCircle className="h-4 w-4 sm:h-5 sm:w-5 mt-0.5 flex-shrink-0" />
                       <p className="text-sm">{error}</p>
                     </div>
                   )}
@@ -396,12 +396,12 @@ const UserProfile = () => {
                     <div className="flex-grow text-center sm:text-left">
                       <h1 className="text-xl sm:text-2xl font-bold text-white mb-2">{user?.contact_name}</h1>
                       <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 text-gray-400 text-sm">
-                        <div className="flex items-center justify-center sm:justify-start">
-                          <Building2 className="h-4 w-4 mr-2" />
+                        <div className="flex items-center justify-center sm:justify-start gap-2">
+                          <Building2 className="h-4 w-4" />
                           {user?.company_name}
                         </div>
-                        <div className="flex items-center justify-center sm:justify-start">
-                          <Calendar className="h-4 w-4 mr-2" />
+                        <div className="flex items-center justify-center sm:justify-start gap-2">
+                          <Calendar className="h-4 w-4" />
                           {translations.memberSince} {formatDate(user?.created_at || '')}
                         </div>
                       </div>
@@ -420,16 +420,16 @@ const UserProfile = () => {
               )}
               
               {successMessage && (
-                <div className="mt-4 p-3 sm:p-4 bg-green-500/20 border border-green-500/30 text-green-300 rounded-lg flex items-start backdrop-blur-sm">
-                  <Check className="h-4 w-4 sm:h-5 sm:w-5 mr-2 mt-0.5 flex-shrink-0" />
+                <div className="mt-4 p-3 sm:p-4 bg-green-500/20 border border-green-500/30 text-green-300 rounded-lg flex items-start gap-2 backdrop-blur-sm">
+                  <Check className="h-4 w-4 sm:h-5 sm:w-5 mt-0.5 flex-shrink-0" />
                   <p className="text-sm">{successMessage}</p>
                 </div>
               )}
             </div>
             
             {error && !isEditing && (
-              <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-red-500/20 border border-red-500/30 text-red-300 rounded-lg flex items-start backdrop-blur-sm">
-                <AlertCircle className="h-4 w-4 sm:h-5 sm:w-5 mr-2 mt-0.5 flex-shrink-0" />
+              <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-red-500/20 border border-red-500/30 text-red-300 rounded-lg flex items-start gap-2 backdrop-blur-sm">
+                <AlertCircle className="h-4 w-4 sm:h-5 sm:w-5 mt-0.5 flex-shrink-0" />
                 <p className="text-sm">{error}</p>
               </div>
             )}
@@ -548,8 +548,8 @@ const UserProfile = () => {
                           {/* Feedback section for resubmit status */}
                           {needsResubmission(solution) && (
                             <div className="mb-3 sm:mb-4 p-3 sm:p-4 bg-gray-700/30 rounded-lg border border-orange-500/30">
-                              <div className="flex items-center mb-2">
-                                <MessageCircle className="h-4 w-4 sm:h-5 sm:w-5 text-orange-400 mr-2" />
+                              <div className="flex items-center mb-2 gap-2">
+                                <MessageCircle className="h-4 w-4 sm:h-5 sm:w-5 text-orange-400" />
                                 <h4 className="font-medium text-sm text-orange-300">Evaluator Feedback</h4>
                               </div>
                               {solution.tech_feedback && (
@@ -579,9 +579,9 @@ const UserProfile = () => {
                                   pathname: "/submission-form",
                                   search: `?id=${solution.id}`
                                 }}
-                                className="inline-flex items-center px-3 py-1.5 sm:px-4 sm:py-2 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-400 hover:to-amber-400 text-white rounded-lg transition-all duration-300 text-xs sm:text-sm shadow-lg shadow-orange-500/25"
+                                className="inline-flex gap-2 items-center px-3 py-1.5 sm:px-4 sm:py-2 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-400 hover:to-amber-400 text-white rounded-lg transition-all duration-300 text-xs sm:text-sm shadow-lg shadow-orange-500/25"
                               >
-                                <Edit className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                                <Edit className="h-3 w-3 sm:h-4 sm:w-4" />
                                 Resubmit
                               </Link>
                             )}

@@ -4,14 +4,24 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import SuccessStory from '../components/SuccessStory';
 import MarketHighlight from '../components/MarketHighlight';
-import { ArrowRight, Check, Zap, Building, Landmark, Cpu, Brain, Shield, Globe, Sparkles, Bot, TrendingUp } from 'lucide-react';
+import { ArrowRight, Check, Zap, Building, Landmark, Cpu, Brain, Shield, Globe, Sparkles, Bot, TrendingUp, X, Loader2 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { successStories, marketHighlights } from '../data/landingPageData';
 
 const LandingPage = () => {
   const { language, translations } = useLanguage();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentStoryIndex, setCurrentStoryIndex] = useState(0);
+  const [error, setError] = useState<string | null>(null);
+  const [showSuccess, setShowSuccess] = useState(false);
   const [currentHighlightIndex, setCurrentHighlightIndex] = useState(0);
+  const [showCTAform, setshowCTAform] = useState(false);
+  const [formData, setFormData] = useState({
+        subject: 'CTA Form Submission – GO AI HUB',
+        contact_name: '',
+        contact_email: '',
+        contact_phone: ''
+      });
 
   useEffect(() => {
     const storyInterval = setInterval(() => {
@@ -27,6 +37,140 @@ const LandingPage = () => {
       clearInterval(highlightInterval);
     };
   }, []);
+
+  useEffect(() => {
+        
+    setshowCTAform(false);
+        
+  }, []);
+
+  const handleCTAclick = () => {
+    
+      setshowCTAform(true);
+    
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+          ...prev,
+          [name]: value
+        }));
+      };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+      e.preventDefault();
+      setError(null);
+      setIsSubmitting(true);
+   
+      try {
+        // Validate required fields
+        if (!formData.contact_name.trim()) {
+          throw new Error(language === 'ar' ? 'الاسم مطلوب' : 'Name is required');
+        }
+        if (!formData.contact_phone.trim()) {
+          throw new Error(language === 'ar' ? 'البريد الإلكتروني مطلوب' : 'Email is required');
+        }
+        if (!formData.subject.trim()) {
+          throw new Error(language === 'ar' ? 'الموضوع مطلوب' : 'Subject is required');
+        }
+        if (!formData.contact_email.trim()) {
+          throw new Error(language === 'ar' ? 'الرسالة مطلوبة' : 'Message is required');
+        }
+   
+        
+   
+        // Prepare email content
+        const emailSubject = `${formData.subject}`;
+  
+        const emailHtml = `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 5px;">
+      
+            <div style="text-align: center; margin-bottom: 20px;">
+              <h1 style="color: #00afaf;">CTA Form Submission</h1>
+            </div>
+
+            <p><strong>Name:</strong> ${formData.contact_name || 'Not provided'}</p>
+            <p><strong>Phone:</strong> ${formData.contact_phone || 'Not provided'}</p>
+            <p><strong>Email:</strong> ${formData.contact_email || 'Not provided'}</p>
+
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0; color: #666; font-size: 12px;">
+              <p>This CTA form was submitted through the GO AI HUB website.</p>
+              <p>Best regards,<br>
+              GO AI HUB Team<br>
+              Email: <a href="mailto:ai.support@go.com.sa">ai.support@go.com.sa</a><br>
+              Website: <a href="https://www.goaihub.ai" target="_blank">www.goaihub.ai</a><br>
+              Working Hours: Sunday–Thursday, 9:00 AM – 5:00 PM (KSA Time)</p>
+            </div>
+
+            <hr style="margin: 40px 0; border: none; border-top: 1px solid #e0e0e0;">
+
+            <div dir="rtl" style="text-align: right; font-family: Arial, sans-serif;">
+              <h1 style="color: #00afaf;">تم إرسال نموذج الدعوة للإجراء</h1>
+              <p><strong>الاسم:</strong> ${formData.contact_name || 'لم يتم التقديم'}</p>
+              <p><strong>رقم الجوال:</strong> ${formData.contact_phone || 'لم يتم التقديم'}</p>
+              <p><strong>البريد الإلكتروني:</strong> ${formData.contact_email || 'لم يتم التقديم'}</p>
+
+              <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0; color: #666; font-size: 12px;">
+                <p>تم إرسال هذا النموذج من خلال موقع GO AI HUB.</p>
+                <p>مع أطيب التحيات،<br>
+                فريق GO AI HUB<br>
+                البريد الإلكتروني: <a href="mailto:ai.support@go.com.sa">ai.support@go.com.sa</a><br>
+                الموقع الإلكتروني: <a href="https://www.goaihub.ai" target="_blank">www.goaihub.ai</a><br>
+                ساعات العمل: الأحد–الخميس، 9:00 صباحًا – 5:00 مساءً (بتوقيت السعودية)</p>
+              </div>
+            </div>
+          </div>
+      `;
+  
+   
+        // Send email using the email service
+        const emailServiceUrl = import.meta.env.VITE_EMAIL_SERVICE_URL || 'https://goaihub.ai/email/api';
+       
+        const response = await fetch(`${emailServiceUrl}/send-email`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            to: 'zayan.khan@inseyab.com',
+            type: 'custom',
+            subject: emailSubject,
+            html: emailHtml
+          })
+        });
+   
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.error || 'Failed to send message');
+        }
+   
+        setShowSuccess(true);
+       
+        // Reset form
+         setFormData({
+            subject: '',
+            
+            contact_name: '',
+            contact_email:'',
+            contact_phone: ''
+
+          });
+    
+          // Hide success message after 5 seconds
+          setTimeout(() => {
+            setShowSuccess(false);
+          }, 5000);
+   
+        
+   
+      } catch (error) {
+        console.error('Error sending contact form:', error);
+        setError(error instanceof Error ? error.message : 'Failed to send message');
+      } finally {
+        setIsSubmitting(false);
+      }
+    };
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-900">
@@ -69,25 +213,36 @@ const LandingPage = () => {
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
              <Link
                 to="/vendor-onboarding"
-                className="group relative text-white font-semibold py-3 px-6 sm:py-4 sm:px-8 rounded-lg transition-all duration-500 flex items-center justify-center transform hover:translate-y-[-2px] bg-gradient-to-r from-[#4CEADB] to-[#014952] bg-[length:200%_200%] bg-[position:0%_50%] hover:bg-[position:100%_50%]"
+                className="group relative text-white font-semibold py-3 px-6 sm:py-4 sm:px-8 rounded-lg transition-all duration-500 flex items-center justify-center gap-2 transform hover:translate-y-[-2px] bg-gradient-to-r from-[#4CEADB] to-[#014952] bg-[length:200%_200%] bg-[position:0%_50%] hover:bg-[position:100%_50%]"
               >
-                <Building className="mr-2 sm:mr-3 h-5 w-5 sm:h-6 sm:w-6" />
+                <Building className="h-5 w-5 sm:h-6 sm:w-6" />
                 {translations.vendorCTA}
-                <ArrowRight className="ml-2 sm:ml-3 h-4 w-4 sm:h-5 sm:w-5 transform group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 transform group-hover:translate-x-1 transition-transform" />
               </Link>
 
               
               <Link 
                 to="/discover" 
-                className="group relative text-white font-semibold py-3 px-6 sm:py-4 sm:px-8 rounded-lg transition-all duration-500 flex items-center justify-center transform hover:translate-y-[-2px] bg-gradient-to-r from-[#4CEADB] to-[#014952] bg-[length:200%_200%] bg-[position:0%_50%] hover:bg-[position:100%_50%]"
+                className="group relative text-white font-semibold py-3 px-6 sm:py-4 sm:px-8 rounded-lg transition-all duration-500 flex items-center justify-center gap-2 transform hover:translate-y-[-2px] bg-gradient-to-r from-[#4CEADB] to-[#014952] bg-[length:200%_200%] bg-[position:0%_50%] hover:bg-[position:100%_50%]"
               >
-                <Landmark className="mr-2 sm:mr-3 h-5 w-5 sm:h-6 sm:w-6" />
+                <Landmark className="h-5 w-5 sm:h-6 sm:w-6" />
                 {translations.governmentCTA}
-                <ArrowRight className="ml-2 sm:ml-3 h-4 w-4 sm:h-5 sm:w-5 transform group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 transform group-hover:translate-x-1 transition-transform" />
               </Link>
+
+              {/* <button
+                  onClick={handleCTAclick}
+                  className="px-4 py-2 sm:px-6 sm:py-3 bg-gradient-to-r from-primary-500 to-secondary-500 hover:from-primary-400 hover:to-secondary-400 text-white rounded-lg transition-all duration-300 flex items-center justify-center shadow-lg shadow-primary-500/25 hover:shadow-primary-500/40 text-sm sm:text-base"
+                >
+                  {translations.ctaform}
+                </button> */}
+                
             </div>
           </div>
+
+          
         </div>
+
 
         {/* Scroll indicator */}
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce hidden sm:block">
@@ -184,8 +339,8 @@ const LandingPage = () => {
         
         <div className="container mx-auto px-4 relative z-10">
           <div className="text-center mb-8 sm:mb-16">
-            <div className="inline-flex items-center mb-3 sm:mb-4">
-              <div className="p-2 sm:p-3 bg-[#016774] rounded-lg border border-[#4CEADB]/30 mr-2 sm:mr-3">
+            <div className="inline-flex items-center mb-3 sm:mb-4 gap-3">
+              <div className="p-2 sm:p-3 bg-[#016774] rounded-lg border border-[#4CEADB]/30">
                 <Bot className="h-5 w-5 sm:h-6 sm:w-6 text-[#4CEADB]" />
               </div>
               <h2 className="text-xl sm:text-3xl font-bold text-[#4CEADB]">
@@ -320,8 +475,8 @@ const LandingPage = () => {
                 
                 <ul className="space-y-2 sm:space-y-3 relative z-10">
                   {[1, 2, 3].map((point) => (
-                    <li key={point} className="flex items-start group/item">
-                      <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-[#4CEADB] flex items-center justify-center mr-2 sm:mr-3 mt-0.5 group-hover/item:scale-110 transition-transform duration-300">
+                    <li key={point} className="flex items-start group/item gap-3">
+                      <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-[#4CEADB] flex items-center justify-center mt-0.5 group-hover/item:scale-110 transition-transform duration-300">
                         <Check className="h-2 w-2 sm:h-3 sm:w-3 text-white" />
                       </div>
                       <span className="text-xs sm:text-sm text-white group-hover/item:text-gray-300 transition-colors duration-300">
@@ -353,24 +508,125 @@ const LandingPage = () => {
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center">
             <Link 
               to="/vendor-onboarding" 
-              className="group relative bg-[#4CEADB] hover:bg-[#4CEADB]/80 text-[#014952] font-semibold py-3 px-6 sm:py-4 sm:px-8 rounded-lg transition-all duration-300 flex items-center justify-center transform hover:translate-y-[-2px]"
+              className="group relative bg-[#4CEADB] hover:bg-[#4CEADB]/80 text-[#014952] font-semibold py-3 px-6 sm:py-4 sm:px-8 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 transform hover:translate-y-[-2px]"
             >
-              <Building className="mr-2 sm:mr-3 h-5 w-5 sm:h-6 sm:w-6" />
+              <Building className="h-5 w-5 sm:h-6 sm:w-6" />
               {translations.vendorCTA}
-              <ArrowRight className="ml-2 sm:ml-3 h-4 w-4 sm:h-5 sm:w-5 transform group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 transform group-hover:translate-x-1 transition-transform" />
             </Link>
             
             <Link 
               to="/discover" 
-              className="group relative bg-[#014952] hover:bg-[#014952]/80 border border-[#4CEADB]/30 hover:border-[#4CEADB] text-white font-semibold py-3 px-6 sm:py-4 sm:px-8 rounded-lg transition-all duration-300 flex items-center justify-center transform hover:translate-y-[-2px]"
+              className="group relative bg-[#014952] hover:bg-[#014952]/80 border border-[#4CEADB]/30 hover:border-[#4CEADB] text-white font-semibold py-3 px-6 sm:py-4 sm:px-8 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 transform hover:translate-y-[-2px]"
             >
-              <Landmark className="mr-2 sm:mr-3 h-5 w-5 sm:h-6 sm:w-6" />
+              <Landmark className="h-5 w-5 sm:h-6 sm:w-6" />
               {translations.governmentCTA}
-              <ArrowRight className="ml-2 sm:ml-3 h-4 w-4 sm:h-5 sm:w-5 transform group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 transform group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
         </div>
       </section>
+      {showSuccess && (
+                                    <div className="fixed top-24 left-1/2 transform -translate-x-1/2 bg-green-500/20 border border-green-500/30 backdrop-blur-sm p-3 sm:p-4 rounded-lg shadow-lg z-50 max-w-xs sm:max-w-md text-center">
+                                      <div className="flex items-center justify-center gap-2">
+                                        <Check className="h-4 w-4 sm:h-5 sm:w-5 text-green-400" />
+                                        <p className="text-sm sm:text-base text-green-300">{translations.interestSubmitted}</p>
+                                      </div>
+                                    </div>
+                                  )}
+                {showCTAform && (
+                          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+                            <div className="bg-gray-900/95 backdrop-blur-xl border border-primary-500/20 rounded-xl p-4 sm:p-6 w-full max-w-md shadow-2xl shadow-primary-500/10">
+                              <div className="flex justify-between items-center mb-4">
+                                <h3 className="text-lg sm:text-xl font-semibold text-white">{translations.ctaform}</h3>
+                                <button
+                                  onClick={() => setshowCTAform(false)}
+                                  className="text-gray-400 hover:text-primary-500 p-2 rounded-lg hover:bg-gray-800/50 transition-all duration-300"
+                                >
+                                  <X className="h-5 w-5" />
+                                </button>
+                              </div>
+                
+                              <form onSubmit={handleSubmit}>
+                                <div className="space-y-3 sm:space-y-4">
+                                  
+                
+                                  <div>
+                                    <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1">
+                                      {translations.name} *
+                                    </label>
+                                    <input
+                                      type="text"
+                                      name="contact_name"
+                                      value={formData.contact_name}
+                                      onChange={handleInputChange}
+                                      required
+                                      className="w-full px-3 py-2 bg-gray-800/50 border border-gray-700/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-white placeholder-gray-400 backdrop-blur-sm text-sm"
+                                    />
+                                  </div>
+                
+                                  <div>
+                                    <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1">
+                                      {translations.email} *
+                                    </label>
+                                    <input
+                                      type="email"
+                                      name="contact_email"
+                                      value={formData.contact_email}
+                                      onChange={handleInputChange}
+                                      required
+                                      className="w-full px-3 py-2 bg-gray-800/50 border border-gray-700/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-white placeholder-gray-400 backdrop-blur-sm text-sm"
+                                    />
+                                  </div>
+                
+                                  <div>
+                                    <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1">
+                                      {translations.phone} *
+                                    </label>
+                                    <input
+                                      type="tel"
+                                      name="contact_phone"
+                                      value={formData.contact_phone}
+                                      onChange={handleInputChange}
+                                      required
+                                      className="w-full px-3 py-2 bg-gray-800/50 border border-gray-700/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500/50 text-white placeholder-gray-400 backdrop-blur-sm text-sm"
+                                    />
+                                  </div>
+                
+                                  
+                                </div>
+                
+                                {error && (
+                                  <p className="mt-3 sm:mt-4 text-xs sm:text-sm text-red-400">{error}</p>
+                                )}
+                
+                                <div className="mt-4 sm:mt-6 flex justify-end gap-3">
+                                  <button
+                                    type="button"
+                                    onClick={() => setshowCTAform(false)}
+                                    className="px-3 sm:px-4 py-1.5 sm:py-2 text-gray-400 hover:text-gray-300 transition-colors duration-300 text-sm"
+                                  >
+                                    {translations.cancel}
+                                  </button>
+                                  <button
+                                    type="submit"
+                                    disabled={isSubmitting}
+                                    className="px-3 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-primary-500 to-secondary-500 hover:from-primary-400 hover:to-secondary-400 text-white rounded-lg disabled:opacity-50 flex items-center gap-2 transition-all duration-300 shadow-lg shadow-primary-500/25 text-sm"
+                                  >
+                                    {isSubmitting ? (
+                                      <>
+                                        <Loader2 className="h-3 w-3 sm:h-4 sm:w-4 animate-spin" />
+                                        {translations.submitting}
+                                      </>
+                                    ) : (
+                                      translations.submit
+                                    )}
+                                  </button>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                        )}
       
       <Footer />
       

@@ -107,8 +107,8 @@ const AuthPage = () => {
         <div className="container mx-auto px-4 py-8 relative z-10">
           <div className="max-w-md mx-auto">
             <div className="mb-6">
-              <Link to="/" className="inline-flex items-center text-[#4CEADB] hover:text-[#4CEADB]/80 mb-4 transition-colors duration-300">
-                <ArrowLeft className="h-4 w-4 mr-2" />
+              <Link to="/" className="inline-flex gap-2 items-center text-[#4CEADB] hover:text-[#4CEADB]/80 mb-4 transition-colors duration-300">
+                <ArrowLeft className="h-4 w-4" />
                 {language === 'ar' ? 'العودة إلى الصفحة الرئيسية' : 'Back to Home'}
               </Link>
               
@@ -123,8 +123,8 @@ const AuthPage = () => {
             </div>
             
             {error && (
-              <div className="mb-6 p-4 bg-red-500/10 border border-red-500/30 text-red-300 rounded-lg flex items-start bg-[#016774]">
-                <AlertCircle className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" />
+              <div className="mb-6 p-4 bg-red-500/10 border border-red-500/30 text-red-300 rounded-lg flex items-start gap-2 bg-[#016774]">
+                <AlertCircle className="h-5 w-5 mt-0.5 flex-shrink-0" />
                 <p className="text-sm">{error}</p>
               </div>
             )}
@@ -249,11 +249,11 @@ const AuthPage = () => {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full bg-[#4CEADB] hover:bg-[#4CEADB]/80 text-[#014952] py-3 rounded-lg disabled:opacity-50 flex items-center justify-center transition-all duration-300 text-sm font-semibold"
+                  className="w-full bg-[#4CEADB] hover:bg-[#4CEADB]/80 text-[#014952] py-3 rounded-lg disabled:opacity-50 flex items-center justify-center gap-2 transition-all duration-300 text-sm font-semibold"
                 >
                   {isLoading ? (
                     <>
-                      <Loader2 className="h-5 w-5 animate-spin mr-2" />
+                      <Loader2 className="h-5 w-5 animate-spin" />
                       {isSignIn ? translations.signingIn : translations.creatingAccount}
                     </>
                   ) : (

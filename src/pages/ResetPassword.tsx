@@ -159,8 +159,8 @@ const ResetPassword = () => {
                 
                 {error && (
                   <div className="mb-4 p-3 bg-red-500/20 border border-red-500/30 text-red-300 rounded-lg text-sm text-left">
-                    <div className="flex items-start">
-                      <AlertTriangle className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" />
+                    <div className="flex items-start gap-2">
+                      <AlertTriangle className="h-5 w-5 mt-0.5 flex-shrink-0" />
                       <p>{error}</p>
                     </div>
                   </div>

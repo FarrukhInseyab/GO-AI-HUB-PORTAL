@@ -67,8 +67,8 @@ const ForgotPassword = () => {
         
         <div className="max-w-md w-full mx-4 relative z-10">
           <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-primary-500/20 shadow-xl shadow-primary-500/10 p-8">
-            <Link to="/auth" className="inline-flex items-center text-primary-500 hover:text-primary-400 mb-6 transition-colors duration-300">
-              <ArrowLeft className="h-4 w-4 mr-2" />
+            <Link to="/auth" className="inline-flex gap-2 items-center text-primary-500 hover:text-primary-400 mb-6 transition-colors duration-300">
+              <ArrowLeft className="h-4 w-4" />
               {language === 'ar' ? 'العودة إلى تسجيل الدخول' : 'Back to Sign In'}
             </Link>
             
@@ -107,8 +107,8 @@ const ForgotPassword = () => {
                 
                 {error && (
                   <div className="mb-4 p-3 bg-red-500/20 border border-red-500/30 text-red-300 rounded-lg text-sm">
-                    <div className="flex items-start">
-                      <AlertTriangle className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" />
+                    <div className="flex items-start gap-2">
+                      <AlertTriangle className="h-5 w-5 mt-0.5 flex-shrink-0" />
                       <p>{error}</p>
                     </div>
                   </div>

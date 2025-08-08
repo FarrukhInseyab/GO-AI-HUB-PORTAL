@@ -129,7 +129,7 @@ const AIRecommendation = () => {
           <div className="max-w-4xl mx-auto">
             <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-primary-500/20 shadow-xl shadow-primary-500/10 overflow-hidden">
               <div className="bg-gradient-to-r from-gray-900 via-secondary-900/30 to-primary-900/30 p-6 text-white border-b border-primary-500/20">
-                <div className="flex items-center mb-4">
+                <div className=" gap-3">
                   <div className="p-3 bg-gradient-to-br from-primary-500/20 to-secondary-500/20 rounded-xl border border-primary-500/30 mr-4">
                     <Brain className="h-8 w-8 text-primary-500" />
                   </div>
@@ -185,8 +185,8 @@ const AIRecommendation = () => {
                       <h3 className="text-lg font-semibold mb-3 text-green-400">{translations.keyStrengths}</h3>
                       <ul className="space-y-2">
                         {recommendation.strengths.map((strength: string, index: number) => (
-                          <li key={index} className="flex items-start">
-                            <CheckCircle className="h-5 w-5 text-green-400 mt-0.5 mr-2 flex-shrink-0" />
+                          <li key={index} className="flex items-start gap-2">
+                            <CheckCircle className="h-5 w-5 text-green-400 mt-0.5 flex-shrink-0" />
                             <span className="text-gray-300">{strength}</span>
                           </li>
                         ))}
@@ -197,8 +197,8 @@ const AIRecommendation = () => {
                       <h3 className="text-lg font-semibold mb-3 text-yellow-400">{translations.potentialGaps}</h3>
                       <ul className="space-y-2">
                         {recommendation.gaps.map((gap: string, index: number) => (
-                          <li key={index} className="flex items-start">
-                            <AlertTriangle className="h-5 w-5 text-yellow-400 mt-0.5 mr-2 flex-shrink-0" />
+                          <li key={index} className="flex items-start gap-2">
+                            <AlertTriangle className="h-5 w-5 text-yellow-400 mt-0.5 flex-shrink-0" />
                             <span className="text-gray-300">{gap}</span>
                           </li>
                         ))}
@@ -209,8 +209,8 @@ const AIRecommendation = () => {
                       <h3 className="text-lg font-semibold mb-3 text-primary-500">{translations.implementationConsiderations}</h3>
                       <ul className="space-y-2">
                         {recommendation.considerations.map((consideration: string, index: number) => (
-                          <li key={index} className="flex items-start">
-                            <Brain className="h-5 w-5 text-primary-500 mt-0.5 mr-2 flex-shrink-0" />
+                          <li key={index} className="flex items-start gap-2">
+                            <Brain className="h-5 w-5 text-primary-500 mt-0.5 flex-shrink-0" />
                             <span className="text-gray-300">{consideration}</span>
                           </li>
                         ))}
@@ -218,8 +218,8 @@ const AIRecommendation = () => {
                     </div>
 
                     <div className="p-6 bg-gray-700/30 backdrop-blur-sm rounded-xl border border-primary-500/20">
-                      <div className="flex items-center mb-4">
-                        <Sparkles className="h-5 w-5 text-primary-500 mr-2" />
+                      <div className="flex items-center mb-4 gap-2">
+                        <Sparkles className="h-5 w-5 text-primary-500" />
                         <h3 className="text-lg font-semibold text-primary-500">{translations.overview}</h3>
                       </div>
                       <p className="text-gray-300 leading-relaxed">{recommendation.summary}</p>

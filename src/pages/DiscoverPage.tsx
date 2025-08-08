@@ -59,18 +59,16 @@ const DiscoverPage = () => {
   };
   
   const handleInterestClick = () => {
-    if (!user) {
-      navigate(`/auth?redirect=/`);
-    } else {
+    
       setShowInterestForm(true);
-    }
+    
   };
 
   useEffect(() => {
-      if (user) {
+    
         setShowInterestForm(true);
-      }
-    }, [user]);
+      
+    }, []);
 
   const filteredSolutions = solutions.filter(solution => {
     const matchesSearch = searchQuery === '' || 
@@ -343,8 +341,8 @@ const DiscoverPage = () => {
 
         <div className="container mx-auto px-4 py-6 sm:py-8 relative z-10">
           <div className="bg-[#016774] rounded-lg border border-[#4CEADB]/30 p-4 sm:p-6 mb-6 sm:mb-8">
-            <div className="flex items-center mb-4">
-              <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 text-[#4CEADB] mr-2 sm:mr-3" />
+            <div className="flex items-center mb-4 gap-3">
+              <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 text-[#4CEADB]" />
               <div className='flex justify-between w-full items-center'>
                 <h1 className="text-xl sm:text-3xl font-bold text-[#4CEADB]">
                 {translations.discoverTitle}
@@ -376,9 +374,9 @@ const DiscoverPage = () => {
               
               <button
                 onClick={() => setShowFilters(!showFilters)}
-                className="bg-[#014952] hover:bg-[#014952]/80 border border-[#4CEADB]/30 hover:border-[#4CEADB] px-3 sm:px-4 py-2 rounded-lg flex items-center justify-center transition-all duration-300 text-white hover:text-[#4CEADB] text-sm"
+                className="bg-[#014952] hover:bg-[#014952]/80 border border-[#4CEADB]/30 hover:border-[#4CEADB] px-3 sm:px-4 py-2 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 text-white hover:text-[#4CEADB] text-sm"
               >
-                <Filter className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
+                <Filter className="h-4 w-4 sm:h-5 sm:w-5" />
                 {translations.filters}
               </button>
               
@@ -509,8 +507,8 @@ const DiscoverPage = () => {
           </div>
           {showSuccess && (
                     <div className="fixed top-24 left-1/2 transform -translate-x-1/2 bg-green-500/20 border border-green-500/30 backdrop-blur-sm p-3 sm:p-4 rounded-lg shadow-lg z-50 max-w-xs sm:max-w-md text-center">
-                      <div className="flex items-center justify-center">
-                        <Check className="h-4 w-4 sm:h-5 sm:w-5 text-green-400 mr-2" />
+                      <div className="flex items-center justify-center gap-2">
+                        <Check className="h-4 w-4 sm:h-5 sm:w-5 text-green-400" />
                         <p className="text-sm sm:text-base text-green-300">{translations.interestSubmitted}</p>
                       </div>
                     </div>
@@ -592,11 +590,11 @@ const DiscoverPage = () => {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="px-3 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-primary-500 to-secondary-500 hover:from-primary-400 hover:to-secondary-400 text-white rounded-lg disabled:opacity-50 flex items-center transition-all duration-300 shadow-lg shadow-primary-500/25 text-sm"
+                    className="px-3 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-primary-500 to-secondary-500 hover:from-primary-400 hover:to-secondary-400 text-white rounded-lg disabled:opacity-50 flex items-center gap-2 transition-all duration-300 shadow-lg shadow-primary-500/25 text-sm"
                   >
                     {isSubmitting ? (
                       <>
-                        <Loader2 className="h-3 w-3 sm:h-4 sm:w-4 animate-spin mr-2" />
+                        <Loader2 className="h-3 w-3 sm:h-4 sm:w-4 animate-spin" />
                         {translations.submitting}
                       </>
                     ) : (

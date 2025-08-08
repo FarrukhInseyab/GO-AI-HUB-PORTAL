@@ -267,8 +267,8 @@ const VendorOnboarding = () => {
           <div className="max-w-4xl mx-auto">
             <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-primary-500/20 shadow-xl shadow-primary-500/10 overflow-hidden">
               <div className="bg-gradient-to-r from-gray-900 via-secondary-900/30 to-primary-900/30 text-white p-4 sm:p-6 border-b border-primary-500/20">
-                <div className="flex items-center mb-3 sm:mb-4">
-                  <Zap className="h-5 w-5 sm:h-6 sm:w-6 text-primary-500 mr-2 sm:mr-3" />
+                <div className="flex items-center mb-3 sm:mb-4 gap-3">
+                  <Zap className="h-5 w-5 sm:h-6 sm:w-6 text-primary-500" />
                   <h1 className="text-lg sm:text-xl font-semibold">AI-Powered Vendor Onboarding by GO.Ai | رُوَّاد</h1>
                 </div>
                 <p className="text-sm sm:text-base text-gray-300">{translations.vendorOnboardingSubtitle}</p>
@@ -288,8 +288,8 @@ const VendorOnboarding = () => {
               
               {error && (
                 <div className="bg-red-500/20 border-l-4 border-red-500 p-3 sm:p-4 backdrop-blur-sm">
-                  <div className="flex items-center">
-                    <AlertCircle className="h-4 w-4 sm:h-5 sm:w-5 text-red-400 mr-2" />
+                  <div className="flex items-center gap-2">
+                    <AlertCircle className="h-4 w-4 sm:h-5 sm:w-5 text-red-400" />
                     <p className="text-xs sm:text-sm text-red-300">{error}</p>
                   </div>
                 </div>
@@ -302,12 +302,12 @@ const VendorOnboarding = () => {
                 {messages.map((message) => (
                   <div
                     key={message.id}
-                    className={`mb-3 sm:mb-4 flex ${
+                    className={`mb-3 sm:mb-4 flex gap-2 ${
                       message.sender === 'user' ? 'justify-end' : 'justify-start'
                     }`}
                   >
                     {message.sender === 'bot' && (
-                      <div className="bg-gradient-to-br from-primary-500/20 to-secondary-500/20 border border-primary-500/30 rounded-full p-1.5 sm:p-2 mr-2">
+                      <div className="bg-gradient-to-br from-primary-500/20 to-secondary-500/20 border border-primary-500/30 rounded-full p-1.5 sm:p-2">
                         <Bot className="h-4 w-4 sm:h-5 sm:w-5 text-primary-500" />
                       </div>
                     )}

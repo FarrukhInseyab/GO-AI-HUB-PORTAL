@@ -156,8 +156,8 @@ const AuthModal: React.FC<AuthModalProps> = ({
         </div>
 
         {error && (
-          <div className="mb-6 p-4 bg-red-500/10 border border-red-500/30 text-red-300 rounded-lg flex items-start bg-[#016774]">
-            <AlertCircle className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" />
+          <div className="mb-6 p-4 bg-red-500/10 border border-red-500/30 text-red-300 rounded-lg flex items-start gap-2 bg-[#016774]">
+            <AlertCircle className="h-5 w-5 mt-0.5 flex-shrink-0" />
             <p className="text-sm">{error}</p>
           </div>
         )}
@@ -281,11 +281,11 @@ const AuthModal: React.FC<AuthModalProps> = ({
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-[#4CEADB] hover:bg-[#4CEADB]/80 text-[#014952] py-3 rounded-lg disabled:opacity-50 flex items-center justify-center transition-all duration-300 text-sm font-semibold"
+            className="w-full bg-[#4CEADB] hover:bg-[#4CEADB]/80 text-[#014952] py-3 rounded-lg disabled:opacity-50 flex items-center justify-center gap-2 transition-all duration-300 text-sm font-semibold"
           >
             {isLoading ? (
               <>
-                <Loader2 className="h-5 w-5 animate-spin mr-2" />
+                <Loader2 className="h-5 w-5 animate-spin" />
                 {isSignIn ? translations.signingIn : translations.creatingAccount}
               </>
             ) : (

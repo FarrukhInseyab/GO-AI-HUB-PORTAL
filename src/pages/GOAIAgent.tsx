@@ -726,8 +726,8 @@ Based on this analysis, organizations should consider:
           <div className="max-w-5xl mx-auto">
             <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-secondary-500/20 shadow-xl shadow-secondary-500/10 overflow-hidden">
               <div className="bg-gradient-to-r from-gray-900 via-secondary-900/30 to-primary-900/30 p-4 sm:p-6 border-b border-secondary-500/20">
-                <div className="flex items-center mb-4">
-                  <Zap className="h-5 w-5 sm:h-6 sm:w-6 text-secondary-500 mr-2 sm:mr-3" />
+                <div className="flex items-center mb-4 gap-3">
+                  <Zap className="h-5 w-5 sm:h-6 sm:w-6 text-secondary-500" />
                   <h1 className="text-xl sm:text-2xl font-bold text-white">{translations.goaiAgentTitle}</h1>
                 </div>
                 <p className="text-sm sm:text-base text-gray-300">{translations.goaiAgentSubtitle}</p>
@@ -758,8 +758,8 @@ Based on this analysis, organizations should consider:
               
               {error && (
                 <div className="bg-red-500/20 border-l-4 border-red-500 p-3 sm:p-4 backdrop-blur-sm">
-                  <div className="flex items-center">
-                    <AlertCircle className="h-4 w-4 sm:h-5 sm:w-5 text-red-400 mr-2" />
+                  <div className="flex items-center gap-2">
+                    <AlertCircle className="h-4 w-4 sm:h-5 sm:w-5 text-red-400" />
                     <p className="text-sm sm:text-base text-red-300">{error}</p>
                   </div>
                 </div>
@@ -774,12 +774,12 @@ Based on this analysis, organizations should consider:
                     {messages.map((message) => (
                       <div
                         key={message.id}
-                        className={`mb-3 sm:mb-4 flex ${
+                        className={`mb-3 sm:mb-4 flex gap-2 ${
                           message.sender === 'user' ? 'justify-end' : 'justify-start'
                         }`}
                       >
                         {message.sender === 'bot' && (
-                          <div className="bg-gradient-to-br from-secondary-500/20 to-primary-500/20 border border-secondary-500/30 rounded-full p-1.5 sm:p-2 mr-2">
+                          <div className="bg-gradient-to-br from-secondary-500/20 to-primary-500/20 border border-secondary-500/30 rounded-full p-1.5 sm:p-2">
                             <Bot className="h-4 w-4 sm:h-5 sm:w-5 text-secondary-500" />
                           </div>
                         )}
@@ -880,7 +880,7 @@ Based on this analysis, organizations should consider:
                         {isLoadingReports ? (
                           <LoadingSpinner size="sm" />
                         ) : (
-                          <RefreshCw className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                          <RefreshCw className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2 ml-1" />
                         )}
                         <span className="text-xs sm:text-sm">{language === 'ar' ? 'تحديث' : 'Refresh'}</span>
                       </Button>
@@ -893,7 +893,7 @@ Based on this analysis, organizations should consider:
                         {isCreatingReport ? (
                           <LoadingSpinner size="sm" />
                         ) : (
-                          <Plus className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                          <Plus className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2 ml-1" />
                         )}
                         <span className="text-xs sm:text-sm">{language === 'ar' ? 'تقرير جديد' : 'New Report'}</span>
                       </Button>
@@ -983,8 +983,8 @@ Based on this analysis, organizations should consider:
             
             <div className="mt-6 sm:mt-8 grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
               <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-secondary-500/20 p-4 sm:p-6 hover:border-secondary-500/30 transition-all duration-300">
-                <div className="flex items-center mb-3 sm:mb-4">
-                  <div className="p-2 sm:p-3 bg-gradient-to-br from-secondary-500/20 to-primary-500/20 rounded-xl border border-secondary-500/30 mr-2 sm:mr-3">
+                <div className="flex items-center mb-3 sm:mb-4 gap-3">
+                  <div className="p-2 sm:p-3 bg-gradient-to-br from-secondary-500/20 to-primary-500/20 rounded-xl border border-secondary-500/30">
                     <FileText className="h-4 w-4 sm:h-5 sm:w-5 text-secondary-500" />
                   </div>
                   <h3 className="text-base sm:text-lg font-semibold text-white">{translations.platformSolutions}</h3>
@@ -1010,8 +1010,8 @@ Based on this analysis, organizations should consider:
               </div>
               
               <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-secondary-500/20 p-4 sm:p-6 hover:border-secondary-500/30 transition-all duration-300">
-                <div className="flex items-center mb-3 sm:mb-4">
-                  <div className="p-2 sm:p-3 bg-gradient-to-br from-secondary-500/20 to-primary-500/20 rounded-xl border border-secondary-500/30 mr-2 sm:mr-3">
+                <div className="flex items-center mb-3 sm:mb-4 gap-3">
+                  <div className="p-2 sm:p-3 bg-gradient-to-br from-secondary-500/20 to-primary-500/20 rounded-xl border border-secondary-500/30">
                     <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5 text-secondary-500" />
                   </div>
                   <h3 className="text-base sm:text-lg font-semibold text-white">{translations.saudiMarketInsights}</h3>
@@ -1037,8 +1037,8 @@ Based on this analysis, organizations should consider:
               </div>
               
               <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-secondary-500/20 p-4 sm:p-6 hover:border-secondary-500/30 transition-all duration-300">
-                <div className="flex items-center mb-3 sm:mb-4">
-                  <div className="p-2 sm:p-3 bg-gradient-to-br from-secondary-500/20 to-primary-500/20 rounded-xl border border-secondary-500/30 mr-2 sm:mr-3">
+                <div className="flex items-center mb-3 sm:mb-4 gap-3">
+                  <div className="p-2 sm:p-3 bg-gradient-to-br from-secondary-500/20 to-primary-500/20 rounded-xl border border-secondary-500/30">
                     <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-secondary-500" />
                   </div>
                   <h3 className="text-base sm:text-lg font-semibold text-white">{translations.globalIndustryReports}</h3>

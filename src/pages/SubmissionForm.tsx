@@ -555,14 +555,14 @@ const SubmissionForm = () => {
                           }
                         }}
                       />
-                      <div className="flex items-center justify-center">
+                      <div className="flex items-center justify-center gap-2">
                         {uploadingField === 'registration' ? (
-                          <svg className="animate-spin h-5 w-5 text-primary-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <svg className="animate-spin h-5 w-5 text-primary-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
                           </svg>
                         ) : (
-                          <Upload className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400 mr-2" />
+                          <Upload className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
                         )}
                         <span className="text-gray-400 text-sm">
                           {uploadingField === 'registration' ? 'Uploading...' : translations.uploadFile}
@@ -572,8 +572,8 @@ const SubmissionForm = () => {
 
                   
                   {formData.registration && (
-                    <div className="flex items-center bg-gray-800/50 border border-gray-700/50 rounded-lg px-2 sm:px-3 py-1.5 sm:py-2">
-                      <FileText className="h-4 w-4 sm:h-5 sm:w-5 text-primary-500 mr-2" />
+                    <div className="flex items-center gap-2 bg-gray-800/50 border border-gray-700/50 rounded-lg px-2 sm:px-3 py-1.5 sm:py-2">
+                      <FileText className="h-4 w-4 sm:h-5 sm:w-5 text-primary-500" />
                       <span className="text-gray-300 text-xs sm:text-sm truncate max-w-[80px] sm:max-w-[150px]">Uploaded</span>
                       <button
                         onClick={() => handleInputChange('registration', null)}
@@ -633,12 +633,12 @@ const SubmissionForm = () => {
                   disabled={isGeneratingAI || !formData.description?.length}
                   variant="outline"
                   size="sm"
-                  className="flex items-center text-xs"
+                  className="flex items-center text-xs gap-2"
                 >
                   {isGeneratingAI ? (
                     <LoadingSpinner size="sm" />
                   ) : (
-                    <RefreshCw className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                    <RefreshCw className="h-3 w-3 sm:h-4 sm:w-4" />
                   )}
                   {isGeneratingAI ? 'Generating...' : 'Generate AI Summary'}
                 </Button>
@@ -721,12 +721,12 @@ const SubmissionForm = () => {
                   disabled={isGeneratingTags || !formData.description || !formData.techCategory?.length}
                   variant="outline"
                   size="sm"
-                  className="flex items-center text-xs"
+                  className="flex items-center text-xs gap-2"
                 >
                   {isGeneratingTags ? (
                     <LoadingSpinner size="sm" />
                   ) : (
-                    <Brain className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                    <Brain className="h-3 w-3 sm:h-4 sm:w-4" />
                   )}
                   {isGeneratingTags ? 'Generating...' : 'Generate AI Tags'}
                 </Button>
@@ -985,10 +985,10 @@ const SubmissionForm = () => {
                     }
                   }}
                 />
-                <div className="flex items-center justify-center">
+                <div className="flex items-center justify-center gap-2">
                   {uploadingField === 'pitchDeck' ? (
                     <>
-                      <svg className="animate-spin h-4 w-4 sm:h-5 sm:w-5 text-primary-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <svg className="animate-spin h-4 w-4 sm:h-5 sm:w-5 text-primary-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
                       </svg>
@@ -996,7 +996,7 @@ const SubmissionForm = () => {
                     </>
                   ) : (
                     <>
-                      <Upload className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400 mr-2" />
+                      <Upload className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
                       <span className="text-gray-400 text-sm">{translations.uploadFile}</span>
                     </>
                   )}
@@ -1005,8 +1005,8 @@ const SubmissionForm = () => {
 
                 
                 {formData.pitchDeck && (
-                  <div className="flex items-center bg-gray-800/50 border border-gray-700/50 rounded-lg px-2 sm:px-3 py-1.5 sm:py-2">
-                    <FileText className="h-4 w-4 sm:h-5 sm:w-5 text-primary-500 mr-2" />
+                  <div className="flex items-center gap-2 bg-gray-800/50 border border-gray-700/50 rounded-lg px-2 sm:px-3 py-1.5 sm:py-2">
+                    <FileText className="h-4 w-4 sm:h-5 sm:w-5 text-primary-500" />
                     <span className="text-gray-300 text-xs sm:text-sm truncate max-w-[80px] sm:max-w-[150px]">Uploaded</span>
                     <button
                       onClick={() => handleInputChange('pitchDeck', null)}
@@ -1131,8 +1131,8 @@ const SubmissionForm = () => {
           <div className="max-w-4xl mx-auto">
             <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-primary-500/20 shadow-xl shadow-primary-500/10 overflow-hidden">
               <div className="bg-gradient-to-r from-gray-900 via-secondary-900/30 to-primary-900/30 p-4 sm:p-6 border-b border-primary-500/20">
-                <div className="flex items-center mb-3 sm:mb-4">
-                  <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 text-primary-500 mr-2 sm:mr-3" />
+                <div className="flex items-center mb-3 sm:mb-4 gap-3">
+                  <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 text-primary-500" />
                   <h1 className="text-lg sm:text-2xl font-bold text-white">
                     {isResubmission ? 'Resubmit Solution' : translations.submissionFormTitle}
                   </h1>
@@ -1172,8 +1172,8 @@ const SubmissionForm = () => {
               
               <div className="p-4 sm:p-8">
                 {error && (
-                  <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-red-500/20 border border-red-500/30 text-red-300 rounded-lg flex items-start backdrop-blur-sm">
-                    <AlertCircle className="h-4 w-4 sm:h-5 sm:w-5 mr-2 mt-0.5 flex-shrink-0" />
+                  <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-red-500/20 border border-red-500/30 text-red-300 rounded-lg flex items-start backdrop-blur-sm gap-2">
+                    <AlertCircle className="h-4 w-4 sm:h-5 sm:w-5 mt-0.5 flex-shrink-0" />
                     <p className="text-sm">{error}</p>
                   </div>
                 )}
@@ -1184,10 +1184,10 @@ const SubmissionForm = () => {
                   <Button
                     variant="ghost"
                     onClick={currentStep === 1 ? () => navigate(-1) : prevStep}
-                    className="flex items-center"
+                    className="flex items-center gap-2"
                     size="sm"
                   >
-                    <ArrowLeft className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                    <ArrowLeft className="h-3 w-3 sm:h-4 sm:w-4" />
                     {currentStep === 1 ? translations.back : translations.back}
                   </Button>
                   

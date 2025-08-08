@@ -31,8 +31,8 @@ const Input: React.FC<InputProps> = ({
         <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-[#049394]/20 to-[#4CEADB]/20 opacity-0 focus-within:opacity-100 transition-opacity duration-300 pointer-events-none blur-sm"></div>
       </div>
       {error && (
-        <p className="text-sm text-red-400 flex items-center">
-          <span className="w-1 h-1 bg-red-400 rounded-full mr-2"></span>
+        <p className="text-sm text-red-400 flex items-center gap-2">
+          <span className="w-1 h-1 bg-red-400 rounded-full"></span>
           {error}
         </p>
       )}

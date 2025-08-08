@@ -179,8 +179,8 @@ const ContactPage = () => {
           <div className="absolute inset-0 bg-gradient-to-r from-primary-500/10 via-secondary-500/10 to-primary-500/10"></div>
           <div className="container mx-auto px-4 relative z-10">
             <div className="max-w-3xl">
-              <div className="flex items-center mb-6">
-                <Sparkles className="h-8 w-8 text-primary-500 mr-4" />
+              <div className="flex items-center mb-6 gap-3">
+                <Sparkles className="h-8 w-8 text-primary-500" />
                 <h1 className="text-4xl font-bold bg-gradient-to-r from-primary-500 to-secondary-500 bg-clip-text text-transparent">
                   {language === 'ar' ? 'اتصل بنا' : 'Contact Us'}
                 </h1>
@@ -204,8 +204,8 @@ const ContactPage = () => {
                 </h2>
                 
                 <div className="space-y-6">
-                  <div className="flex items-start group">
-                    <div className="p-3 bg-gradient-to-br from-primary-500/20 to-secondary-500/20 rounded-xl border border-primary-500/30 mr-4">
+                  <div className="flex items-start group gap-3">
+                    <div className="p-3 bg-gradient-to-br from-primary-500/20 to-secondary-500/20 rounded-xl border border-primary-500/30">
                       <Mail className="h-6 w-6 text-primary-500" />
                     </div>
                     <div>
@@ -238,8 +238,8 @@ const ContactPage = () => {
                     </div>
                   </div> */}
 
-                  <div className="flex items-start group">
-                    <div className="p-3 bg-gradient-to-br from-green-500/20 to-teal-500/20 rounded-xl border border-green-500/30 mr-4">
+                  <div className="flex items-start group gap-3">
+                    <div className="p-3 bg-gradient-to-br from-green-500/20 to-teal-500/20 rounded-xl border border-green-500/30">
                       <MapPin className="h-6 w-6 text-green-400" />
                     </div>
                     <div>
@@ -275,8 +275,8 @@ const ContactPage = () => {
                 </h2>
 
                 {isSuccess && (
-                  <div className="mb-6 p-4 bg-green-500/20 border border-green-500/30 text-green-300 rounded-lg flex items-start backdrop-blur-sm">
-                    <CheckCircle className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" />
+                  <div className="mb-6 p-4 bg-green-500/20 border border-green-500/30 text-green-300 rounded-lg flex items-start backdrop-blur-sm gap-2">
+                    <CheckCircle className="h-5 w-5 mt-0.5 flex-shrink-0" />
                     <p className="text-sm">
                       {language === 'ar' 
                         ? 'تم إرسال رسالتك بنجاح! سنتواصل معك قريباً.'
@@ -286,8 +286,8 @@ const ContactPage = () => {
                 )}
 
                 {error && (
-                  <div className="mb-6 p-4 bg-red-500/20 border border-red-500/30 text-red-300 rounded-lg flex items-start backdrop-blur-sm">
-                    <AlertTriangle className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" />
+                  <div className="mb-6 p-4 bg-red-500/20 border border-red-500/30 text-red-300 rounded-lg flex items-start backdrop-blur-sm gap-2">
+                    <AlertTriangle className="h-5 w-5 mt-0.5 flex-shrink-0" />
                     <p className="text-sm">{error}</p>
                   </div>
                 )}
@@ -372,7 +372,7 @@ const ContactPage = () => {
                     className="w-full"
                   >
                     <div className='flex gap-2'>
-                        <Send className="h-4 w-4 mr-2" />
+                        <Send className="h-4 w-4" />
                       {isSubmitting 
                         ? (language === 'ar' ? 'جاري الإرسال...' : 'Sending...') 
                         : (language === 'ar' ? 'إرسال الرسالة' : 'Send Message')}

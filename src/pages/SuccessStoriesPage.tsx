@@ -30,8 +30,8 @@ const SuccessStoriesPage = () => {
           <div className="absolute inset-0 bg-gradient-to-r from-primary-500/10 via-secondary-500/10 to-primary-500/10"></div>
           <div className="container mx-auto px-4 relative z-10">
             <div className="max-w-3xl">
-              <div className="flex items-center mb-6">
-                <Sparkles className="h-8 w-8 text-primary-500 mr-4" />
+              <div className="flex items-center mb-6 gap-3">
+                <Sparkles className="h-8 w-8 text-primary-500" />
                 <h1 className="text-4xl font-bold bg-gradient-to-r from-primary-500 to-secondary-500 bg-clip-text text-transparent">
                   {translations.successStoriesPageTitle}
                 </h1>
@@ -51,7 +51,7 @@ const SuccessStoriesPage = () => {
                 <div className="absolute inset-0 bg-gradient-to-br from-primary-500/5 to-secondary-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 
                 <div className="p-8 relative z-10">
-                  <div className="flex items-center mb-6">
+                  <div className="flex items-center mb-6 gap-3">
                     <div className="p-3 bg-gradient-to-br from-primary-500/20 to-secondary-500/20 rounded-xl border border-primary-500/30 mr-4">
                       <Zap className="h-6 w-6 text-primary-500" />
                     </div>
@@ -59,8 +59,8 @@ const SuccessStoriesPage = () => {
                   </div>
                   <p className="text-lg text-gray-300 max-w-2xl mb-6 leading-relaxed group-hover:text-gray-200 transition-colors duration-300">{story.description[language]}</p>
                   <div className="bg-gray-700/30 backdrop-blur-sm p-6 rounded-xl border border-primary-500/20">
-                    <div className="flex items-center mb-4">
-                      <div className="w-2 h-2 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full mr-3"></div>
+                    <div className="flex items-center mb-4 gap-3">
+                      <div className="w-2 h-2 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full"></div>
                       <h3 className="text-xl font-semibold text-primary-500">{translations.impact}:</h3>
                     </div>
                     <p className="text-gray-300 leading-relaxed">{story.impact[language]}</p>

@@ -44,7 +44,7 @@ const emailTemplates = {
         <h1 style="color: #00afaf;">Welcome to GO AI HUB!</h1>
       </div>
       <p>Dear ${vendorName},</p>
-      <p>Thank you for registering with GO AI HUB. Your vendor profile has been successfully created. You can now submit your AI solutions and explore collaboration opportunities within our ecosystem.</p>
+      <p>Thank you for registering with GO AI HUB. Your profile has been successfully created. You can now submit your AI solutions and explore collaboration opportunities within our ecosystem.</p>
       <p>To log in, please visit: <a href="${loginUrl}" style="color: #00afaf;">${loginUrl}</a></p>
       <p>If you have any questions, feel free to contact us at <a href="mailto:info@go.com.sa">info@go.com.sa</a>.</p>
       <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0; color: #666; font-size: 12px;">
@@ -58,7 +58,7 @@ const emailTemplates = {
       <div dir="rtl" style="text-align: right; font-family: Arial, sans-serif;">
         <h1 style="color: #00afaf;">مرحباً بك في GO AI HUB!</h1>
         <p>عزيزي/عزيزتي ${vendorName}،</p>
-        <p>شكرًا لتسجيلك في منصة GO AI HUB. تم إنشاء ملفك كمورد بنجاح. يمكنك الآن تقديم حلول الذكاء الاصطناعي الخاصة بك واستكشاف فرص التعاون داخل منظومتنا.</p>
+        <p>شكرًا لتسجيلك في منصة GO AI HUB. تم إنشاء ملفك بنجاح. يمكنك الآن تقديم حلول الذكاء الاصطناعي الخاصة بك واستكشاف فرص التعاون داخل منظومتنا.</p>
         <p>للدخول، يرجى زيارة: <a href="${loginUrl}" style="color: #00afaf;">${loginUrl}</a></p>
         <p>لأي استفسار، يمكنك التواصل معنا عبر البريد التالي: <a href="mailto:info@goaihub.com">info@goaihub.com</a></p>
         <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0; color: #666; font-size: 12px;">

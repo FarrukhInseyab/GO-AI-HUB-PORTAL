@@ -93,17 +93,17 @@ class ErrorBoundary extends Component<Props, State> {
               <div className="flex flex-col sm:flex-row gap-3">
                 <button
                   onClick={this.handleRetry}
-                  className="flex-1 bg-gradient-to-r from-primary-500 to-secondary-500 hover:from-primary-400 hover:to-secondary-400 text-white py-3 px-4 rounded-lg transition-all duration-300 flex items-center justify-center shadow-lg shadow-primary-500/25"
+                  className="flex-1 gap-2 bg-gradient-to-r from-primary-500 to-secondary-500 hover:from-primary-400 hover:to-secondary-400 text-white py-3 px-4 rounded-lg transition-all duration-300 flex items-center justify-center shadow-lg shadow-primary-500/25"
                 >
-                  <RefreshCw className="h-4 w-4 mr-2" />
+                  <RefreshCw className="h-4 w-4" />
                   Try Again
                 </button>
                 
                 <button
                   onClick={this.handleGoHome}
-                  className="flex-1 bg-gray-700/50 hover:bg-gray-600/50 border border-gray-600/50 hover:border-gray-500/50 text-gray-300 hover:text-white py-3 px-4 rounded-lg transition-all duration-300 flex items-center justify-center"
+                  className="flex-1 gap-2 bg-gray-700/50 hover:bg-gray-600/50 border border-gray-600/50 hover:border-gray-500/50 text-gray-300 hover:text-white py-3 px-4 rounded-lg transition-all duration-300 flex items-center justify-center"
                 >
-                  <Home className="h-4 w-4 mr-2" />
+                  <Home className="h-4 w-4" />
                   Go Home
                 </button>
               </div>

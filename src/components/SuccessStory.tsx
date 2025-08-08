@@ -28,8 +28,8 @@ const SuccessStory: React.FC<SuccessStoryProps> = ({
         
         <div className="relative z-10 max-w-4xl">
           {/* Title */}
-          <div className="flex items-center mb-4 sm:mb-6">
-            <div className="p-2 sm:p-3 bg-gradient-to-br from-[#049394]/20 to-[#4CEADB]/20 rounded-xl border border-[#049394]/30 mr-3 sm:mr-4">
+          <div className="flex items-center mb-4 sm:mb-6 gap-3">
+            <div className="p-2 sm:p-3 bg-gradient-to-br from-[#049394]/20 to-[#4CEADB]/20 rounded-xl border border-[#049394]/30 ">
               <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 text-[#049394]" />
             </div>
             <h3 className="text-xl sm:text-3xl font-bold text-white">{title}</h3>
@@ -42,8 +42,8 @@ const SuccessStory: React.FC<SuccessStoryProps> = ({
           
           {/* Impact */}
           <div className="bg-gray-800/50 backdrop-blur-sm border border-[#049394]/20 p-4 sm:p-6 rounded-xl">
-            <div className="flex items-center mb-2 sm:mb-4">
-              <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-gradient-to-r from-[#049394] to-[#4CEADB] rounded-full mr-2 sm:mr-3"></div>
+            <div className="flex items-center mb-2 sm:mb-4 gap-2">
+              <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-gradient-to-r from-[#049394] to-[#4CEADB] rounded-full"></div>
               <h4 className="font-semibold text-base sm:text-lg text-[#049394]">{translations.impact}:</h4>
             </div>
             <p className="text-sm sm:text-base text-gray-300 leading-relaxed">{impact}</p>
