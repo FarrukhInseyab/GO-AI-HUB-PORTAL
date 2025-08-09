@@ -870,7 +870,7 @@ const DiscoverPage = () => {
       </main>
       <Footer />
     </div>
-            {translations.showing} <span className="font-semibold text-[#4CEADB]">{paginatedSolutions.length}</span> of <span className="font-semibold text-[#4CEADB]">{sortedSolutions.length}</span> {translations.results}
+  );
 };
 
 export default DiscoverPage;
