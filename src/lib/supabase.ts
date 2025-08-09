@@ -5,13 +5,113 @@ import { validateUrl, validateLinkedIn } from '../utils/validation';
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-if (!supabaseUrl || !supabaseAnonKey) {
+// Check if we're in development and using placeholder values
+const isPlaceholder = supabaseUrl === 'https://your-project-id.supabase.co' || 
+                     supabaseAnonKey === 'your-anon-key-here';
+
+if (!supabaseUrl || !supabaseAnonKey || isPlaceholder) {
   const missingVars = [];
-  if (!supabaseUrl) missingVars.push('VITE_SUPABASE_URL');
-  if (!supabaseAnonKey) missingVars.push('VITE_SUPABASE_ANON_KEY');
+  if (!supabaseUrl || supabaseUrl === 'https://your-project-id.supabase.co') missingVars.push('VITE_SUPABASE_URL');
+  if (!supabaseAnonKey || supabaseAnonKey === 'your-anon-key-here') missingVars.push('VITE_SUPABASE_ANON_KEY');
   
-  console.error('Missing Supabase environment variables:', missingVars);
-  throw new Error(`Missing Supabase environment variables: ${missingVars.join(', ')}. Please check your .env file.`);
+  console.warn('⚠️ Supabase not configured properly. Please update your .env file with real values from your Supabase dashboard.');
+  console.warn('Missing or placeholder variables:', missingVars);
+  
+  // Create a mock client that will show helpful error messages instead of crashing
+  const mockClient = {
+    auth: {
+      getUser: () => Promise.resolve({ data: { user: null }, error: new Error('Supabase not configured') }),
+      signUp: () => Promise.resolve({ data: { user: null }, error: new Error('Supabase not configured') }),
+      signInWithPassword: () => Promise.resolve({ data: { user: null }, error: new Error('Supabase not configured') }),
+      signOut: () => Promise.resolve({ error: null }),
+      onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } })
+    },
+    from: () => ({
+      select: () => ({ data: [], error: new Error('Supabase not configured') }),
+      insert: () => ({ data: null, error: new Error('Supabase not configured') }),
+      update: () => ({ data: null, error: new Error('Supabase not configured') }),
+      delete: () => ({ data: null, error: new Error('Supabase not configured') })
+    }),
+    storage: {
+      from: () => ({
+        upload: () => Promise.resolve({ data: null, error: new Error('Supabase not configured') }),
+        getPublicUrl: () => ({ data: { publicUrl: '' } })
+      })
+    }
+  };
+  
+  // Export the mock client and skip the rest of the initialization
+  export const supabase = mockClient as any;
+  export { ensureStringArray, sanitizeInput, validateFile, uploadFile, createSolution, updateSolution, getSolutions, getSolutionById, createInterest, deleteSolution, deleteInterest };
+  
+  // Skip the rest of the file
+  const skipRest = true;
+  if (skipRest) {
+    // Re-export the functions with mock implementations
+    export async function createSolution(): Promise<any> {
+      throw new Error('Supabase not configured. Please update your .env file.');
+    }
+    
+    export async function updateSolution(): Promise<any> {
+      throw new Error('Supabase not configured. Please update your .env file.');
+    }
+    
+    export async function getSolutions(): Promise<any[]> {
+      console.warn('Supabase not configured. Returning empty array.');
+      return [];
+    }
+    
+    export async function getSolutionById(): Promise<any> {
+      throw new Error('Supabase not configured. Please update your .env file.');
+    }
+    
+    export async function createInterest(): Promise<any> {
+      throw new Error('Supabase not configured. Please update your .env file.');
+    }
+    
+    export async function deleteSolution(): Promise<void> {
+      throw new Error('Supabase not configured. Please update your .env file.');
+    }
+    
+    export async function deleteInterest(): Promise<void> {
+      throw new Error('Supabase not configured. Please update your .env file.');
+    }
+    
+    export async function uploadFile(): Promise<string> {
+      throw new Error('Supabase not configured. Please update your .env file.');
+    }
+    
+    export function ensureStringArray(value: unknown): string[] {
+      if (Array.isArray(value)) {
+        return value.map(item => String(item)).filter(Boolean);
+      }
+      if (typeof value === 'string') {
+        return value.split(',').map(item => item.trim()).filter(Boolean);
+      }
+      return [];
+    }
+    
+    export function sanitizeInput(input: string): string {
+      return input
+        .trim()
+        .replace(/[<>]/g, '')
+        .substring(0, 10000);
+    }
+    
+    export function validateFile(file: File, allowedTypes: string[], maxSize: number): void {
+      if (!allowedTypes.includes(file.type)) {
+        throw new Error(`Invalid file type. Allowed types: ${allowedTypes.join(', ')}`);
+      }
+      
+      if (file.size > maxSize) {
+        throw new Error(`File too large. Maximum size: ${maxSize / 1024 / 1024}MB`);
+      }
+    }
+    
+    // Exit early to prevent the rest of the file from executing
+    // @ts-ignore
+    return;
+  }
 }
 
 // Validate URL format
