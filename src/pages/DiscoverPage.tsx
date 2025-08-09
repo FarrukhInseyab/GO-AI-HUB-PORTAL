@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { Search, Filter, Grid, List, ArrowRight, Check, Loader2, Users, Sparkles, Image, X } from 'lucide-react';
+import { Search, Filter, Grid, List, ArrowRight, Check, Loader2, Users, Sparkles, Image, X, Settings } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { getSolutions, createInterest, type Solution } from '../lib/supabase';
 import { useUser } from '../context/UserContext';
+import { usePagination } from '../hooks/usePagination';
+import { Pagination } from '../components/ui';
 
 
 type ViewMode = 'grid' | 'list';
@@ -36,6 +38,7 @@ const DiscoverPage = () => {
       contact_phone: '',
       message: ''
     });
+  const [showPaginationSettings, setShowPaginationSettings] = useState(false);
   
   useEffect(() => {
     loadSolutions();
@@ -96,6 +99,18 @@ const DiscoverPage = () => {
     }
   });
 
+  // Use pagination hook
+  const {
+    data: paginatedSolutions,
+    pagination,
+    hasNextPage,
+    hasPrevPage,
+    totalPages,
+    goToPage,
+    nextPage,
+    prevPage,
+    setPageSize
+  } = usePagination(sortedSolutions, 12);
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const { name, value } = e.target;
       setFormData(prev => ({
@@ -382,6 +397,15 @@ const DiscoverPage = () => {
               
               <div className="flex rounded-lg border border-[#4CEADB]/30 overflow-hidden">
                 <button
+                  onClick={() => setShowPaginationSettings(!showPaginationSettings)}
+                  className={`px-3 py-2 transition-all duration-300 ${
+                    showPaginationSettings ? 'bg-[#4CEADB] text-[#014952]' : 'bg-[#014952] text-gray-400 hover:text-[#4CEADB]'
+                  }`}
+                  aria-label="Pagination settings"
+                >
+                  <Settings className="h-4 w-4 sm:h-5 sm:w-5" />
+                </button>
+                <button
                   onClick={() => setViewMode('grid')}
                   className={`px-3 py-2 transition-all duration-300 ${
                     viewMode === 'grid' ? 'bg-[#4CEADB] text-[#014952]' : 'bg-[#014952] text-gray-400 hover:text-[#4CEADB]'
@@ -607,7 +631,7 @@ const DiscoverPage = () => {
           </div>
         )}
           
-          {sortedSolutions.length === 0 ? (
+          {paginatedSolutions.length === 0 ? (
             <div className="bg-[#016774] rounded-lg border border-[#4CEADB]/30 p-6 sm:p-8 text-center">
               <p className="text-gray-400 mb-4">
                 {solutions.length === 0 
@@ -630,7 +654,7 @@ const DiscoverPage = () => {
             </div>
           ) : viewMode === 'grid' ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-              {sortedSolutions.map((solution) => (
+              {paginatedSolutions.map((solution) => (
                 <div key={solution.id} className="group relative bg-[#016774] rounded-lg border border-[#4CEADB]/30 hover:border-[#4CEADB] overflow-hidden transition-all duration-300 hover:transform hover:translate-y-[-4px]">
                   {/* Glowing background effect */}
                   <div className="absolute inset-0 bg-[#016774] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -708,7 +732,7 @@ const DiscoverPage = () => {
             </div>
           ) : (
             <div className="space-y-4">
-              {sortedSolutions.map((solution) => (
+              {paginatedSolutions.map((solution) => (
                 <div key={solution.id} className="group bg-gray-800 rounded-lg border border-gray-700 hover:border-primary-500 overflow-hidden transition-all duration-300">
                   {/* Glowing background effect */}
                   
@@ -800,11 +824,53 @@ const DiscoverPage = () => {
               ))}
             </div>
           )}
+          
+          {/* Pagination Controls */}
+          {sortedSolutions.length > 0 && totalPages > 1 && (
+            <div className="mt-8">
+              <Pagination
+                currentPage={pagination.page}
+                totalPages={totalPages}
+                onPageChange={goToPage}
+                showPageSizeSelector={true}
+                pageSize={pagination.pageSize}
+                onPageSizeChange={setPageSize}
+                className="bg-[#016774] rounded-lg border border-[#4CEADB]/30 p-4"
+              />
+            </div>
+          )}
+          
+          {/* Pagination Settings */}
+          {showPaginationSettings && (
+            <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-[#014952] rounded-lg border border-[#4CEADB]/30">
+              <div className="flex flex-wrap items-center justify-between mb-3 sm:mb-4">
+                <h3 className="font-semibold text-sm sm:text-base text-[#4CEADB]">
+                  {language === 'ar' ? 'إعدادات العرض' : 'Display Settings'}
+                </h3>
+              </div>
+              
+              <div className="flex items-center gap-4">
+                <label className="text-sm text-gray-300">
+                  {language === 'ar' ? 'عدد العناصر في الصفحة:' : 'Items per page:'}
+                </label>
+                <select
+                  value={pagination.pageSize}
+                  onChange={(e) => setPageSize(Number(e.target.value))}
+                  className="px-3 py-1 bg-[#016774] border border-[#4CEADB]/30 rounded text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#4CEADB]"
+                >
+                  <option value={6}>6</option>
+                  <option value={12}>12</option>
+                  <option value={24}>24</option>
+                  <option value={48}>48</option>
+                </select>
+              </div>
+            </div>
+          )}
         </div>
       </main>
       <Footer />
     </div>
-  );
+            {translations.showing} <span className="font-semibold text-[#4CEADB]">{paginatedSolutions.length}</span> of <span className="font-semibold text-[#4CEADB]">{sortedSolutions.length}</span> {translations.results}
 };
 
 export default DiscoverPage;
