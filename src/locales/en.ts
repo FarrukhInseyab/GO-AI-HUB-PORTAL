@@ -490,6 +490,15 @@ const en = {
   typeYourMessage: "Type your message here...",
   pressEnterToSend: "Press Enter to send, Shift+Enter for new line",
   loadingPlatformData: "Loading platform data...",
+  
+  // Pagination
+  page: "Page",
+  of: "of",
+  itemsPerPage: "Items per page",
+  showingXofY: "Showing {x} of {y}",
+  previousPage: "Previous page",
+  nextPage: "Next page",
+  goToPage: "Go to page {page}",
 };
 
 export default en;

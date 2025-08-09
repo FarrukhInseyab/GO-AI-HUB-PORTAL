@@ -492,6 +492,15 @@ const ar = {
   typeYourMessage: "اكتب رسالتك هنا...",
   pressEnterToSend: "اضغط Enter للإرسال، Shift+Enter لسطر جديد",
   loadingPlatformData: "جاري تحميل بيانات المنصة...",
+  
+  // Pagination
+  page: "صفحة",
+  of: "من",
+  itemsPerPage: "عناصر في الصفحة",
+  showingXofY: "عرض {x} من {y}",
+  previousPage: "الصفحة السابقة",
+  nextPage: "الصفحة التالية",
+  goToPage: "الذهاب إلى الصفحة {page}",
 };
 
 export default ar;

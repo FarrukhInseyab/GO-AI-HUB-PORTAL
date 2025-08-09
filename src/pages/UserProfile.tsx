@@ -11,6 +11,8 @@ import { Loader2, AlertCircle, Sparkles, Zap, User, Building2, Calendar, Check, 
 import type { Solution, Interest } from '../types';
 import { validateUrl, validateLinkedIn } from '../utils/validation';
 import { COUNTRIES } from '../constants';
+import { usePagination } from '../hooks/usePagination';
+import { Pagination } from '../components/ui';
 
 const UserProfile = () => {
   const { translations, language } = useLanguage();
@@ -34,6 +36,15 @@ const UserProfile = () => {
     country: '',
     email: ''
   });
+
+  // Pagination for solutions
+  const solutionsPagination = usePagination(solutions, 6);
+  
+  // Pagination for interests
+  const interestsPagination = usePagination(interests, 6);
+  
+  // Pagination for interested users
+  const interestedUsersPagination = usePagination(interestedUsers, 6);
 
   useEffect(() => {
     if (user) {
@@ -471,7 +482,7 @@ const UserProfile = () => {
             {/* My Solutions Tab */}
             {activeTab === 'solutions' && (
               <div>
-                {solutions.length === 0 ? (
+                {solutionsPagination.data.length === 0 && solutions.length === 0 ? (
                   <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700/50 p-6 sm:p-8 text-center">
                     <p className="text-gray-400 mb-4 sm:mb-6">{translations.noSolutionsYet}</p>
                     <Link 
@@ -483,7 +494,7 @@ const UserProfile = () => {
                   </div>
                 ) : (
                   <div className="space-y-4 sm:space-y-6">
-                    {solutions.map((solution) => (
+                    {solutionsPagination.data.map((solution) => (
                       <div 
                         key={solution.id} 
                         className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700/50 hover:border-primary-500/30 overflow-hidden transition-all duration-500 shadow-lg hover:shadow-primary-500/20"
@@ -597,6 +608,21 @@ const UserProfile = () => {
                         </div>
                       </div>
                     ))}
+                    
+                    {/* Pagination for solutions */}
+                    {solutions.length > 6 && (
+                      <div className="mt-6">
+                        <Pagination
+                          currentPage={solutionsPagination.pagination.page}
+                          totalPages={solutionsPagination.totalPages}
+                          onPageChange={solutionsPagination.goToPage}
+                          showPageSizeSelector={true}
+                          pageSize={solutionsPagination.pagination.pageSize}
+                          onPageSizeChange={solutionsPagination.setPageSize}
+                          className="bg-gray-800/30 rounded-lg border border-gray-700/50 p-4"
+                        />
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -605,7 +631,7 @@ const UserProfile = () => {
             {/* Interests Tab */}
             {activeTab === 'interests' && (
               <div>
-                {interests.length === 0 ? (
+                {interestsPagination.data.length === 0 && interests.length === 0 ? (
                   <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700/50 p-6 sm:p-8 text-center">
                     <p className="text-gray-400 mb-4 sm:mb-6">{translations.noInterestsYet}</p>
                     <Link 
@@ -617,7 +643,7 @@ const UserProfile = () => {
                   </div>
                 ) : (
                   <div className="space-y-4 sm:space-y-6">
-                    {interests.map((interest) => (
+                    {interestsPagination.data.map((interest) => (
                       <div 
                         key={interest.id} 
                         className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700/50 hover:border-primary-500/30 overflow-hidden transition-all duration-500 shadow-lg hover:shadow-primary-500/20"
@@ -677,6 +703,21 @@ const UserProfile = () => {
                         </div>
                       </div>
                     ))}
+                    
+                    {/* Pagination for interests */}
+                    {interests.length > 6 && (
+                      <div className="mt-6">
+                        <Pagination
+                          currentPage={interestsPagination.pagination.page}
+                          totalPages={interestsPagination.totalPages}
+                          onPageChange={interestsPagination.goToPage}
+                          showPageSizeSelector={true}
+                          pageSize={interestsPagination.pagination.pageSize}
+                          onPageSizeChange={interestsPagination.setPageSize}
+                          className="bg-gray-800/30 rounded-lg border border-gray-700/50 p-4"
+                        />
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -685,13 +726,13 @@ const UserProfile = () => {
             {/* Interested Users Tab */}
             {activeTab === 'interestedUsers' && (
               <div>
-                {interestedUsers.length === 0 ? (
+                {interestedUsersPagination.data.length === 0 && interestedUsers.length === 0 ? (
                   <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700/50 p-6 sm:p-8 text-center">
                     <p className="text-gray-400">No users have shown interest in your solutions yet.</p>
                   </div>
                 ) : (
                   <div className="space-y-4 sm:space-y-6">
-                    {interestedUsers.map((interest) => (
+                    {interestedUsersPagination.data.map((interest) => (
                       <div 
                         key={interest.id} 
                         className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700/50 hover:border-primary-500/30 overflow-hidden transition-all duration-500 shadow-lg hover:shadow-primary-500/20"
@@ -746,6 +787,21 @@ const UserProfile = () => {
                         </div>
                       </div>
                     ))}
+                    
+                    {/* Pagination for interested users */}
+                    {interestedUsers.length > 6 && (
+                      <div className="mt-6">
+                        <Pagination
+                          currentPage={interestedUsersPagination.pagination.page}
+                          totalPages={interestedUsersPagination.totalPages}
+                          onPageChange={interestedUsersPagination.goToPage}
+                          showPageSizeSelector={true}
+                          pageSize={interestedUsersPagination.pagination.pageSize}
+                          onPageSizeChange={interestedUsersPagination.setPageSize}
+                          className="bg-gray-800/30 rounded-lg border border-gray-700/50 p-4"
+                        />
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
