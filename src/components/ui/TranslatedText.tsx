@@ -12,7 +12,7 @@ interface TranslatedTextProps {
 
 const TranslatedText: React.FC<TranslatedTextProps> = ({
   text,
-  sourceLanguage = 'en',
+  sourceLanguage = 'auto',
   className = '',
   showTranslationIndicator = false,
   fallbackToOriginal = true
@@ -22,8 +22,9 @@ const TranslatedText: React.FC<TranslatedTextProps> = ({
   // Show loading state
   if (isTranslating) {
     return (
-      <span className={className}>
-        {text}
+      <span className={`inline-flex items-center gap-1 ${className}`}>
+        <Loader2 className="h-3 w-3 animate-spin text-primary-500" />
+        <span className="text-gray-400">Translating...</span>
       </span>
     );
   }

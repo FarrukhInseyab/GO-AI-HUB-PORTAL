@@ -28,26 +28,11 @@ function getCacheKey(text: string, source: string, target: string): string {
 export async function translateText(
   text: string,
   targetLanguage: 'ar' | 'en',
-  sourceLanguage: 'auto' | 'ar' | 'en' = 'en'
+  sourceLanguage: 'auto' | 'ar' | 'en' = 'auto'
 ): Promise<string> {
   // Return original text if it's empty or if target is same as source
-  if (!text || !text.trim() || text.length < 2) return text;
+  if (!text || !text.trim()) return text;
   if (sourceLanguage === targetLanguage) return text;
-  
-  // Skip translation for common non-translatable content
-  const skipPatterns = [
-    /^[0-9\s\-\+\(\)\.%$€£¥]+$/, // Numbers, currencies, percentages
-    /^[A-Z]{2,10}$/, // Acronyms like "AI", "ML", "NLP"
-    /^(N\/A|n\/a|NA|na|TBD|tbd)$/i, // Common abbreviations
-    /^https?:\/\//, // URLs
-    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, // Email addresses
-  ];
-  
-  for (const pattern of skipPatterns) {
-    if (pattern.test(text.trim())) {
-      return text;
-    }
-  }
 
   const cacheKey = getCacheKey(text, sourceLanguage, targetLanguage);
   

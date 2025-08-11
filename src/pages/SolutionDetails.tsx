@@ -426,12 +426,12 @@ const SolutionDetails = () => {
                   <div className="flex items-center mb-3 sm:mb-4 gap-3">
                     <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 text-primary-500" />
                     <h1 className="text-xl sm:text-3xl font-bold text-white">
-                      <TranslatedText text={translatedSolution.solution_name} sourceLanguage="auto" showTranslationIndicator />
+                      <TranslatedText text={translatedSolution.solution_name} showTranslationIndicator />
                     </h1>
                   </div>
                   <div className="flex items-center text-gray-400 text-sm gap-2">
                     <Building2 className="h-4 w-4" />
-                    <TranslatedText text={translatedSolution.company_name} sourceLanguage="auto" />
+                    <TranslatedText text={translatedSolution.company_name} />
                   </div>
                 </div>
 
@@ -498,7 +498,7 @@ const SolutionDetails = () => {
                     <div>
                       <h2 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3 text-primary-500">{translations.overview}</h2>
                       <div className="text-sm sm:text-base text-gray-300 mb-4 sm:mb-6 leading-relaxed">
-                        <TranslatedText text={translatedSolution.summary} sourceLanguage="auto" />
+                        <TranslatedText text={translatedSolution.summary} />
                       </div>
                     </div>
 
@@ -506,7 +506,7 @@ const SolutionDetails = () => {
                       <div>
                         <h3 className="text-base sm:text-lg font-semibold mb-2 text-primary-500">{translations.detailedDescription}</h3>
                         <div className="text-sm sm:text-base text-gray-300 mb-4 sm:mb-6 leading-relaxed">
-                          <TranslatedText text={translatedSolution.description} sourceLanguage="auto" />
+                          <TranslatedText text={translatedSolution.description} />
                         </div>
                       </div>
                     )}
@@ -561,7 +561,7 @@ const SolutionDetails = () => {
                       <div className="mb-4 sm:mb-6">
                         <h3 className="text-base sm:text-lg font-semibold mb-2 text-primary-500">{translations.saudiMarketCustomization}</h3>
                         <div className="text-sm sm:text-base text-gray-300 leading-relaxed">
-                          <TranslatedText text={translatedSolution.ksa_customization_details} sourceLanguage="auto" />
+                          <TranslatedText text={translatedSolution.ksa_customization_details} />
                         </div>
                       </div>
                     )}
@@ -575,13 +575,13 @@ const SolutionDetails = () => {
                       <div className="flex items-center text-sm text-gray-300 gap-2">
                         <Building2 className="h-4 w-4 sm:h-5 sm:w-5 text-primary-400 flex-shrink-0" />
                         <span className="font-medium mr-1">{translations.companyName}:</span>
-                        <span><TranslatedText text={translatedSolution.company_name || 'N/A'} sourceLanguage="auto" /></span>
+                        <span><TranslatedText text={translatedSolution.company_name || 'N/A'} /></span>
                       </div>
                       
                       <div className="flex items-center text-sm text-gray-300 gap-2">
                         <MapPin className="h-4 w-4 sm:h-5 sm:w-5 text-primary-400 flex-shrink-0" />
                         <span className="font-medium mr-1">{language === 'ar' ? 'البلد:' : 'Country'}:</span>
-                        <span><TranslatedText text={translatedSolution.country || 'N/A'} sourceLanguage="auto" /></span>
+                        <span><TranslatedText text={translatedSolution.country || 'N/A'} /></span>
                       </div>
                       
                       <div className="flex items-center text-sm gap-2 text-gray-300">
@@ -638,26 +638,26 @@ const SolutionDetails = () => {
                       <div className="flex items-center text-sm text-gray-300 gap-2">
                         <Server className="h-4 w-4 sm:h-5 sm:w-5 text-primary-400 flex-shrink-0" />
                         <span className="font-medium">{language === 'ar' ? 'نموذج النشر:' : 'Deployment Model'}:</span>
-                        <span><TranslatedText text={translatedSolution.deployment_model || 'N/A'} sourceLanguage="auto" /></span>
+                        <span><TranslatedText text={translatedSolution.deployment_model || 'N/A'} /></span>
                       </div>
                       
                       <div className="flex items-center text-sm text-gray-300 gap-2">
                         <Layers className="h-4 w-4 sm:h-5 sm:w-5 text-primary-400 flex-shrink-0" />
                         <span className="font-medium">{language === 'ar' ? 'حالة النشر:' : 'Deployment Status'}:</span>
-                        <span><TranslatedText text={translatedSolution.deployment_status || 'N/A'} sourceLanguage="auto" /></span>
+                        <span><TranslatedText text={translatedSolution.deployment_status || 'N/A'} /></span>
                       </div>
                       
                       <div className="flex items-center text-sm text-gray-300 gap-2">
                         <Award className="h-4 w-4 sm:h-5 sm:w-5 text-primary-400 flex-shrink-0" />
                         <span className="font-medium">{language === 'ar' ? 'مستوى جاهزية التكنولوجيا:' : 'TRL Level'}:</span>
-                        <span><TranslatedText text={translatedSolution.trl || 'N/A'} sourceLanguage="auto" /></span>
+                        <span><TranslatedText text={translatedSolution.trl || 'N/A'} /></span>
                       </div>
                       
                       <div className="flex items-start text-sm text-gray-300 gap-2">
                         <Briefcase className="h-4 w-4 sm:h-5 sm:w-5 mt-0.5 text-primary-400 flex-shrink-0" />
                         <span className="font-medium">{language === 'ar' ? 'العملاء الحاليين:' : 'Current Clients'}:</span>
                         <span className="flex-1">
-                          <TranslatedText text={translatedSolution.clients || 'N/A'} sourceLanguage="auto" />
+                          <TranslatedText text={translatedSolution.clients || 'N/A'} />
                         </span>
                       </div>
                     </div>
@@ -667,10 +667,10 @@ const SolutionDetails = () => {
                     <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 text-primary-500">{translations.contactInformation}</h3>
                     <div className="space-y-2">
                       <p className="text-sm text-gray-300">
-                        <TranslatedText text={translatedSolution.contact_name} sourceLanguage="auto" />
+                        <TranslatedText text={translatedSolution.contact_name} />
                       </p>
                       <p className="text-xs sm:text-sm text-gray-500">
-                        <TranslatedText text={translatedSolution.position || 'N/A'} sourceLanguage="auto" />
+                        <TranslatedText text={translatedSolution.position || 'N/A'} />
                       </p>
                       <a
                         href={`mailto:${translatedSolution.contact_email}`}
