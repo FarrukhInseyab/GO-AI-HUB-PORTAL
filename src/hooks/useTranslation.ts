@@ -5,7 +5,7 @@ import { useLanguage } from '../context/LanguageContext';
 // Hook for translating a single text
 export function useTranslatedText(
   text: string,
-  sourceLanguage: 'auto' | 'ar' | 'en' = 'auto'
+  sourceLanguage: 'auto' | 'ar' | 'en' = 'en'
 ) {
   const { language } = useLanguage();
   const [translatedText, setTranslatedText] = useState(text);
@@ -13,7 +13,13 @@ export function useTranslatedText(
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!text || sourceLanguage === language) {
+    if (!text || !text.trim() || sourceLanguage === language) {
+      setTranslatedText(text);
+      return;
+    }
+
+    // Skip translation for very short text or common words
+    if (text.length < 3 || ['N/A', 'n/a', 'NA', 'na', '-', '—'].includes(text.trim())) {
       setTranslatedText(text);
       return;
     }

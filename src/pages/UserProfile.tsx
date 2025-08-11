@@ -508,7 +508,7 @@ const UserProfile = () => {
                           <div className="flex flex-col sm:flex-row justify-between items-start gap-3 sm:gap-4 mb-3 sm:mb-4">
                             <div>
                               <h3 className="text-lg sm:text-xl font-semibold text-white mb-1">
-                                <TranslatedText text={solution.solution_name} showTranslationIndicator />
+                                <TranslatedText text={solution.solution_name} sourceLanguage="auto" showTranslationIndicator />
                               </h3>
                               <p className="text-xs sm:text-sm text-gray-400">{translations.submitted}: {formatDate(solution.created_at)}</p>
                             </div>
@@ -562,7 +562,7 @@ const UserProfile = () => {
                           </div>
                           
                           <div className="text-sm text-gray-300 mb-3 sm:mb-4 line-clamp-2">
-                            <TranslatedText text={solution.summary} />
+                            <TranslatedText text={solution.summary} sourceLanguage="auto" />
                           </div>
                           
                           {/* Feedback section for resubmit status */}
@@ -576,7 +576,7 @@ const UserProfile = () => {
                                 <div className="mb-2">
                                   <p className="text-xs sm:text-sm text-gray-300">
                                     <span className="text-orange-300">Technical:</span> 
-                                    <TranslatedText text={solution.tech_feedback} />
+                                    <TranslatedText text={solution.tech_feedback} sourceLanguage="auto" />
                                   </p>
                                 </div>
                               )}
@@ -584,7 +584,7 @@ const UserProfile = () => {
                                 <div>
                                   <p className="text-xs sm:text-sm text-gray-300">
                                     <span className="text-orange-300">Business:</span> 
-                                    <TranslatedText text={solution.business_feedback} />
+                                    <TranslatedText text={solution.business_feedback} sourceLanguage="auto" />
                                   </p>
                                 </div>
                               )}
@@ -667,8 +667,9 @@ const UserProfile = () => {
                           <div className="flex flex-col sm:flex-row justify-between items-start gap-3 sm:gap-4 mb-3 sm:mb-4">
                             <div>
                               <h3 className="text-lg sm:text-xl font-semibold text-white mb-1">
-                                <TranslatedText 
+                                <TranslatedText
                                   text={interest.solutions?.solution_name || 'Unknown Solution'} 
+                                  sourceLanguage="auto"
                                   showTranslationIndicator 
                                 />
                               </h3>
@@ -702,7 +703,7 @@ const UserProfile = () => {
                           </div>
                           
                           <div className="text-sm text-gray-300 mb-3 sm:mb-4 line-clamp-3">
-                            <TranslatedText text={interest.message} />
+                            <TranslatedText text={interest.message} sourceLanguage="auto" />
                           </div>
                           
                           <div className="flex flex-wrap gap-2 sm:gap-3">
@@ -761,7 +762,7 @@ const UserProfile = () => {
                           <div className="flex flex-col sm:flex-row justify-between items-start gap-3 sm:gap-4 mb-3 sm:mb-4">
                             <div>
                               <h3 className="text-lg sm:text-xl font-semibold text-white mb-1">
-                                <TranslatedText text={interest.contact_name} /> - <TranslatedText text={interest.company_name} />
+                                <TranslatedText text={interest.contact_name} sourceLanguage="auto" /> - <TranslatedText text={interest.company_name} sourceLanguage="auto" />
                               </h3>
                               <p className="text-xs sm:text-sm text-gray-400">
                                 {translations.received}: {formatDate(interest.created_at)}
@@ -786,7 +787,7 @@ const UserProfile = () => {
                           <div className="bg-gray-700/30 backdrop-blur-sm p-3 sm:p-4 rounded-lg border border-gray-600/50 mb-3 sm:mb-4">
                             <h4 className="font-medium text-sm text-gray-300 mb-1 sm:mb-2">Message:</h4>
                             <div className="text-xs sm:text-sm text-gray-400">
-                              <TranslatedText text={interest.message} />
+                              <TranslatedText text={interest.message} sourceLanguage="auto" />
                             </div>
                           </div>
                           
