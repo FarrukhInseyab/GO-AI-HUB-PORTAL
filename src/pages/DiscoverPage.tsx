@@ -64,7 +64,7 @@ const DiscoverPage = () => {
   };
   
   // Use translation hook for solutions
-  const { translatedSolutions, isTranslating: isTranslatingSolutions } = useTranslatedSolutions(solutions);
+  const { translatedSolutions, isTranslating: isTranslatingSolutions, translationProgress } = useTranslatedSolutions(solutions);
   
   const handleInterestClick = () => {
     
@@ -532,6 +532,12 @@ const DiscoverPage = () => {
                   ({solutions.length} approved solutions available)
                 </span>
               )}
+              {isTranslatingSolutions && (
+                <span className="text-primary-500 ml-2 flex items-center gap-2">
+                  <div className="w-3 h-3 border border-primary-500 border-t-transparent rounded-full animate-spin"></div>
+                  Translating... {Math.round(translationProgress)}%
+                </span>
+              )}
             </p>
           </div>
           {showSuccess && (
@@ -685,17 +691,17 @@ const DiscoverPage = () => {
                     <div className="h-full w-full bg-gradient-to-t from-black/80 to-transparent flex items-end p-3 sm:p-4">
                       <div className="text-white">
                         <h3 className="font-bold text-base sm:text-lg mb-1">
-                          <TranslatedText text={solution.solution_name} />
+                          <TranslatedText text={solution.solution_name} priority="high" />
                         </h3>
                         <p className="text-xs sm:text-sm text-white/90">
-                          <TranslatedText text={solution.company_name} />
+                          <TranslatedText text={solution.company_name} priority="normal" />
                         </p>
                       </div>
                     </div>
                   </div>
                   <div className="p-3 sm:p-4 relative z-10">
                     <div className="text-xs sm:text-sm text-gray-300 mb-3 sm:mb-4 line-clamp-2">
-                      <TranslatedText text={solution.summary} />
+                      <TranslatedText text={solution.summary} priority="normal" />
                     </div>
                     <div className="flex flex-wrap gap-1 sm:gap-2 mb-3 sm:mb-4">
                       {(solution.tech_categories || []).slice(0, 3).map((tag) => (
@@ -785,15 +791,15 @@ const DiscoverPage = () => {
                       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-2 sm:mb-3">
                         <div>
                           <h3 className="font-bold text-lg sm:text-xl text-white mb-1 group-hover:text-primary-500 transition-colors duration-300">
-                            <TranslatedText text={solution.solution_name} />
+                            <TranslatedText text={solution.solution_name} priority="high" />
                           </h3>
                           <p className="text-xs sm:text-sm text-gray-400">
-                            <TranslatedText text={solution.company_name} />
+                            <TranslatedText text={solution.company_name} priority="normal" />
                           </p>
                         </div>
                       </div>
                       <div className="text-xs sm:text-sm text-gray-300 mb-3 sm:mb-4 line-clamp-3">
-                        <TranslatedText text={solution.summary} />
+                        <TranslatedText text={solution.summary} priority="normal" />
                       </div>
                       <div className="flex flex-wrap gap-1 sm:gap-2 mb-3 sm:mb-4">
                         {(solution.tech_categories || []).map((tag) => (

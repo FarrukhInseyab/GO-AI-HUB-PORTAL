@@ -81,10 +81,12 @@ export function useTranslatedSolutions(solutions: any[]) {
   const [translatedSolutions, setTranslatedSolutions] = useState(solutions);
   const [isTranslating, setIsTranslating] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [translationProgress, setTranslationProgress] = useState(0);
 
   useEffect(() => {
     if (!solutions || solutions.length === 0) {
       setTranslatedSolutions(solutions);
+      setTranslationProgress(0);
       return;
     }
 
@@ -95,20 +97,50 @@ export function useTranslatedSolutions(solutions: any[]) {
 
     if (alreadyTranslated) {
       setTranslatedSolutions(solutions);
+      setTranslationProgress(100);
       return;
     }
 
     const translateAsync = async () => {
       setIsTranslating(true);
       setError(null);
+      setTranslationProgress(0);
 
       try {
+        // Show immediate results with original text while translating
+        setTranslatedSolutions(solutions);
+        
+        // Translate in background with progress tracking
+        const needsTranslation = solutions.filter(s => s._translatedTo !== language);
+        const batchSize = 3;
+        const translatedResults = [];
+        
+        for (let i = 0; i < needsTranslation.length; i += batchSize) {
+          const batch = needsTranslation.slice(i, i + batchSize);
+          const batchTranslated = await translateSolutions(batch, language);
+          translatedResults.push(...batchTranslated);
+          
+          // Update progress
+          const progress = Math.min(100, ((i + batchSize) / needsTranslation.length) * 100);
+          setTranslationProgress(progress);
+          
+          // Update UI with partial results
+          const partialResults = solutions.map(solution => {
+            if (solution._translatedTo === language) return solution;
+            const translated = translatedResults.find(t => t.id === solution.id);
+            return translated || solution;
+          });
+          setTranslatedSolutions(partialResults);
+        }
+        
         const translated = await translateSolutions(solutions, language);
         setTranslatedSolutions(translated);
+        setTranslationProgress(100);
       } catch (err) {
         console.warn('Solutions translation error:', err);
         setError(err instanceof Error ? err.message : 'Translation failed');
         setTranslatedSolutions(solutions); // Fallback to original solutions
+        setTranslationProgress(0);
       } finally {
         setIsTranslating(false);
       }
@@ -117,7 +149,7 @@ export function useTranslatedSolutions(solutions: any[]) {
     translateAsync();
   }, [solutions, language]);
 
-  return { translatedSolutions, isTranslating, error };
+  return { translatedSolutions, isTranslating, error, translationProgress };
 }
 
 // Hook for translating dynamic content based on detected language

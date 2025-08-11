@@ -8,6 +8,7 @@ interface TranslatedTextProps {
   className?: string;
   showTranslationIndicator?: boolean;
   fallbackToOriginal?: boolean;
+  priority?: 'high' | 'normal' | 'low';
 }
 
 const TranslatedText: React.FC<TranslatedTextProps> = ({
@@ -15,16 +16,27 @@ const TranslatedText: React.FC<TranslatedTextProps> = ({
   sourceLanguage = 'auto',
   className = '',
   showTranslationIndicator = false,
-  fallbackToOriginal = true
+  fallbackToOriginal = true,
+  priority = 'normal'
 }) => {
   const { translatedText, isTranslating, error } = useTranslatedText(text, sourceLanguage);
 
   // Show loading state
-  if (isTranslating) {
+  if (isTranslating && priority === 'high') {
     return (
       <span className={`inline-flex items-center gap-1 ${className}`}>
         <Loader2 className="h-3 w-3 animate-spin text-primary-500" />
-        <span className="text-gray-400">Translating...</span>
+        <span className="text-gray-400">{text}</span>
+      </span>
+    );
+  }
+  
+  // For normal/low priority, show original text while translating
+  if (isTranslating && priority !== 'high') {
+    return (
+      <span className={className}>
+        {text}
+        <Loader2 className="inline h-3 w-3 ml-1 animate-spin text-primary-500 opacity-60" />
       </span>
     );
   }
@@ -33,7 +45,7 @@ const TranslatedText: React.FC<TranslatedTextProps> = ({
   if (error && !fallbackToOriginal) {
     return (
       <span className={`text-red-400 ${className}`}>
-        Translation failed
+        {text}
       </span>
     );
   }
