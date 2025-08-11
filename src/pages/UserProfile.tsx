@@ -13,6 +13,8 @@ import { validateUrl, validateLinkedIn } from '../utils/validation';
 import { COUNTRIES } from '../constants';
 import { usePagination } from '../hooks/usePagination';
 import { Pagination } from '../components/ui';
+import { useTranslatedSolutions } from '../hooks/useTranslation';
+import TranslatedText from '../components/ui/TranslatedText';
 
 const UserProfile = () => {
   const { translations, language } = useLanguage();
@@ -45,6 +47,9 @@ const UserProfile = () => {
   
   // Pagination for interested users
   const interestedUsersPagination = usePagination(interestedUsers, 6);
+
+  // Use translation hooks for solutions
+  const { translatedSolutions, isTranslating: isTranslatingSolutions } = useTranslatedSolutions(solutions);
 
   useEffect(() => {
     if (user) {
@@ -482,7 +487,7 @@ const UserProfile = () => {
             {/* My Solutions Tab */}
             {activeTab === 'solutions' && (
               <div>
-                {solutionsPagination.data.length === 0 && solutions.length === 0 ? (
+                {solutionsPagination.data.length === 0 && translatedSolutions.length === 0 ? (
                   <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700/50 p-6 sm:p-8 text-center">
                     <p className="text-gray-400 mb-4 sm:mb-6">{translations.noSolutionsYet}</p>
                     <Link 
@@ -494,7 +499,7 @@ const UserProfile = () => {
                   </div>
                 ) : (
                   <div className="space-y-4 sm:space-y-6">
-                    {solutionsPagination.data.map((solution) => (
+                    {usePagination(translatedSolutions, 6).data.map((solution) => (
                       <div 
                         key={solution.id} 
                         className="bg-gray-800/50 backdrop-blur-xl rounded-2xl border border-gray-700/50 hover:border-primary-500/30 overflow-hidden transition-all duration-500 shadow-lg hover:shadow-primary-500/20"
@@ -502,7 +507,9 @@ const UserProfile = () => {
                         <div className="p-4 sm:p-6">
                           <div className="flex flex-col sm:flex-row justify-between items-start gap-3 sm:gap-4 mb-3 sm:mb-4">
                             <div>
-                              <h3 className="text-lg sm:text-xl font-semibold text-white mb-1">{solution.solution_name}</h3>
+                              <h3 className="text-lg sm:text-xl font-semibold text-white mb-1">
+                                <TranslatedText text={solution.solution_name} showTranslationIndicator />
+                              </h3>
                               <p className="text-xs sm:text-sm text-gray-400">{translations.submitted}: {formatDate(solution.created_at)}</p>
                             </div>
                             <div className="flex flex-wrap gap-2">
@@ -554,7 +561,9 @@ const UserProfile = () => {
                             </div>
                           </div>
                           
-                          <p className="text-sm text-gray-300 mb-3 sm:mb-4 line-clamp-2">{solution.summary}</p>
+                          <div className="text-sm text-gray-300 mb-3 sm:mb-4 line-clamp-2">
+                            <TranslatedText text={solution.summary} />
+                          </div>
                           
                           {/* Feedback section for resubmit status */}
                           {needsResubmission(solution) && (
@@ -565,12 +574,18 @@ const UserProfile = () => {
                               </div>
                               {solution.tech_feedback && (
                                 <div className="mb-2">
-                                  <p className="text-xs sm:text-sm text-gray-300"><span className="text-orange-300">Technical:</span> {solution.tech_feedback}</p>
+                                  <p className="text-xs sm:text-sm text-gray-300">
+                                    <span className="text-orange-300">Technical:</span> 
+                                    <TranslatedText text={solution.tech_feedback} />
+                                  </p>
                                 </div>
                               )}
                               {solution.business_feedback && (
                                 <div>
-                                  <p className="text-xs sm:text-sm text-gray-300"><span className="text-orange-300">Business:</span> {solution.business_feedback}</p>
+                                  <p className="text-xs sm:text-sm text-gray-300">
+                                    <span className="text-orange-300">Business:</span> 
+                                    <TranslatedText text={solution.business_feedback} />
+                                  </p>
                                 </div>
                               )}
                             </div>
@@ -610,15 +625,15 @@ const UserProfile = () => {
                     ))}
                     
                     {/* Pagination for solutions */}
-                    {solutions.length > 6 && (
+                    {translatedSolutions.length > 6 && (
                       <div className="mt-6">
                         <Pagination
-                          currentPage={solutionsPagination.pagination.page}
-                          totalPages={solutionsPagination.totalPages}
-                          onPageChange={solutionsPagination.goToPage}
+                          currentPage={usePagination(translatedSolutions, 6).pagination.page}
+                          totalPages={usePagination(translatedSolutions, 6).totalPages}
+                          onPageChange={usePagination(translatedSolutions, 6).goToPage}
                           showPageSizeSelector={true}
-                          pageSize={solutionsPagination.pagination.pageSize}
-                          onPageSizeChange={solutionsPagination.setPageSize}
+                          pageSize={usePagination(translatedSolutions, 6).pagination.pageSize}
+                          onPageSizeChange={usePagination(translatedSolutions, 6).setPageSize}
                           className="bg-gray-800/30 rounded-lg border border-gray-700/50 p-4"
                         />
                       </div>
@@ -652,7 +667,10 @@ const UserProfile = () => {
                           <div className="flex flex-col sm:flex-row justify-between items-start gap-3 sm:gap-4 mb-3 sm:mb-4">
                             <div>
                               <h3 className="text-lg sm:text-xl font-semibold text-white mb-1">
-                                {interest.solutions?.solution_name || 'Unknown Solution'}
+                                <TranslatedText 
+                                  text={interest.solutions?.solution_name || 'Unknown Solution'} 
+                                  showTranslationIndicator 
+                                />
                               </h3>
                               <p className="text-xs sm:text-sm text-gray-400">
                                 {translations.interestShownOn}: {formatDate(interest.created_at)}
@@ -683,7 +701,9 @@ const UserProfile = () => {
                             </div>
                           </div>
                           
-                          <p className="text-sm text-gray-300 mb-3 sm:mb-4 line-clamp-3">{interest.message}</p>
+                          <div className="text-sm text-gray-300 mb-3 sm:mb-4 line-clamp-3">
+                            <TranslatedText text={interest.message} />
+                          </div>
                           
                           <div className="flex flex-wrap gap-2 sm:gap-3">
                             <Link
@@ -741,7 +761,7 @@ const UserProfile = () => {
                           <div className="flex flex-col sm:flex-row justify-between items-start gap-3 sm:gap-4 mb-3 sm:mb-4">
                             <div>
                               <h3 className="text-lg sm:text-xl font-semibold text-white mb-1">
-                                {interest.contact_name} - {interest.company_name}
+                                <TranslatedText text={interest.contact_name} /> - <TranslatedText text={interest.company_name} />
                               </h3>
                               <p className="text-xs sm:text-sm text-gray-400">
                                 {translations.received}: {formatDate(interest.created_at)}
@@ -765,7 +785,9 @@ const UserProfile = () => {
                           
                           <div className="bg-gray-700/30 backdrop-blur-sm p-3 sm:p-4 rounded-lg border border-gray-600/50 mb-3 sm:mb-4">
                             <h4 className="font-medium text-sm text-gray-300 mb-1 sm:mb-2">Message:</h4>
-                            <p className="text-xs sm:text-sm text-gray-400">{interest.message}</p>
+                            <div className="text-xs sm:text-sm text-gray-400">
+                              <TranslatedText text={interest.message} />
+                            </div>
                           </div>
                           
                           <div className="flex flex-wrap gap-2 sm:gap-3">
