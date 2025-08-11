@@ -110,29 +110,7 @@ export function useTranslatedSolutions(solutions: any[]) {
         // Show immediate results with original text while translating
         setTranslatedSolutions(solutions);
         
-        // Translate in background with progress tracking
-        const needsTranslation = solutions.filter(s => s._translatedTo !== language);
-        const batchSize = 3;
-        const translatedResults = [];
-        
-        for (let i = 0; i < needsTranslation.length; i += batchSize) {
-          const batch = needsTranslation.slice(i, i + batchSize);
-          const batchTranslated = await translateSolutions(batch, language);
-          translatedResults.push(...batchTranslated);
-          
-          // Update progress
-          const progress = Math.min(100, ((i + batchSize) / needsTranslation.length) * 100);
-          setTranslationProgress(progress);
-          
-          // Update UI with partial results
-          const partialResults = solutions.map(solution => {
-            if (solution._translatedTo === language) return solution;
-            const translated = translatedResults.find(t => t.id === solution.id);
-            return translated || solution;
-          });
-          setTranslatedSolutions(partialResults);
-        }
-        
+        // Translate with optimized batch processing
         const translated = await translateSolutions(solutions, language);
         setTranslatedSolutions(translated);
         setTranslationProgress(100);

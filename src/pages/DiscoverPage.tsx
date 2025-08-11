@@ -691,7 +691,7 @@ const DiscoverPage = () => {
                     <div className="h-full w-full bg-gradient-to-t from-black/80 to-transparent flex items-end p-3 sm:p-4">
                       <div className="text-white">
                         <h3 className="font-bold text-base sm:text-lg mb-1">
-                          <TranslatedText text={solution.solution_name} priority="high" />
+                          <TranslatedText text={solution.solution_name} priority="high" showTranslationIndicator />
                         </h3>
                         <p className="text-xs sm:text-sm text-white/90">
                           <TranslatedText text={solution.company_name} priority="normal" />
@@ -701,7 +701,7 @@ const DiscoverPage = () => {
                   </div>
                   <div className="p-3 sm:p-4 relative z-10">
                     <div className="text-xs sm:text-sm text-gray-300 mb-3 sm:mb-4 line-clamp-2">
-                      <TranslatedText text={solution.summary} priority="normal" />
+                      <TranslatedText text={solution.summary} priority="low" />
                     </div>
                     <div className="flex flex-wrap gap-1 sm:gap-2 mb-3 sm:mb-4">
                       {(solution.tech_categories || []).slice(0, 3).map((tag) => (

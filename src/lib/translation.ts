@@ -1,11 +1,11 @@
-// Translation service using LibreTranslate API
+// Translation service using your LibreTranslate API
 const LIBRETRANSLATE_URL = 'https://goaihub.ai/trans/translate';
 
 // Configuration for translation optimization
 const TRANSLATION_CONFIG = {
-  batchSize: 10, // Process translations in batches
+  batchSize: 5, // Process translations in batches (reduced for better performance)
   maxConcurrent: 3, // Maximum concurrent translation requests
-  timeout: 8000, // Request timeout in milliseconds
+  timeout: 10000, // Request timeout in milliseconds (increased for longer texts)
   retryAttempts: 2, // Number of retry attempts
   cacheExpiry: 24 * 60 * 60 * 1000, // 24 hours in milliseconds
 };
@@ -102,6 +102,7 @@ export async function translateText(
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Cookie': 'session=38049352-0289-4828-a581-2b6bcc9b5b6b'
           },
           body: JSON.stringify({
             q: text,
@@ -115,7 +116,8 @@ export async function translateText(
         clearTimeout(timeoutId);
 
         if (!response.ok) {
-          console.warn(`Translation API error: ${response.status} ${response.statusText}`);
+          const errorText = await response.text().catch(() => 'Unknown error');
+          console.warn(`Translation API error: ${response.status} ${response.statusText} - ${errorText}`);
           resolve(text);
           return;
         }
