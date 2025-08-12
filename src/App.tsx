@@ -36,9 +36,9 @@ function App() {
   return (
     <ErrorBoundary>
       <ThemeProvider>
-        <LanguageProvider>
-          <UserProvider>
-            <Router>
+        <Router>
+          <LanguageProvider>
+            <UserProvider>
               <div className="App">
                 <Suspense fallback={
                   <div className="min-h-screen flex items-center justify-center bg-gray-900">
@@ -96,9 +96,9 @@ function App() {
                   </Routes>
                 </Suspense>
               </div>
-            </Router>
-          </UserProvider>
-        </LanguageProvider>
+            </UserProvider>
+          </LanguageProvider>
+        </Router>
       </ThemeProvider>
     </ErrorBoundary>
   );
