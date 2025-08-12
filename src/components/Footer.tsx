@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Mail, Phone, MapPin, Facebook, Linkedin, Instagram, Zap } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import Logo from './Logo';
@@ -12,7 +12,16 @@ const XLogo = () => (
 );
 
 const Footer = () => {
-  const { translations } = useLanguage();
+  const { translations, language } = useLanguage();
+  const location = useLocation();
+  
+  // Helper function to get language-aware path
+  const getLanguageAwarePath = (path: string) => {
+    if (language === 'ar') {
+      return path === '/' ? '/ar' : `${path}/ar`;
+    }
+    return path;
+  };
   
   return (
     <footer className="relative bg-[#014952] text-white pt-12 sm:pt-16 pb-6 sm:pb-8 overflow-hidden">
@@ -60,15 +69,15 @@ const Footer = () => {
             </h3>
             <ul className="space-y-2 sm:space-y-3 text-sm sm:text-base">
               {[
-                { label: translations.home, path: "/" },
-                { label: translations.discover, path: "/discover" },
-                { label: translations.getListedShort, path: "/vendor-onboarding" },
-                { label: translations.marketInsights, path: "/market-insights" },
-                { label: 'GO.Ai | رُوَّاد', path: "/goai-agent" },
-                { label: translations.about, path: "/about" },
-                { label: "How It Works", path: "/how-it-works" },
-                { label: translations.contact, path: "/contact" },
-                { label: translations.faq, path: "/faq" }
+                { label: translations.home, path: getLanguageAwarePath("/") },
+                { label: translations.discover, path: getLanguageAwarePath("/discover") },
+                { label: translations.getListedShort, path: getLanguageAwarePath("/vendor-onboarding") },
+                { label: translations.marketInsights, path: getLanguageAwarePath("/market-insights") },
+                { label: 'GO.Ai | رُوَّاد', path: getLanguageAwarePath("/goai-agent") },
+                { label: translations.about, path: getLanguageAwarePath("/about") },
+                { label: "How It Works", path: getLanguageAwarePath("/how-it-works") },
+                { label: translations.contact, path: getLanguageAwarePath("/contact") },
+                { label: translations.faq, path: getLanguageAwarePath("/faq") }
               ].map((link, index) => (
                 <li key={index}>
                   <Link 
@@ -129,14 +138,14 @@ const Footer = () => {
           </p>
           <div className="flex space-x-4 sm:space-x-6 text-xs sm:text-sm">
             <Link 
-              to="/privacy" 
+              to={getLanguageAwarePath("/privacy")} 
               className="text-gray-500 hover:text-[#049394] transition-all duration-300 relative group"
             >
               {translations.privacyPolicy}
               <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-[#049394] to-[#4CEADB] group-hover:w-full transition-all duration-300"></div>
             </Link>
             <Link 
-              to="/cookies" 
+              to={getLanguageAwarePath("/cookies")} 
               className="text-gray-500 hover:text-[#049394] transition-all duration-300 relative group"
             >
               {translations.cookiePolicy}

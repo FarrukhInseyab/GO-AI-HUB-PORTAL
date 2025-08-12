@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, ReactNode } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { en, ar } from '../locales';
 
 type Language = 'en' | 'ar';
@@ -13,20 +14,66 @@ interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  const [language, setLanguage] = useState<Language>('en');
+  const location = useLocation();
+  const navigate = useNavigate();
   
-  const toggleLanguage = () => {
-    setLanguage(prevLang => (prevLang === 'en' ? 'ar' : 'en'));
-    
+  // Check if URL ends with /ar to determine initial language
+  const getInitialLanguage = (): Language => {
+    return location.pathname.endsWith('/ar') ? 'ar' : 'en';
+  };
+  
+  const [language, setLanguage] = useState<Language>(getInitialLanguage);
+  
+  // Update language when URL changes
+  React.useEffect(() => {
+    const newLanguage = getInitialLanguage();
+    if (newLanguage !== language) {
+      setLanguage(newLanguage);
+      updateDocumentAttributes(newLanguage);
+    }
+  }, [location.pathname]);
+  
+  const updateDocumentAttributes = (lang: Language) => {
     // Update HTML dir attribute for RTL support
-    document.documentElement.dir = language === 'en' ? 'rtl' : 'ltr';
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
     
     // Update document title based on language
     const title = document.querySelector('title');
     if (title && title.hasAttribute('data-default')) {
-      title.textContent = language === 'en' ? 'منصة حلول الذكاء الاصطناعي' : 'AI Solutions Marketplace';
+      title.textContent = lang === 'ar' ? 'منصة حلول الذكاء الاصطناعي' : 'GO AI HUB';
     }
   };
+  
+  const toggleLanguage = () => {
+    const newLanguage = language === 'en' ? 'ar' : 'en';
+    setLanguage(newLanguage);
+    updateDocumentAttributes(newLanguage);
+    
+    // Update URL to reflect language change
+    const currentPath = location.pathname;
+    let newPath: string;
+    
+    if (newLanguage === 'ar') {
+      // Add /ar suffix if not already present
+      newPath = currentPath.endsWith('/ar') ? currentPath : `${currentPath}/ar`;
+    } else {
+      // Remove /ar suffix if present
+      newPath = currentPath.endsWith('/ar') ? currentPath.slice(0, -3) : currentPath;
+    }
+    
+    // Ensure path doesn't end with double slashes
+    newPath = newPath.replace(/\/+$/, '') || '/';
+    
+    // Navigate to new path if it's different
+    if (newPath !== currentPath) {
+      navigate(newPath, { replace: true });
+    }
+  };
+  
+  // Initialize document attributes on mount
+  React.useEffect(() => {
+    updateDocumentAttributes(language);
+  }, []);
   
   const translations = language === 'en' ? en : ar;
   

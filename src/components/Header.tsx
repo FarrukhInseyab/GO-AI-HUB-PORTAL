@@ -49,17 +49,25 @@ const Header = () => {
     }
   };
 
+  // Helper function to get language-aware path
+  const getLanguageAwarePath = (path: string) => {
+    if (language === 'ar') {
+      return path === '/' ? '/ar' : `${path}/ar`;
+    }
+    return path;
+  };
+
   const handleDropdownClick = (e: React.MouseEvent, dropdownName: string) => {
     e.stopPropagation();
     setActiveDropdown(activeDropdown === dropdownName ? null : dropdownName);
   };
 
   const aboutMenuItems = [
-    { label: translations.about, path: '/about' },
-    { label: translations.howItWorks, path: '/how-it-works' },
-    { label: translations.goAdvantage, path: '/go-advantage' },
-    { label: translations.successStories, path: '/success-stories' },
-    { label: translations.faq, path: '/faq' },
+    { label: translations.about, path: getLanguageAwarePath('/about') },
+    { label: translations.howItWorks, path: getLanguageAwarePath('/how-it-works') },
+    { label: translations.goAdvantage, path: getLanguageAwarePath('/go-advantage') },
+    { label: translations.successStories, path: getLanguageAwarePath('/success-stories') },
+    { label: translations.faq, path: getLanguageAwarePath('/faq') },
   ];
 
   return (
@@ -85,7 +93,7 @@ const Header = () => {
           {/* Desktop Navigation */}
           <nav className={`hidden md:flex items-center ${language === 'ar' ? 'space-x-reverse space-x-6' : 'space-x-6'}`}>
             <Link 
-              to="/discover" 
+              to={getLanguageAwarePath("/discover")} 
               className={`relative font-medium transition-all duration-300 hover:text-primary-500 group text-sm ${
                 isScrolled || !isLandingPage ? 'text-white' : 'text-white'
               }`}
@@ -95,7 +103,7 @@ const Header = () => {
             </Link>
 
             <Link 
-              to="/vendor-onboarding" 
+              to={getLanguageAwarePath("/vendor-onboarding")} 
               className={`relative font-medium transition-all duration-300 hover:text-primary-500 group text-sm ${
                 isScrolled || !isLandingPage ? 'text-white' : 'text-white'
               }`}
@@ -105,7 +113,7 @@ const Header = () => {
             </Link>
             
             <Link 
-              to="/market-insights" 
+              to={getLanguageAwarePath("/market-insights")} 
               className={`relative font-medium transition-all duration-300 hover:text-primary-500 group text-sm ${
                 isScrolled || !isLandingPage ? 'text-white' : 'text-white'
               }`}
@@ -116,11 +124,11 @@ const Header = () => {
 
             {/* GOAI Link - Show for all users but require auth on click */}
             <Link 
-              to={user ? "/goai-agent" : "#"}
+              to={user ? getLanguageAwarePath("/goai-agent") : "#"}
               onClick={(e) => {
                 if (!user) {
                   e.preventDefault();
-                  navigate('/auth?redirect=/goai-agent');
+                  navigate(getLanguageAwarePath('/auth') + `?redirect=${getLanguageAwarePath('/goai-agent')}`);
                 }
               }}
               className={`relative font-medium transition-all duration-300 hover:text-primary-500 group text-sm ${
@@ -133,7 +141,7 @@ const Header = () => {
 
 
             <Link 
-              to="/contact" 
+              to={getLanguageAwarePath("/contact")} 
               className={`relative font-medium transition-all duration-300 hover:text-primary-500 group text-sm ${
                 isScrolled || !isLandingPage ? 'text-white' : 'text-white'
               }`}
@@ -219,7 +227,7 @@ const Header = () => {
             
             : (
               <Link
-                to="/auth"
+                to={getLanguageAwarePath("/auth")}
                 className={`font-medium transition-all duration-300 px-3 py-2 rounded-lg border border-gray-700/50 bg-primary-500/10 hover:bg-primary-500/20 text-sm ${
                   isScrolled || !isLandingPage ? 'text-white hover:text-primary-500' : 'text-white hover:text-primary-500'
                 }`}
@@ -278,21 +286,21 @@ const Header = () => {
         <div className="container mx-auto px-4">
           <nav className="flex flex-col space-y-2">
             <Link 
-              to="/discover" 
+              to={getLanguageAwarePath("/discover")} 
               className="font-medium text-white hover:text-primary-500 transition-all duration-300 py-2 px-4 rounded-lg hover:bg-primary-500/10"
               onClick={() => setIsMenuOpen(false)}
             >
               {translations.discover}
             </Link>
             <Link 
-              to="/vendor-onboarding" 
+              to={getLanguageAwarePath("/vendor-onboarding")} 
               className="font-medium text-white hover:text-primary-500 transition-all duration-300 py-2 px-4 rounded-lg hover:bg-primary-500/10"
               onClick={() => setIsMenuOpen(false)}
             >
               {translations.getListedShort}
             </Link>
             <Link 
-              to="/market-insights" 
+              to={getLanguageAwarePath("/market-insights")} 
               className="font-medium text-white hover:text-primary-500 transition-all duration-300 py-2 px-4 rounded-lg hover:bg-primary-500/10"
               onClick={() => setIsMenuOpen(false)}
             >
@@ -301,11 +309,11 @@ const Header = () => {
             
             {/* GOAI Link - Show for all users but require auth on click */}
             <Link 
-              to={user ? "/goai-agent" : "#"}
+              to={user ? getLanguageAwarePath("/goai-agent") : "#"}
               onClick={() => {
                 setIsMenuOpen(false);
                 if (!user) {
-                  navigate('/auth?redirect=/goai-agent');
+                  navigate(getLanguageAwarePath('/auth') + `?redirect=${getLanguageAwarePath('/goai-agent')}`);
                 }
               }}
               className="font-medium text-white hover:text-primary-500 transition-all duration-300 py-2 px-4 rounded-lg hover:bg-primary-500/10"
@@ -314,7 +322,7 @@ const Header = () => {
             </Link>
             
              <Link 
-              to="/contact" 
+              to={getLanguageAwarePath("/contact")} 
               className="font-medium text-white hover:text-primary-500 transition-all duration-300 py-2 px-4 rounded-lg hover:bg-primary-500/10"
               onClick={() => setIsMenuOpen(false)}
             >
@@ -338,7 +346,7 @@ const Header = () => {
             {user ? (
               <div className="border-t border-gray-800/50 pt-2">
                 <Link
-                  to="/profile"
+                  to={getLanguageAwarePath("/profile")}
                   className="font-medium text-white hover:text-primary-500 transition-all duration-300 py-2 px-4 block rounded-lg hover:bg-primary-500/10"
                   onClick={() => setIsMenuOpen(false)}
                 >
@@ -356,7 +364,7 @@ const Header = () => {
               </div>
             ) : (
               <Link
-                to="/auth"
+                to={getLanguageAwarePath("/auth")}
                 onClick={() => setIsMenuOpen(false)}
                 className="font-medium text-white hover:text-primary-500 transition-all duration-300 py-2 px-4 text-left rounded-lg hover:bg-primary-500/10"
               >

@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { LanguageProvider } from './context/LanguageContext';
 import { UserProvider } from './context/UserContext';
 import { ThemeProvider } from './context/ThemeContext';
@@ -46,29 +46,53 @@ function App() {
                   </div>
                 }>
                   <Routes>
+                    {/* Language-aware routes */}
                     <Route path="/" element={<LandingPage />} />
+                    <Route path="/ar" element={<LandingPage />} />
                     <Route path="/submission-form" element={<SubmissionForm />} />
+                    <Route path="/submission-form/ar" element={<SubmissionForm />} />
                     <Route path="/profile" element={<UserProfile />} />
+                    <Route path="/profile/ar" element={<UserProfile />} />
                     <Route path="/discover" element={<DiscoverPage />} />
+                    <Route path="/discover/ar" element={<DiscoverPage />} />
                     <Route path="/solutions/:id" element={<SolutionDetails />} />
+                    <Route path="/solutions/:id/ar" element={<SolutionDetails />} />
                     <Route path="/solutions/:id/recommendation" element={<AIRecommendation />} />
+                    <Route path="/solutions/:id/recommendation/ar" element={<AIRecommendation />} />
                     <Route path="/about" element={<AboutPage />} />
+                    <Route path="/about/ar" element={<AboutPage />} />
                     <Route path="/confirm-email" element={<ConfirmEmail />} />
+                    <Route path="/confirm-email/ar" element={<ConfirmEmail />} />
                     <Route path="/forgot-password" element={<ForgotPassword />} />
+                    <Route path="/forgot-password/ar" element={<ForgotPassword />} />
                     <Route path="/reset-password" element={<ResetPassword />} />
+                    <Route path="/reset-password/ar" element={<ResetPassword />} />
                     <Route path="/how-it-works" element={<HowItWorksPage />} />
+                    <Route path="/how-it-works/ar" element={<HowItWorksPage />} />
                     <Route path="/go-advantage" element={<GoAdvantagePage />} />
+                    <Route path="/go-advantage/ar" element={<GoAdvantagePage />} />
                     <Route path="/success-stories" element={<SuccessStoriesPage />} />
+                    <Route path="/success-stories/ar" element={<SuccessStoriesPage />} />
                     <Route path="/market-insights" element={<MarketInsightsPage />} />
+                    <Route path="/market-insights/ar" element={<MarketInsightsPage />} />
                     <Route path="/faq" element={<FAQPage />} />
+                    <Route path="/faq/ar" element={<FAQPage />} />
                     <Route path="/privacy" element={<PrivacyPolicy />} />
+                    <Route path="/privacy/ar" element={<PrivacyPolicy />} />
                     <Route path="/cookies" element={<CookiePolicy />} />
+                    <Route path="/cookies/ar" element={<CookiePolicy />} />
                     <Route path="/auth/callback" element={<AuthCallback />} />
+                    <Route path="/auth/callback/ar" element={<AuthCallback />} />
                     <Route path="/auth" element={<AuthPage />} />
+                    <Route path="/auth/ar" element={<AuthPage />} />
                     <Route path="/vendor-onboarding" element={<VendorOnboarding />} />
+                    <Route path="/vendor-onboarding/ar" element={<VendorOnboarding />} />
                     <Route path="/vendor-onboarding-ai" element={<VendorOnboardingAI />} />
+                    <Route path="/vendor-onboarding-ai/ar" element={<VendorOnboardingAI />} />
                     <Route path="/goai-agent" element={<GOAIAgent />} />
+                    <Route path="/goai-agent/ar" element={<GOAIAgent />} />
                     <Route path="/contact" element={<ContactPage />} />
+                    <Route path="/contact/ar" element={<ContactPage />} />
                   </Routes>
                 </Suspense>
               </div>
