@@ -98,7 +98,7 @@ const LandingPage = () => {
               <p>This CTA form was submitted through the GO AI HUB website.</p>
               <p>Best regards,<br>
               GO AI HUB Team<br>
-              Email: <a href="mailto:ai.support@go.com.sa">ai.support@go.com.sa</a><br>
+              Email: <a href="mailto:support@goaihub.ai">support@goaihub.ai</a><br>
               Website: <a href="https://www.goaihub.ai" target="_blank">www.goaihub.ai</a><br>
               Working Hours: Sunday–Thursday, 9:00 AM – 5:00 PM (KSA Time)</p>
             </div>
@@ -115,7 +115,7 @@ const LandingPage = () => {
                 <p>تم إرسال هذا النموذج من خلال موقع GO AI HUB.</p>
                 <p>مع أطيب التحيات،<br>
                 فريق GO AI HUB<br>
-                البريد الإلكتروني: <a href="mailto:ai.support@go.com.sa">ai.support@go.com.sa</a><br>
+                البريد الإلكتروني: <a href="mailto:support@goaihub.ai">support@goaihub.ai</a><br>
                 الموقع الإلكتروني: <a href="https://www.goaihub.ai" target="_blank">www.goaihub.ai</a><br>
                 ساعات العمل: الأحد–الخميس، 9:00 صباحًا – 5:00 مساءً (بتوقيت السعودية)</p>
               </div>

@@ -50,7 +50,7 @@ const emailTemplates = {
       <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0; color: #666; font-size: 12px;">
         <p>Best regards,<br>
         GO AI HUB Team<br>
-        Email: <a href="mailto:ai.support@go.com.sa">ai.support@go.com.sa</a><br>
+        Email: <a href="mailto:support@goaihub.ai">support@goaihub.ai</a><br>
         Website: <a href="https://www.goaihub.ai" target="_blank">www.goaihub.ai</a><br>
         Working Hours: Sunday–Thursday, 9:00 AM – 5:00 PM (KSA Time)</p>
       </div>
@@ -64,7 +64,7 @@ const emailTemplates = {
         <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0; color: #666; font-size: 12px;">
           <p>مع أطيب التحيات،<br>
           فريق GO AI HUB<br>
-          البريد الإلكتروني: <a href="mailto:ai.support@go.com.sa">ai.support@go.com.sa</a><br>
+          البريد الإلكتروني: <a href="mailto:support@goaihub.ai">support@goaihub.ai</a><br>
           الموقع الإلكتروني: <a href="https://www.goaihub.ai" target="_blank">www.goaihub.ai</a><br>
           ساعات العمل: الأحد–الخميس، 9:00 صباحًا – 5:00 مساءً (بتوقيت السعودية)</p>
         </div>
@@ -90,7 +90,7 @@ const emailTemplates = {
       <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0; color: #666; font-size: 12px;">
         <p>Best regards,<br>
         GO AI HUB Team<br>
-        Email: <a href="mailto:ai.support@go.com.sa">ai.support@go.com.sa</a><br>
+        Email: <a href="mailto:support@goaihub.ai">support@goaihub.ai</a><br>
         Website: <a href="https://www.goaihub.ai" target="_blank">www.goaihub.ai</a><br>
         Working Hours: Sunday–Thursday, 9:00 AM – 5:00 PM (KSA Time)</p>
       </div>
@@ -107,7 +107,7 @@ const emailTemplates = {
         <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0; color: #666; font-size: 12px;">
           <p>مع أطيب التحيات،<br>
           فريق GO AI HUB<br>
-          البريد الإلكتروني: <a href="mailto:ai.support@go.com.sa">ai.support@go.com.sa</a><br>
+          البريد الإلكتروني: <a href="mailto:support@goaihub.ai">support@goaihub.ai</a><br>
           الموقع الإلكتروني: <a href="https://www.goaihub.ai" target="_blank">www.goaihub.ai</a><br>
           ساعات العمل: من الأحد إلى الخميس، من الساعة 9:00 صباحاً حتى 5:00 مساءً (بتوقيت السعودية)</p>
         </div>

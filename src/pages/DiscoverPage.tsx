@@ -8,8 +8,6 @@ import { getSolutions, createInterest, type Solution } from '../lib/supabase';
 import { useUser } from '../context/UserContext';
 import { usePagination } from '../hooks/usePagination';
 import { Pagination } from '../components/ui';
-import { useTranslatedSolutions } from '../hooks/useTranslation';
-import TranslatedText from '../components/ui/TranslatedText';
 
 
 type ViewMode = 'grid' | 'list';
@@ -63,9 +61,6 @@ const DiscoverPage = () => {
     }
   };
   
-  // Use translation hook for solutions
-  const { translatedSolutions, isTranslating: isTranslatingSolutions, translationProgress } = useTranslatedSolutions(solutions);
-  
   const handleInterestClick = () => {
     
       setShowInterestForm(true);
@@ -78,7 +73,7 @@ const DiscoverPage = () => {
       
   //   }, []);
 
-  const filteredSolutions = translatedSolutions.filter(solution => {
+  const filteredSolutions = solutions.filter(solution => {
     const matchesSearch = searchQuery === '' || 
       solution.solution_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       solution.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -205,7 +200,7 @@ const DiscoverPage = () => {
           <p>This interest form was submitted through the GO AI HUB website.</p>
           <p>Best regards,<br>
           GO AI HUB Team<br>
-          Email: <a href="mailto:ai.support@go.com.sa">ai.support@go.com.sa</a><br>
+          Email: <a href="mailto:support@goaihub.ai">support@goaihub.ai</a><br>
           Website: <a href="https://www.goaihub.ai" target="_blank">www.goaihub.ai</a><br>
           Working Hours: Sunday–Thursday, 9:00 AM – 5:00 PM (KSA Time)</p>
         </div>
@@ -223,7 +218,7 @@ const DiscoverPage = () => {
             <p>تم إرسال هذا النموذج من خلال موقع GO AI HUB.</p>
             <p>مع أطيب التحيات،<br>
             فريق GO AI HUB<br>
-            البريد الإلكتروني: <a href="mailto:ai.support@go.com.sa">ai.support@go.com.sa</a><br>
+            البريد الإلكتروني: <a href="mailto:support@goaihub.ai">support@goaihub.ai</a><br>
             الموقع الإلكتروني: <a href="https://www.goaihub.ai" target="_blank">www.goaihub.ai</a><br>
             ساعات العمل: الأحد–الخميس، 9:00 صباحًا – 5:00 مساءً (بتوقيت السعودية)</p>
           </div>
@@ -532,12 +527,6 @@ const DiscoverPage = () => {
                   ({solutions.length} approved solutions available)
                 </span>
               )}
-              {isTranslatingSolutions && (
-                <span className="text-primary-500 ml-2 flex items-center gap-2">
-                  <div className="w-3 h-3 border border-primary-500 border-t-transparent rounded-full animate-spin"></div>
-                  Translating... {Math.round(translationProgress)}%
-                </span>
-              )}
             </p>
           </div>
           {showSuccess && (
@@ -690,19 +679,15 @@ const DiscoverPage = () => {
                     </div>
                     <div className="h-full w-full bg-gradient-to-t from-black/80 to-transparent flex items-end p-3 sm:p-4">
                       <div className="text-white">
-                        <h3 className="font-bold text-base sm:text-lg mb-1">
-                          <TranslatedText text={solution.solution_name} priority="high" showTranslationIndicator />
-                        </h3>
-                        <p className="text-xs sm:text-sm text-white/90">
-                          <TranslatedText text={solution.company_name} priority="normal" />
-                        </p>
+                        <h3 className="font-bold text-base sm:text-lg mb-1">{solution.solution_name}</h3>
+                        <p className="text-xs sm:text-sm text-white/90">{solution.company_name}</p>
                       </div>
                     </div>
                   </div>
                   <div className="p-3 sm:p-4 relative z-10">
-                    <div className="text-xs sm:text-sm text-gray-300 mb-3 sm:mb-4 line-clamp-2">
-                      <TranslatedText text={solution.summary} priority="low" />
-                    </div>
+                    <p className="text-xs sm:text-sm text-gray-300 mb-3 sm:mb-4 line-clamp-2">
+                      {solution.summary}
+                    </p>
                     <div className="flex flex-wrap gap-1 sm:gap-2 mb-3 sm:mb-4">
                       {(solution.tech_categories || []).slice(0, 3).map((tag) => (
                         <span 
@@ -790,17 +775,13 @@ const DiscoverPage = () => {
                     <div className="p-4 sm:p-6 flex-grow">
                       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-2 sm:mb-3">
                         <div>
-                          <h3 className="font-bold text-lg sm:text-xl text-white mb-1 group-hover:text-primary-500 transition-colors duration-300">
-                            <TranslatedText text={solution.solution_name} priority="high" />
-                          </h3>
-                          <p className="text-xs sm:text-sm text-gray-400">
-                            <TranslatedText text={solution.company_name} priority="normal" />
-                          </p>
+                          <h3 className="font-bold text-lg sm:text-xl text-white mb-1 group-hover:text-primary-500 transition-colors duration-300">{solution.solution_name}</h3>
+                          <p className="text-xs sm:text-sm text-gray-400">{solution.company_name}</p>
                         </div>
                       </div>
-                      <div className="text-xs sm:text-sm text-gray-300 mb-3 sm:mb-4 line-clamp-3">
-                        <TranslatedText text={solution.summary} priority="normal" />
-                      </div>
+                      <p className="text-xs sm:text-sm text-gray-300 mb-3 sm:mb-4 line-clamp-3">
+                        {solution.summary}
+                      </p>
                       <div className="flex flex-wrap gap-1 sm:gap-2 mb-3 sm:mb-4">
                         {(solution.tech_categories || []).map((tag) => (
                           <span 
