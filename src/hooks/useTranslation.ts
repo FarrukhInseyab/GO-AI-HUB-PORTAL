@@ -5,7 +5,7 @@ import { useLanguage } from '../context/LanguageContext';
 // Hook for translating a single text
 export function useTranslatedText(
   text: string,
-  sourceLanguage: 'auto' | 'ar' | 'en' = 'auto'
+  sourceLanguage: 'ar' | 'en' = 'en'
 ) {
   const { language } = useLanguage();
   const [translatedText, setTranslatedText] = useState(text);
@@ -17,13 +17,16 @@ export function useTranslatedText(
       setTranslatedText(text);
       return;
     }
+    
+    // Auto-detect source language based on target
+    const actualSourceLanguage = language === 'ar' ? 'en' : 'ar';
 
     const translateAsync = async () => {
       setIsTranslating(true);
       setError(null);
 
       try {
-        const translated = await translateText(text, language, sourceLanguage);
+        const translated = await translateText(text, language, actualSourceLanguage);
         setTranslatedText(translated);
       } catch (err) {
         console.warn('Translation error:', err);
@@ -152,14 +155,12 @@ export function useSmartTranslation(
       setError(null);
 
       try {
-        // Detect if text needs translation
-        const sourceLanguage = detectSourceLanguage ? 'auto' : 'en';
+        // Determine source language based on target
+        const sourceLanguage = language === 'ar' ? 'en' : 'ar';
         const translated = await translateText(text, language, sourceLanguage);
         
         setTranslatedText(translated);
         if (detectSourceLanguage) {
-          // In a real implementation, you might want to detect the source language
-          // For now, we'll assume it was detected
           setDetectedLanguage(sourceLanguage);
         }
       } catch (err) {

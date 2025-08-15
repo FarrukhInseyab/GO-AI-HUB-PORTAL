@@ -1,5 +1,5 @@
 // Translation service using your LibreTranslate API
-const LIBRETRANSLATE_URL = 'https://goaihub.ai/trans/translate';
+const OPUS_TRANSLATE_URL = 'https://goaihub.ai/trans/translate';
 
 // Configuration for translation optimization
 const TRANSLATION_CONFIG = {
@@ -14,7 +14,6 @@ export interface TranslationRequest {
   q: string;
   source: string;
   target: string;
-  format?: 'text' | 'html';
 }
 
 export interface TranslationResponse {
@@ -78,11 +77,24 @@ setInterval(cleanExpiredCache, 60 * 60 * 1000);
 export async function translateText(
   text: string,
   targetLanguage: 'ar' | 'en',
-  sourceLanguage: 'auto' | 'ar' | 'en' = 'auto'
+  sourceLanguage: 'ar' | 'en' = 'en'
 ): Promise<string> {
   // Return original text if it's empty or if target is same as source
   if (!text || !text.trim()) return text;
   if (sourceLanguage === targetLanguage) return text;
+  
+  // Auto-detect source language if not specified
+  if (sourceLanguage === 'en' && targetLanguage === 'en') {
+    // If both are English, assume source is Arabic
+    sourceLanguage = 'ar';
+  }
+  
+  // Validate language pair - Opus only supports en<->ar
+  if (!((sourceLanguage === 'en' && targetLanguage === 'ar') || 
+        (sourceLanguage === 'ar' && targetLanguage === 'en'))) {
+    console.warn('Opus model only supports en<->ar translation');
+    return text;
+  }
 
   const cacheKey = getCacheKey(text, sourceLanguage, targetLanguage);
   
@@ -98,17 +110,15 @@ export async function translateText(
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), TRANSLATION_CONFIG.timeout);
 
-        const response = await fetch(LIBRETRANSLATE_URL, {
+        const response = await fetch(OPUS_TRANSLATE_URL, {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
-            'Cookie': 'session=38049352-0289-4828-a581-2b6bcc9b5b6b'
+            'Content-Type': 'application/json'
           },
           body: JSON.stringify({
             q: text,
             source: sourceLanguage,
-            target: targetLanguage,
-            format: 'text'
+            target: targetLanguage
           } as TranslationRequest),
           signal: controller.signal
         });
@@ -155,7 +165,7 @@ export async function translateText(
 export async function translateTexts(
   texts: string[],
   targetLanguage: 'ar' | 'en',
-  sourceLanguage: 'auto' | 'ar' | 'en' = 'auto'
+  sourceLanguage: 'ar' | 'en' = 'en'
 ): Promise<string[]> {
   // Process in batches to avoid overwhelming the API
   const results: string[] = [];
@@ -197,6 +207,8 @@ export async function translateSolution(
     return solution;
   }
 
+  // Determine source language based on target
+  const sourceLanguage = targetLanguage === 'ar' ? 'en' : 'ar';
   try {
     const fieldsToTranslate = [
       'solution_name',
@@ -222,7 +234,7 @@ export async function translateSolution(
     }
 
     // Batch translate all texts
-    const translatedTexts = await translateTexts(textsToTranslate, targetLanguage);
+    const translatedTexts = await translateTexts(textsToTranslate, targetLanguage, sourceLanguage);
     
     // Map translated texts back to fields
     const translatedFields: { [key: string]: string } = {};

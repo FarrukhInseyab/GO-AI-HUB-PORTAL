@@ -4,7 +4,7 @@ import { Loader2, Languages } from 'lucide-react';
 
 interface TranslatedTextProps {
   text: string;
-  sourceLanguage?: 'auto' | 'ar' | 'en';
+  sourceLanguage?: 'ar' | 'en';
   className?: string;
   showTranslationIndicator?: boolean;
   fallbackToOriginal?: boolean;
@@ -13,13 +13,18 @@ interface TranslatedTextProps {
 
 const TranslatedText: React.FC<TranslatedTextProps> = ({
   text,
-  sourceLanguage = 'auto',
+  sourceLanguage,
   className = '',
   showTranslationIndicator = false,
   fallbackToOriginal = true,
   priority = 'normal'
 }) => {
-  const { translatedText, isTranslating, error } = useTranslatedText(text, sourceLanguage);
+  const { language } = useLanguage();
+  
+  // Auto-determine source language if not provided
+  const actualSourceLanguage = sourceLanguage || (language === 'ar' ? 'en' : 'ar');
+  
+  const { translatedText, isTranslating, error } = useTranslatedText(text, actualSourceLanguage);
 
   // Show loading state
   if (isTranslating && priority === 'high') {
