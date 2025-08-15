@@ -1,24 +1,14 @@
-// Translation service using your LibreTranslate API
-const OPUS_TRANSLATE_URL = 'https://goaihub.ai/trans/translate';
+// Translation service using GPT prompts for text translation
+import { callOpenAI } from './openai';
 
 // Configuration for translation optimization
 const TRANSLATION_CONFIG = {
-  batchSize: 5, // Process translations in batches (reduced for better performance)
-  maxConcurrent: 3, // Maximum concurrent translation requests
-  timeout: 10000, // Request timeout in milliseconds (increased for longer texts)
+  batchSize: 3, // Process translations in smaller batches for GPT
+  maxConcurrent: 2, // Maximum concurrent translation requests
+  timeout: 15000, // Request timeout in milliseconds
   retryAttempts: 2, // Number of retry attempts
   cacheExpiry: 24 * 60 * 60 * 1000, // 24 hours in milliseconds
 };
-
-export interface TranslationRequest {
-  q: string;
-  source: string;
-  target: string;
-}
-
-export interface TranslationResponse {
-  translatedText: string;
-}
 
 export interface TranslationCacheEntry {
   text: string;
@@ -73,7 +63,7 @@ function cleanExpiredCache() {
 // Periodically clean cache (every hour)
 setInterval(cleanExpiredCache, 60 * 60 * 1000);
 
-// Main translation function
+// Main translation function using GPT
 export async function translateText(
   text: string,
   targetLanguage: 'ar' | 'en',
@@ -85,14 +75,13 @@ export async function translateText(
   
   // Auto-detect source language if not specified
   if (sourceLanguage === 'en' && targetLanguage === 'en') {
-    // If both are English, assume source is Arabic
     sourceLanguage = 'ar';
   }
   
-  // Validate language pair - Opus only supports en<->ar
+  // Validate language pair - only support en<->ar
   if (!((sourceLanguage === 'en' && targetLanguage === 'ar') || 
         (sourceLanguage === 'ar' && targetLanguage === 'en'))) {
-    console.warn('Opus model only supports en<->ar translation');
+    console.warn('Translation only supports en<->ar');
     return text;
   }
 
@@ -106,48 +95,35 @@ export async function translateText(
   return new Promise((resolve) => {
     const executeTranslation = async () => {
       try {
-        // Create abort controller for timeout
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), TRANSLATION_CONFIG.timeout);
+        // Create translation prompt based on target language
+        const systemPrompt = targetLanguage === 'ar' 
+          ? `You are a professional translator. Translate the following English text to Arabic. Provide only the Arabic translation without any additional text, explanations, or formatting. Maintain the original meaning and context while ensuring the translation is natural and culturally appropriate for Arabic speakers.`
+          : `You are a professional translator. Translate the following Arabic text to English. Provide only the English translation without any additional text, explanations, or formatting. Maintain the original meaning and context while ensuring the translation is natural and appropriate for English speakers.`;
 
-        const response = await fetch(OPUS_TRANSLATE_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            q: text,
-            source: sourceLanguage,
-            target: targetLanguage
-          } as TranslationRequest),
-          signal: controller.signal
+        const userPrompt = `Translate this text: ${text}`;
+
+        const messages = [
+          { role: 'system' as const, content: systemPrompt },
+          { role: 'user' as const, content: userPrompt }
+        ];
+
+        const translatedText = await callOpenAI(messages, {
+          temperature: 0.3,
+          max_tokens: Math.max(text.length * 2, 100) // Ensure enough tokens for translation
         });
 
-        clearTimeout(timeoutId);
-
-        if (!response.ok) {
-          const errorText = await response.text().catch(() => 'Unknown error');
-          console.warn(`Translation API error: ${response.status} ${response.statusText} - ${errorText}`);
-          resolve(text);
-          return;
-        }
-
-        const data: TranslationResponse = await response.json();
-        const translatedText = data.translatedText || text;
+        // Clean up the response (remove any extra formatting or explanations)
+        const cleanedTranslation = translatedText.trim();
 
         // Cache the translation with timestamp
         translationCache[cacheKey] = {
-          text: translatedText,
+          text: cleanedTranslation,
           timestamp: Date.now()
         };
 
-        resolve(translatedText);
+        resolve(cleanedTranslation);
       } catch (error) {
-        if (error.name === 'AbortError') {
-          console.warn('Translation request timed out');
-        } else {
-          console.warn('Translation error:', error);
-        }
+        console.warn('GPT translation error:', error);
         resolve(text); // Return original text on error
       }
     };
@@ -173,24 +149,70 @@ export async function translateTexts(
   for (let i = 0; i < texts.length; i += TRANSLATION_CONFIG.batchSize) {
     const batch = texts.slice(i, i + TRANSLATION_CONFIG.batchSize);
     
-    const batchTranslations = await Promise.allSettled(
-      batch.map(text => translateText(text, targetLanguage, sourceLanguage))
-    );
+    // For batch translation, use a single GPT call with multiple texts
+    try {
+      const systemPrompt = targetLanguage === 'ar' 
+        ? `You are a professional translator. Translate the following English texts to Arabic. Return the translations in the same order as the input, separated by "|||". Provide only the Arabic translations without any additional text, explanations, or formatting.`
+        : `You are a professional translator. Translate the following Arabic texts to English. Return the translations in the same order as the input, separated by "|||". Provide only the English translations without any additional text, explanations, or formatting.`;
 
-    const batchResults = batchTranslations.map((result, index) => {
-      if (result.status === 'fulfilled') {
-        return result.value;
+      const userPrompt = `Translate these texts:\n${batch.map((text, index) => `${index + 1}. ${text}`).join('\n')}`;
+
+      const messages = [
+        { role: 'system' as const, content: systemPrompt },
+        { role: 'user' as const, content: userPrompt }
+      ];
+
+      const batchTranslation = await callOpenAI(messages, {
+        temperature: 0.3,
+        max_tokens: Math.max(batch.join(' ').length * 2, 500)
+      });
+
+      // Split the batch translation by separator
+      const batchResults = batchTranslation.split('|||').map(t => t.trim());
+      
+      // If we don't get the expected number of results, fall back to individual translations
+      if (batchResults.length !== batch.length) {
+        console.warn('Batch translation count mismatch, falling back to individual translations');
+        const individualResults = await Promise.allSettled(
+          batch.map(text => translateText(text, targetLanguage, sourceLanguage))
+        );
+        
+        const fallbackResults = individualResults.map((result, index) => {
+          if (result.status === 'fulfilled') {
+            return result.value;
+          } else {
+            console.warn(`Translation failed for text ${i + index}:`, result.reason);
+            return batch[index]; // Return original text on error
+          }
+        });
+        
+        results.push(...fallbackResults);
       } else {
-        console.warn(`Translation failed for text ${i + index}:`, result.reason);
-        return batch[index]; // Return original text on error
+        results.push(...batchResults);
       }
-    });
-
-    results.push(...batchResults);
+    } catch (error) {
+      console.warn('Batch translation failed, falling back to individual translations:', error);
+      
+      // Fallback to individual translations
+      const individualResults = await Promise.allSettled(
+        batch.map(text => translateText(text, targetLanguage, sourceLanguage))
+      );
+      
+      const fallbackResults = individualResults.map((result, index) => {
+        if (result.status === 'fulfilled') {
+          return result.value;
+        } else {
+          console.warn(`Translation failed for text ${i + index}:`, result.reason);
+          return batch[index]; // Return original text on error
+        }
+      });
+      
+      results.push(...fallbackResults);
+    }
     
     // Small delay between batches to avoid rate limiting
     if (i + TRANSLATION_CONFIG.batchSize < texts.length) {
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise(resolve => setTimeout(resolve, 300));
     }
   }
   
@@ -209,6 +231,7 @@ export async function translateSolution(
 
   // Determine source language based on target
   const sourceLanguage = targetLanguage === 'ar' ? 'en' : 'ar';
+  
   try {
     const fieldsToTranslate = [
       'solution_name',
@@ -268,7 +291,7 @@ export async function translateSolutions(
     return solutions;
   }
 
-  const batchSize = 3; // Smaller batches for better performance
+  const batchSize = 2; // Smaller batches for GPT to ensure quality
   const translatedSolutions = [];
 
   for (let i = 0; i < needsTranslation.length; i += batchSize) {
@@ -288,9 +311,9 @@ export async function translateSolutions(
 
     translatedSolutions.push(...batchResults);
     
-    // Small delay between batches
+    // Small delay between batches to avoid rate limiting
     if (i + batchSize < needsTranslation.length) {
-      await new Promise(resolve => setTimeout(resolve, 200));
+      await new Promise(resolve => setTimeout(resolve, 500));
     }
   }
 
