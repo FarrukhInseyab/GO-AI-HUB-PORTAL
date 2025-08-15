@@ -51,7 +51,6 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     
     // Update URL to reflect language change
     const currentPath = location.pathname;
-    const currentUrl = `${window.location.origin}${currentPath}`;
     let newPath: string;
     
     if (newLanguage === 'ar') {
@@ -62,12 +61,19 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
       newPath = currentPath.endsWith('/ar') ? currentPath.slice(0, -3) : currentPath;
     }
     
-    // Ensure path doesn't end with double slashes
-    newPath = newPath.replace(/\/+$/, '') || '/';
-    const newUrl = `${window.location.origin}${newPath}`;
+    // Normalize path: replace multiple slashes with single slash and ensure proper format
+    newPath = newPath.replace(/\/+/g, '/');
+    // Ensure path doesn't end with trailing slashes unless it's root
+    if (newPath !== '/') {
+      newPath = newPath.replace(/\/+$/, '');
+    }
+    // Ensure path starts with /
+    if (!newPath.startsWith('/')) {
+      newPath = '/' + newPath;
+    }
     
     // Navigate to new path if it's different
-    if (newUrl !== currentUrl) {
+    if (newPath !== currentPath) {
       navigate(newPath, { replace: true });
     }
   };

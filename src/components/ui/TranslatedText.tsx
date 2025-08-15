@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLanguage } from '../../context/LanguageContext';
 import { useTranslatedText } from '../../hooks/useTranslation';
 import { Loader2, Languages } from 'lucide-react';
 
