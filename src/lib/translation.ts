@@ -107,7 +107,8 @@ export async function translateText(
           { role: 'user' as const, content: userPrompt }
         ];
 
-        const translatedText = await callOpenAI(messages, {
+        // Call OpenAI directly instead of using edge function
+        const translatedText = await callOpenAIDirect(messages, {
           temperature: 0.3,
           max_tokens: Math.max(text.length * 2, 100) // Ensure enough tokens for translation
         });
@@ -137,6 +138,44 @@ export async function translateText(
   });
 }
 
+// Direct OpenAI API call function for translation
+async function callOpenAIDirect(
+  messages: Array<{ role: 'system' | 'user' | 'assistant'; content: string }>,
+  options: {
+    model?: string;
+    temperature?: number;
+    max_tokens?: number;
+  } = {}
+) {
+  const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
+  
+  if (!OPENAI_API_KEY) {
+    throw new Error('OpenAI API key not configured');
+  }
+
+  const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${OPENAI_API_KEY}`
+    },
+    body: JSON.stringify({
+      model: options.model || 'gpt-4o',
+      messages,
+      temperature: options.temperature ?? 0.7,
+      max_tokens: options.max_tokens,
+    }),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.error?.message || `OpenAI API error: ${response.statusText}`);
+  }
+
+  const data = await response.json();
+  return data.choices[0].message.content;
+}
+
 // Batch translation function for multiple texts
 export async function translateTexts(
   texts: string[],
@@ -162,7 +201,7 @@ export async function translateTexts(
         { role: 'user' as const, content: userPrompt }
       ];
 
-      const batchTranslation = await callOpenAI(messages, {
+      const batchTranslation = await callOpenAIDirect(messages, {
         temperature: 0.3,
         max_tokens: Math.max(batch.join(' ').length * 2, 500)
       });
